@@ -36,7 +36,7 @@ class Rcon {
 		promise.then(response => {
 			console.log(`Connected to ${this.name} Rcon`);
 		}).catch(err => {
-			console.warn(err);
+			console.error(err);
 		});
 	}
 
