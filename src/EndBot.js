@@ -19,7 +19,7 @@ class EndBot extends Discord.Client {
 		console.log("Logging in...");
 
 		this.login(this.token)
-			.then(console.log("EndBot is on! 😎"));
+			.then(() => console.log("EndBot is on! 😎"));
 
 		this.rcon = new Rcon("localhost", 25575, "supersecret", "Server");
 	}
