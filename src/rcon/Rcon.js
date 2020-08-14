@@ -3,12 +3,16 @@
 const Net = require("net");
 const Packet = require("./Packet");
 
+/**
+ * Class representing a single instance of an Rcon.
+ */
 class Rcon {
 	constructor(host, port, password, name) {
 		this.host = host;
 		this.port = port;
 		this.password = password;
 		this.name = name;
+		this.timeout = 8000;
 
 		// this.client = new Net.Socket();
 		this.client = Net.createConnection({
@@ -23,21 +27,37 @@ class Rcon {
 		let packet = new Packet(this.generateId(), 3, this.password);
 		this.client.write(packet.buffer);
 
-		let promise = new Promise(
-			(resolve, reject) => {
-				this.client.once("data", data => {
-					let response = Packet.read(data);
-					if (response.id == packet.id) resolve(response);
-					else reject(`Couldn't authenticate to ${this.name} Rcon`);
-				});
-			}
-		);
+		let promise = new Promise((resolve, reject) => {
+			this.client.once("data", data => {
+				let response = Packet.read(data);
+				if (response.id != packet.id) reject(`Couldn't authenticate to ${this.name} Rcon`);
 
-		promise.then(response => {
+				this.client.emit("auth");
+			});
+		});
+
+		promise.then(() => {
 			console.log(`Connected to ${this.name} Rcon`);
 		}).catch(err => {
 			console.error(err);
 		});
+	}
+
+	sendCommand(command) {
+		let packet = new Packet(this.generateId(), 2, command);
+		this.client.write(packet.buffer);
+
+		return new Promise((resolve, reject) => {
+			this.client.once("data", resolve);
+			setTimeout(() => {
+				reject("Timeout exceeded");
+			}, this.timeout);
+		});
+	}
+
+	sendMessage(message, author) {
+		let tellraw = `tellraw @a {"text":"[${author}] ${message}"}`;
+		return this.sendCommand(tellraw);
 	}
 
 	generateId() {
