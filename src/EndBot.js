@@ -2,6 +2,7 @@
 
 const Discord = require("discord.js");
 const Ping = require("./commands/Ping");
+const Rcon = require("./rcon/Rcon");
 const config = require("../config.json");
 
 class EndBot extends Discord.Client {
@@ -19,6 +20,8 @@ class EndBot extends Discord.Client {
 
 		this.login(this.token)
 			.then(console.log("EndBot is on! 😎"));
+
+		this.rcon = new Rcon("localhost", 25575, "supersecret", "Server");
 	}
 
 	filterCommand(message) {
