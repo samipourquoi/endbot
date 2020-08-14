@@ -19,7 +19,9 @@ class Rcon {
 			host: this.host,
 			port: this.port
 		}, () => {
-			this.authenticate();
+			this.authenticate()
+				.then(console.log)
+				.catch(console.error);
 		});
 	}
 
@@ -33,14 +35,11 @@ class Rcon {
 				if (response.id != packet.id) reject(`Couldn't authenticate to ${this.name} Rcon`);
 
 				this.client.emit("auth");
+				resolve(`Running ${this.name} Rcon`);
 			});
 		});
 
-		promise.then(() => {
-			console.log(`Connected to ${this.name} Rcon`);
-		}).catch(err => {
-			console.error(err);
-		});
+		return promise;
 	}
 
 	sendCommand(command) {

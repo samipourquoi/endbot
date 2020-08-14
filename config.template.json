@@ -1,4 +1,13 @@
 {
 	"token": "",
-	"prefix": "/"
+	"prefix": "/",
+
+	"servers": [
+		{
+			"name": "Server",
+			"host": "localhost",
+			"rcon-port": "25575",
+			"rcon-password": "supersecret"
+		}
+	]
 }

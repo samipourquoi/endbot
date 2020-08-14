@@ -10,6 +10,7 @@ class EndBot extends Discord.Client {
 		super();
 		this.token = config.token;
 		this.prefix = config.prefix;
+		this.servers = {};
 		this.commands = {
 			"ping": new Ping()
 		};
@@ -21,7 +22,15 @@ class EndBot extends Discord.Client {
 		this.login(this.token)
 			.then(() => console.log("EndBot is on! 😎"));
 
-		this.rcon = new Rcon("localhost", 25575, "supersecret", "Server");
+		let keys = Object.keys(config.servers);
+		for (let i = 0; i < keys.length; i++) {
+			let server = config.servers[keys[i]];
+			this.servers[server.name] = new Rcon(server.host, server["rcon-port"], server["rcon-password"], server.name);
+
+			this.servers[server.name].client.on("auth", () => {
+				this.servers[server.name].sendMessage("Hello World!", "EndBot");
+			});
+		}
 	}
 
 	filterCommand(message) {
