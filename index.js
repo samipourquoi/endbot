@@ -20,7 +20,6 @@ console = new (class extends Console {
 });
 
 client.init();
-// client.once("ready", () => console.log("EndBot is on! 😎"));
 client.on("message", client.filterCommand);
 
 module.export = client;
