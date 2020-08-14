@@ -10,12 +10,26 @@ console = new (class extends Console {
 	}
 
 	log(...data) {
+		let time = this.getTime();
+		super.log(`\x1b[37m${time}\x1b[0m`, ...data);
+	}
+
+	error(...data) {
+		let time = this.getTime();
+		super.log(`\x1b[37m${time}\x1b[31m`, ...data);
+	}
+
+	warn(...data) {
+		let time = this.getTime();
+		super.log(`\x1b[37m${time}\x1b[33m`, ...data);
+	}
+
+	getTime() {
 		let date = new Date();
 		let hours = String(date.getHours()).padStart(2, "0");
 		let minutes = String(date.getMinutes()).padStart(2, "0");
 		let seconds = String(date.getSeconds()).padStart(2, "0");
-
-		super.log(`\x1b[37m[${hours}:${minutes}:${seconds}]\x1b[0m`, ...data);
+		return `[${hours}:${minutes}:${seconds}]`
 	}
 });
 
