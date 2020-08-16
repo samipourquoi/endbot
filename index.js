@@ -1,7 +1,7 @@
 "use strict";
 
 const EndBot = require("./src/EndBot");
-const client = new EndBot();
+const client = module.exports = new EndBot();
 const { Console } = require("console");
 
 console = new (class extends Console {
@@ -33,7 +33,12 @@ console = new (class extends Console {
 	}
 });
 
-client.init();
-client.on("message", client.filterCommand);
+console.log("Logging in...");
+client.login(client.token);
 
-module.export = client;
+client.once("ready", () => {
+	client.init();
+	console.log("EndBot is on! 😎");
+});
+
+client.on("message", client.filterCommand);

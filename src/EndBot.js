@@ -12,30 +12,44 @@ class EndBot extends Discord.Client {
 		this.prefix = config.prefix;
 		this.servers = {};
 		this.commands = {
-			"ping": new Ping()
+			"ping": new Ping(),
 		};
+		this.bridges = [];
+		this.bridgeChannels = [];
 	}
 
 	init() {
-		console.log("Logging in...");
+		this.guild = this.guilds.cache.get(config["guild-id"]);
 
-		this.login(this.token)
-			.then(() => console.log("EndBot is on! 😎"));
+		if (this.guilds.cache.size == undefined) {
+			console.error("EndBot isn't in the configured server!");
+			process.abort();
+		}
 
+		// Setup listeners
 		let keys = Object.keys(config.servers);
 		for (let i = 0; i < keys.length; i++) {
 			let server = config.servers[keys[i]];
-			this.servers[server.name] = new Rcon(server.host, server["rcon-port"], server["rcon-password"], server.name);
 
-			this.servers[server.name].client.on("auth", () => {
+			// Setup RCON
+			let rcon = this.servers[server.name] = new Rcon(server.host, server["rcon-port"], server["rcon-password"], server.name);
+			rcon.client.on("auth", () => {
 				this.servers[server.name].sendMessage("Hello World!", "EndBot");
 			});
+
+			// Setup bridge channels
+			let channel = this.guild.channels.cache.get(server["bridge-channel"]);
+			this.bridges[i] = new Bridge(channel, rcon);
+			this.bridgeChannels.push(server["bridge-channel"]);
 		}
 	}
 
 	filterCommand(message) {
-		if (message.content.charAt(0) !== this.prefix) 	return;
-		if (message.author.bot) 						return;
+		if (message.content.charAt(0) !== this.prefix) return;
+		if (message.author.bot) return;
+		if (this.bridgeChannels.includes(message.channel.id)) {
+			this.bridge.run();
+		}
 
 		let command = message.content.substring(1).split(" ");
 		this.parseCommand(message, command[0], command.slice(1));
@@ -45,6 +59,21 @@ class EndBot extends Discord.Client {
 		let cmd = this.commands[command];
 		if (cmd == undefined) return;
 		cmd.run(message, ...args);
+	}
+}
+
+class Bridge {
+	constructor(channel, rcon) {
+		this.channel = channel;
+		this.channel.send(`Connected to ${rcon.name}!`);
+	}
+
+	toMinecraft(message) {
+
+	}
+
+	toDiscord(message) {
+
 	}
 }
 
