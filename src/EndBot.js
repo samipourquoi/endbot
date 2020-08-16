@@ -14,8 +14,7 @@ class EndBot extends Discord.Client {
 		this.commands = {
 			"ping": new Ping(),
 		};
-		this.bridges = [];
-		this.bridgeChannels = [];
+		this.bridges = new Map();
 	}
 
 	init() {
@@ -39,17 +38,19 @@ class EndBot extends Discord.Client {
 
 			// Setup bridge channels
 			let channel = this.guild.channels.cache.get(server["bridge-channel"]);
-			this.bridges[i] = new Bridge(channel, rcon);
-			this.bridgeChannels.push(server["bridge-channel"]);
+			this.bridges.set(channel.id, new Bridge(channel, rcon));
 		}
 	}
 
 	filterCommand(message) {
 		if (message.content.charAt(0) !== this.prefix) return;
-		if (message.author.bot) return;
-		if (this.bridgeChannels.includes(message.channel.id)) {
-			this.bridge.run();
+
+		if (this.bridges.has(message.channel.id)) {
+			console.log(message.content);
+			this.bridges.get(message.channel.id).toMinecraft(message);
 		}
+
+		if (message.author.bot) return;
 
 		let command = message.content.substring(1).split(" ");
 		this.parseCommand(message, command[0], command.slice(1));
@@ -65,11 +66,13 @@ class EndBot extends Discord.Client {
 class Bridge {
 	constructor(channel, rcon) {
 		this.channel = channel;
+		this.rcon = rcon;
+
 		this.channel.send(`Connected to ${rcon.name}!`);
 	}
 
 	toMinecraft(message) {
-
+		this.rcon.sendMessage(message.content, message.author.username);
 	}
 
 	toDiscord(message) {
