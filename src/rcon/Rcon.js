@@ -47,7 +47,9 @@ class Rcon {
 		this.client.write(packet.buffer);
 
 		return new Promise((resolve, reject) => {
-			this.client.once("data", resolve);
+			this.client.once("data", data => {
+				resolve(Packet.read(data));
+			});
 			setTimeout(() => {
 				reject("Timeout exceeded");
 			}, this.timeout);

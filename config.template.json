@@ -9,7 +9,8 @@
 			"host": "localhost",
 			"rcon-port": "25575",
 			"rcon-password": "supersecret",
-			"bridge-channel": "123456789123456789"
+			"bridge-channel": "123456789123456789",
+			"log-path": "path/to/latest.log"
 		}
 	]
 }
