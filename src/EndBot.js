@@ -68,7 +68,6 @@ class EndBot extends Discord.Client {
 		if (message.author.bot) return;
 
 		if (this.bridges.has(message.channel.id)) {
-			console.log(message.content);
 			this.bridges.get(message.channel.id).toMinecraft(message);
 		}
 
@@ -149,7 +148,6 @@ class Bridge {
 
 			// <samipourquoi> Lorem ipsum
 			if ((message = line.match(/<.+> .+/)) != null) {
-				console.log(message[0]);
 				this.channel.send(message[0]);
 
 			// [samipourquoi: Set own game mode to Survival Mode]
