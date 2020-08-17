@@ -56,8 +56,8 @@ class Rcon {
 		});
 	}
 
-	sendMessage(message, author) {
-		let tellraw = `tellraw @a {"text":"[${author}] ${message}"}`;
+	sendMessage(message, author, color) {
+		let tellraw = `tellraw @a ["[", {"text":"${author}", "color": "${color}"}, "] ", {"text":"${message}", "color": "white"}]`;
 		return this.sendCommand(tellraw);
 	}
 

@@ -7,6 +7,25 @@ const Ping = require("./commands/Ping");
 const Rcon = require("./rcon/Rcon");
 const config = require("../config.json");
 const deathMessages = require("./assets/deaths.json");
+const colors = {
+	"dark_red": "#AA0000",
+	"red": "#FF5555",
+	"gold": "#FFAA00",
+	"yellow": "#FFFF55",
+	"dark_green": "#00AA00",
+	"green": "#55FF55",
+	"aqua": "#55FFFF",
+	"dark_aqua": "#00AAAA",
+	"dark_blue": "#0000AA",
+	"blue": "#5555FF",
+	"light_purple": "#FF55FF",
+	"dark_purple": "#AA00AA",
+	"white": "#FFFFFF",
+	"gray": "#AAAAAA",
+	"dark_gray": "#555555",
+	"black": "#000000"
+};
+const nearestColor = require("nearest-color").from(colors);
 
 class EndBot extends Discord.Client {
 	constructor() {
@@ -101,7 +120,21 @@ class Bridge {
 	}
 
 	toMinecraft(message) {
-		this.rcon.sendMessage(message.content, message.author.username);
+		// Gets the color of the user
+		let aboveRole = message.member.roles.cache.array()[0];
+		let color = "white";
+		if (message.member.roles.cache.array()[0].name != "@everyone") {
+			let roleColor = aboveRole.color;
+			color = this.roleToColor(roleColor).name;
+		}
+
+		this.rcon.sendMessage(message.content, message.author.username, color);
+	}
+
+	roleToColor(roleColor) {
+		let rgbRole = hexToRgb(roleColor.toString(16).padStart(6, "0"));
+		if (rgbRole == undefined) return "white";
+		return nearestColor(rgbRole);
 	}
 
 	onMessage() {
@@ -139,6 +172,15 @@ class Bridge {
 
 		return false;
 	}
+}
+
+function hexToRgb(hex) {
+	var result = /^([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	return result ? {
+		r: parseInt(result[1], 16),
+		g: parseInt(result[2], 16),
+		b: parseInt(result[3], 16)
+	} : null;
 }
 
 module.exports = EndBot;
