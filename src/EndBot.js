@@ -5,25 +5,24 @@ const Discord = require("discord.js");
 const Ping = require("./commands/discord/Ping");
 const Rcon = require("./rcon/Rcon");
 const Bridge = require("./rcon/Bridge");
-const Scoreboard = require("./commands/server/Scoreboard");
+const ServerScoreboard = require("./commands/server/Scoreboard");
+const DiscordServer = require("./commands/discord/Scoreboard");
 const Help = require("./commands/server/Help");
-const Backup = require("./commands/discord/Backup");
 
 const config = require("../config.json");
 
 class EndBot extends Discord.Client {
 	constructor() {
 		super();
-		this.config = config;
 		this.token = config.token;
 		this.prefix = config.prefix;
 		this.servers = {};
 		this.discordCommands = {
 			"ping": new Ping(this),
-			"backup": new Backup(this)
+			"scoreboard": new DiscordServer(this)
 		};
 		this.serverCommands = {
-			"scoreboard": new Scoreboard(this),
+			"scoreboard": new ServerScoreboard(this),
 			"help": new Help(this)
 		};
 		this.bridges = new Map();
@@ -87,6 +86,7 @@ class EndBot extends Discord.Client {
 	parseDiscordCommand(message, command, ...args) {
 		let cmd = this.discordCommands[command];
 		if (cmd == undefined) return;
+
 		cmd.run(message, ...args);
 	}
 
@@ -95,35 +95,6 @@ class EndBot extends Discord.Client {
 		if (cmd == undefined) return;
 
 		cmd.run(rcon, authorName, ...args);
-	}
-
-	createEmbed(color) {
-		switch (color) {
-		case "result":
-			color = "#7fe254";
-			break;
-		case "error":
-			color = "#f54f38";
-		}
-
-		return new Discord.MessageEmbed()
-			.setColor(color);
-	}
-
-	/**
-	 * Returns a predefined common error embed.<br>
-	 * Possible errors are:
-	 * - `bridge`: "You must be in a bridge channel to do that!"
-	 *
-	 * @param {String} error
-	 * @return {Discord.MessageEmbed}
-	 */
-	errorEmbed(error) {
-		switch (error) {
-		case "bridge":
-			return this.createEmbed("error")
-				.setTitle("You must be in a bridge channel to do that!");
-		}
 	}
 }
 
