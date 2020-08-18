@@ -22,7 +22,7 @@ class Scoreboard extends ServerCommand {
 			rcon.sendCommand(`scoreboard objectives setdisplay sidebar ${scoreboard}`)
 				.then(data => {
 					if (data.body.includes("Unknown scoreboard objective")) {
-						rcon.error("Unknown scoreboard objective '", args[0], "'");
+						rcon.error(data.body);
 						// TODO: Autocomplete
 					}
 				});
@@ -37,14 +37,18 @@ class Scoreboard extends ServerCommand {
 		} else if (args[2] == "total") {
 			// TODO: scoreboard <objective> total
 		} else {
-			// TODO: Error command
+			rcon.error(`Incorrect arguments. Correct usage: ${this.info.usage}`);
 		}
 	}
 
 	query(rcon, player, objective) {
 		rcon.sendCommand(`scoreboard players get ${player} ${objective}`)
 			.then(data => {
-				rcon.succeed(data.body);
+				if (data.body.includes("Can't get value of") || data.body.includes("Unknown scoreboard objective")) {
+					rcon.error(data.body);
+				} else {
+					rcon.succeed(data.body);
+				}
 			});
 	}
 }
