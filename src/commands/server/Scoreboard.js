@@ -1,7 +1,6 @@
 "use strict";
 
 const ServerCommand = require("../ServerCommand");
-const Packet = require("../../rcon/Packet");
 
 const everyScoreboard = require("../../assets/scoreboards.json");
 
@@ -30,7 +29,6 @@ class Scoreboard extends ServerCommand {
 		} else if (args[1] == "query") {
 			let player = args[2];
 			let objective = args[0];
-			console.log(player, objective)
 			if (player == undefined) {
 				this.rcon.error("Missing argument: scoreboard query <player>");
 			} else {

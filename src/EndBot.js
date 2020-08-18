@@ -6,7 +6,6 @@ const Ping = require("./commands/discord/Ping");
 const Rcon = require("./rcon/Rcon");
 const Bridge = require("./rcon/Bridge");
 const Scoreboard = require("./commands/server/Scoreboard");
-const ServerCommand = require("./commands/ServerCommand");
 
 const config = require("../config.json");
 
