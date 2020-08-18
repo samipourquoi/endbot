@@ -20,7 +20,8 @@ class EndBot extends Discord.Client {
 			"ping": new Ping(this),
 		};
 		this.serverCommands = {
-			"scoreboard": new Scoreboard(this)
+			"scoreboard": new Scoreboard(this),
+			"help": new Help(this)
 		};
 		this.bridges = new Map();
 		this.rcons = [];
