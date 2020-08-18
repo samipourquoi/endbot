@@ -85,6 +85,7 @@ class Bridge {
 			// <samipourquoi> Lorem ipsum
 			if ((message = line.match(/<.+> .+/)) != null) {
 				this.channel.send(message[0]);
+				this.client.filterServer(message[0]);
 
 				// [samipourquoi: Set own game mode to Survival Mode]
 			} else if (((message = line.match(/\[.+: .+/)) != null)) {

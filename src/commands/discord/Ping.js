@@ -1,6 +1,6 @@
 "use strict";
 
-const Command = require("./Command.js");
+const Command = require("../Command.js");
 
 class Ping extends Command {
 	constructor(client) {
@@ -13,7 +13,6 @@ class Ping extends Command {
 	}
 
 	run(message) {
-		console.log(this.client);
 		message.channel.send("Pong!");
 	}
 

@@ -2,9 +2,11 @@
 
 const Discord = require("discord.js");
 
-const Ping = require("./commands/Ping");
+const Ping = require("./commands/discord/Ping");
 const Rcon = require("./rcon/Rcon");
 const Bridge = require("./rcon/Bridge");
+const Scoreboard = require("./commands/server/Scoreboard");
+const ServerCommand = require("./commands/ServerCommand");
 
 const config = require("../config.json");
 
@@ -14,10 +16,12 @@ class EndBot extends Discord.Client {
 		this.token = config.token;
 		this.prefix = config.prefix;
 		this.servers = {};
-		this.commands = {
+		this.discordCommands = {
 			"ping": new Ping(this),
 		};
+		this.serverCommands = {};
 		this.bridges = new Map();
+		this.rcons = [];
 	}
 
 	init() {
@@ -34,18 +38,27 @@ class EndBot extends Discord.Client {
 			let server = config.servers[keys[i]];
 
 			// Setup RCON
-			let rcon = this.servers[server.name] = new Rcon(server.host, server["rcon-port"], server["rcon-password"], server.name);
-			rcon.client.on("auth", () => {
+			let rcon = this.servers[server.name] = new Rcon({
+				host: server.host,
+				port: server["rcon-port"],
+				password: server["rcon-password"],
+				name: server.name
+			}, this);
+			rcon.connection.on("auth", () => {
 				this.servers[server.name].sendMessage("Hello World!", "EndBot");
 			});
 
 			// Setup bridge channels
 			let channel = this.guild.channels.cache.get(server["bridge-channel"]);
-			this.bridges.set(channel.id, new Bridge(channel, rcon, server["log-path"]));
+			this.bridges.set(channel.id, new Bridge(channel, rcon, server["log-path"], this));
+			this.rcons.push(rcon);
 		}
+
+		// Setup Scoreboard command (requires rcons)
+		this.serverCommands["scoreboard"] = new Scoreboard(this, this.rcons[0]);
 	}
 
-	filterCommand(message) {
+	filterDiscord(message) {
 		if (message.author.bot) return;
 
 		if (this.bridges.has(message.channel.id)) {
@@ -55,13 +68,31 @@ class EndBot extends Discord.Client {
 		if (message.content.charAt(0) !== this.prefix) return;
 
 		let command = message.content.substring(1).split(" ");
-		this.parseCommand(message, command[0], command.slice(1));
+		this.parseDiscordCommand(message, command[0], command.slice(1));
 	}
 
-	parseCommand(message, command, ...args) {
-		let cmd = this.commands[command];
+	filterServer(message) {
+		if (message.charAt(0) == this.prefix) return;
+
+		let author = message.substring(1, message.indexOf(">"));
+		let command = message.split(" ");
+		command[1] = command[1].substring(1);
+
+		this.parseServerCommand(author, command[1], command.slice(2));
+	}
+
+	parseDiscordCommand(message, command, ...args) {
+		let cmd = this.discordCommands[command];
 		if (cmd == undefined) return;
+
 		cmd.run(message, ...args);
+	}
+
+	parseServerCommand(authorName, command, ...args) {
+		let cmd = this.serverCommands[command];
+		if (cmd == undefined) return;
+
+		cmd.run(authorName, ...args);
 	}
 }
 

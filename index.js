@@ -41,4 +41,4 @@ client.once("ready", () => {
 	console.log("EndBot is on! 😎");
 });
 
-client.on("message", client.filterCommand);
+client.on("message", client.filterDiscord);

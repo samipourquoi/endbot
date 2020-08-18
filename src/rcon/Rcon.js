@@ -7,15 +7,16 @@ const Packet = require("./Packet");
  * Class representing a single instance of an Rcon.
  */
 class Rcon {
-	constructor(host, port, password, name) {
+	constructor({ host, port, password, name }, client) {
 		this.host = host;
 		this.port = port;
 		this.password = password;
 		this.name = name;
 		this.timeout = 8000;
 
-		// this.client = new Net.Socket();
-		this.client = Net.createConnection({
+		this.client = client;
+
+		this.connection = Net.createConnection({
 			host: this.host,
 			port: this.port
 		}, () => {
@@ -27,14 +28,14 @@ class Rcon {
 
 	authenticate() {
 		let packet = new Packet(this.generateId(), 3, this.password);
-		this.client.write(packet.buffer);
+		this.connection.write(packet.buffer);
 
 		let promise = new Promise((resolve, reject) => {
-			this.client.once("data", data => {
+			this.connection.once("data", data => {
 				let response = Packet.read(data);
 				if (response.id != packet.id) reject(`Couldn't authenticate to ${this.name} Rcon`);
 
-				this.client.emit("auth");
+				this.connection.emit("auth");
 				resolve(`Running ${this.name} Rcon`);
 			});
 		});
@@ -44,10 +45,10 @@ class Rcon {
 
 	sendCommand(command) {
 		let packet = new Packet(this.generateId(), 2, command);
-		this.client.write(packet.buffer);
+		this.connection.write(packet.buffer);
 
 		return new Promise((resolve, reject) => {
-			this.client.once("data", data => {
+			this.connection.once("data", data => {
 				resolve(Packet.read(data));
 			});
 			setTimeout(() => {
