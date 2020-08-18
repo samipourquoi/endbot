@@ -57,10 +57,11 @@ class Rcon {
 		});
 	}
 
-	sendMessage(message, { author, color }) {
+	sendMessage(message, meta) {
 		let tellraw = "";
-		if (author != undefined) {
-			tellraw = `tellraw @a ["[", {"text":"${author}","color":"${color}"},"]",{"text":"${message}","color":"white"}]`;
+		if (meta != undefined) {
+			console.log(true);
+			tellraw = `tellraw @a ["[", {"text":"${meta.author}","color":"${meta.color}"},"]",{"text":"${message}","color":"white"}]`;
 		} else {
 			tellraw = `tellraw @a {"text":"${message}","color":"white"}`;
 		}
