@@ -65,6 +65,22 @@ class Rcon {
 	generateId() {
 		return Math.floor(Math.random() * Math.floor(2**16));
 	}
+
+	log(...args) {
+		this.sendCommand(`tellraw @a {"text": "${args.join("")}", "color": "red"}`);
+	}
+
+	succeed(...args) {
+		this.sendCommand(`tellraw @a {"text": "${args.join("")}", "color": "green"}`);
+	}
+
+	warn(...args) {
+		this.sendCommand(`tellraw @a {"text": "${args.join("")}", "color": "gold"}`);
+	}
+
+	error(...args) {
+		this.sendCommand(`tellraw @a {"text": "${args.join("")}", "color": "red"}`);
+	}
 }
 
 module.exports = Rcon;
