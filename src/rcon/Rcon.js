@@ -57,8 +57,14 @@ class Rcon {
 		});
 	}
 
-	sendMessage(message, author, color) {
-		let tellraw = `tellraw @a ["[", {"text":"${author}", "color": "${color}"}, "] ", {"text":"${message}", "color": "white"}]`;
+	sendMessage(message, color, author) {
+		let tellraw = "";
+		if (author != undefined) {
+			tellraw = `tellraw @a ["[", {"text":"${author}","color":"${color}"},"]",{"text":"${message}","color":"white"}]`;
+		} else {
+			tellraw = `tellraw @a {"text":"${message}","color":"white"}`;
+		}
+
 		return this.sendCommand(tellraw);
 	}
 
