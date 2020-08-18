@@ -6,6 +6,7 @@ const Ping = require("./commands/discord/Ping");
 const Rcon = require("./rcon/Rcon");
 const Bridge = require("./rcon/Bridge");
 const Scoreboard = require("./commands/server/Scoreboard");
+const Help = require("./commands/server/Help");
 
 const config = require("../config.json");
 
@@ -18,7 +19,9 @@ class EndBot extends Discord.Client {
 		this.discordCommands = {
 			"ping": new Ping(this),
 		};
-		this.serverCommands = {};
+		this.serverCommands = {
+			"scoreboard": new Scoreboard(this)
+		};
 		this.bridges = new Map();
 		this.rcons = [];
 	}
@@ -44,7 +47,7 @@ class EndBot extends Discord.Client {
 				name: server.name
 			}, this);
 			rcon.connection.on("auth", () => {
-				this.servers[server.name].sendMessage("Hello World!", "EndBot");
+				this.servers[server.name].sendMessage("Hello World!", { author: "EndBot", color: "dark_purple"});
 			});
 
 			// Setup bridge channels
@@ -52,9 +55,6 @@ class EndBot extends Discord.Client {
 			this.bridges.set(channel.id, new Bridge(channel, rcon, server["log-path"], this));
 			this.rcons.push(rcon);
 		}
-
-		// Setup Scoreboard command (requires rcons)
-		this.serverCommands["scoreboard"] = new Scoreboard(this, this.rcons[0]);
 	}
 
 	filterDiscord(message) {
@@ -70,14 +70,14 @@ class EndBot extends Discord.Client {
 		this.parseDiscordCommand(message, command[0], command.slice(1));
 	}
 
-	filterServer(message) {
+	filterServer(rcon, message) {
 		if (message.charAt(0) == this.prefix) return;
 
 		let author = message.substring(1, message.indexOf(">"));
 		let command = message.split(" ");
 		command[1] = command[1].substring(1);
 
-		this.parseServerCommand(author, command[1], command.slice(2));
+		this.parseServerCommand(rcon, author, command[1], command.slice(2));
 	}
 
 	parseDiscordCommand(message, command, ...args) {
@@ -87,11 +87,11 @@ class EndBot extends Discord.Client {
 		cmd.run(message, ...args);
 	}
 
-	parseServerCommand(authorName, command, ...args) {
+	parseServerCommand(rcon, authorName, command, ...args) {
 		let cmd = this.serverCommands[command];
 		if (cmd == undefined) return;
 
-		cmd.run(authorName, ...args);
+		cmd.run(rcon, authorName, ...args);
 	}
 }
 

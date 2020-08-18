@@ -3,9 +3,8 @@
 const Command = require("./Command");
 
 class ServerCommand extends Command {
-	constructor(client, rcon) {
+	constructor(client) {
 		super(client);
-		this.rcon = rcon;
 	}
 }
 
