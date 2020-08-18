@@ -3,8 +3,8 @@
 const Command = require("./Command.js");
 
 class Ping extends Command {
-	constructor() {
-		super();
+	constructor(client) {
+		super(client);
 		this.info = {
 			"name": "Ping",
 			"usage": "ping",
@@ -13,6 +13,7 @@ class Ping extends Command {
 	}
 
 	run(message) {
+		console.log(this.client);
 		message.channel.send("Pong!");
 	}
 

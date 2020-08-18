@@ -1,7 +1,8 @@
 "use strict";
 
 class Command {
-	constructor() {
+	constructor(client) {
+		this.client = client;
 	}
 }
 
