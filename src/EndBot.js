@@ -7,17 +7,20 @@ const Rcon = require("./rcon/Rcon");
 const Bridge = require("./rcon/Bridge");
 const Scoreboard = require("./commands/server/Scoreboard");
 const Help = require("./commands/server/Help");
+const Backup = require("./commands/discord/Backup");
 
 const config = require("../config.json");
 
 class EndBot extends Discord.Client {
 	constructor() {
 		super();
+		this.config = config;
 		this.token = config.token;
 		this.prefix = config.prefix;
 		this.servers = {};
 		this.discordCommands = {
 			"ping": new Ping(this),
+			"backup": new Backup(this)
 		};
 		this.serverCommands = {
 			"scoreboard": new Scoreboard(this),

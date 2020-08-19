@@ -1,6 +1,11 @@
 # EndBot specific
 
 config.json
+backups
+
+# macOS
+
+.DS_Store
 
 # IntelliJ
 
