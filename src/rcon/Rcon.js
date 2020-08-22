@@ -16,13 +16,24 @@ class Rcon {
 
 		this.client = client;
 
-		this.connection = Net.createConnection({
-			host: this.host,
-			port: this.port
-		}, () => {
-			this.authenticate()
-				.then(console.log)
-				.catch(console.error);
+		let connect = () => {
+			console.log(`Connecting to ${this.name} Rcon...`);
+			this.connection = Net.createConnection({
+				host: this.host,
+				port: this.port
+			}, () => {
+				this.authenticate()
+					.then(console.log)
+					.catch(console.error);
+			});
+		};
+
+		connect();
+
+		this.connection.on("error", e => {
+			console.error(e);
+			console.error(`Couldn't connect to ${this.name} Rcon. Retrying in 5 seconds.`);
+			setTimeout(connect, 5*1000);
 		});
 	}
 
@@ -60,7 +71,6 @@ class Rcon {
 	sendMessage(message, meta) {
 		let tellraw = "";
 		if (meta != undefined) {
-			console.log(true);
 			tellraw = `tellraw @a ["[", {"text":"${meta.author}","color":"${meta.color}"},"]",{"text":"${message}","color":"white"}]`;
 		} else {
 			tellraw = `tellraw @a {"text":"${message}","color":"white"}`;
@@ -74,19 +84,19 @@ class Rcon {
 	}
 
 	log(...args) {
-		this.sendCommand(`tellraw @a {"text": "${args.join("")}", "color": "red"}`);
+		return this.sendCommand(`tellraw @a {"text": "${args.join("")}", "color": "red"}`);
 	}
 
 	succeed(...args) {
-		this.sendCommand(`tellraw @a {"text": "${args.join("")}", "color": "green"}`);
+		return this.sendCommand(`tellraw @a {"text": "${args.join("")}", "color": "green"}`);
 	}
 
 	warn(...args) {
-		this.sendCommand(`tellraw @a {"text": "${args.join("")}", "color": "gold"}`);
+		return this.sendCommand(`tellraw @a {"text": "${args.join("")}", "color": "gold"}`);
 	}
 
 	error(...args) {
-		this.sendCommand(`tellraw @a {"text": "${args.join("")}", "color": "red"}`);
+		return this.sendCommand(`tellraw @a {"text": "${args.join("")}", "color": "red"}`);
 	}
 }
 
