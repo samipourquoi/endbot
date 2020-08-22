@@ -99,7 +99,7 @@ class Rcon {
 	sendMessage(message, meta) {
 		let tellraw = "";
 		if (meta != undefined) {
-			tellraw = `tellraw @a ["[", {"text":"${meta.author}","color":"${meta.color}"},"]",{"text":"${message}","color":"white"}]`;
+			tellraw = `tellraw @a ["[", {"text":"${meta.author}","color":"${meta.color}"},"] ",{"text":"${message}","color":"white"}]`;
 		} else {
 			tellraw = `tellraw @a {"text":"${message}","color":"white"}`;
 		}
