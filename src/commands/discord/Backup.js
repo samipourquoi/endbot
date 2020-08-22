@@ -16,7 +16,7 @@ class Backup extends Command {
 		};
 	}
 
-	run(message, args) {
+	run(message) {
 		if (!message.member.roles.cache.has(this.client.config["backup-role"])) {
 			message.channel.send("da fuck you tryin' to do");
 			return;
@@ -30,16 +30,29 @@ class Backup extends Command {
 
 			if (server["bridge-channel"] == message.channel.id) {
 				let serverPath = path.parse(path.parse(server["log-path"]).dir).dir;
-				this.backup(serverPath);
+				let rcon = this.client.bridges.get(message.channel.id).rcon;
+
+				let embed = this.client.createEmbed("result");
+				embed.setTitle("Backup is running...");
+				message.channel.send(embed);
+
+				let backupName = this.backup(rcon, serverPath);
+
+				embed = this.client.createEmbed("result")
+					.setTitle("Backup is finished!")
+					.setFooter(`${backupName}`);
+				message.channel.send(embed);
 
 				return;
 			}
 		}
 
-		message.channel.send("You must be in a bridge channel to do that!");
+		let embed = this.client.createEmbed("error")
+			.setTitle("You must be in a bridge channel to do that!");
+		message.channel.send(embed);
 	}
 
-	backup(serverPath) {
+	backup(rcon, serverPath) {
 		if (!fs.existsSync("./backups")) {
 			fs.mkdirSync("./backups");
 		}
@@ -54,11 +67,10 @@ class Backup extends Command {
 
 		// on_08-20-2020_at_01-10-07.tar.gz
 		let backupName = `on_${month}-${day}-${year}_at_${hours}-${minutes}-${seconds}.${this.client.config["backup-format"]}`;
-		console.log(backupName);
-
+		
 		exec(`cd /${serverPath} && tar --exclude="./server.jar" -zcvf ${process.cwd()}/backups/${backupName} .`);
 
-		console.log("backup taken!");
+		return backupName;
 	}
 }
 

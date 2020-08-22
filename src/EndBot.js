@@ -87,7 +87,6 @@ class EndBot extends Discord.Client {
 	parseDiscordCommand(message, command, ...args) {
 		let cmd = this.discordCommands[command];
 		if (cmd == undefined) return;
-
 		cmd.run(message, ...args);
 	}
 
@@ -96,6 +95,35 @@ class EndBot extends Discord.Client {
 		if (cmd == undefined) return;
 
 		cmd.run(rcon, authorName, ...args);
+	}
+
+	createEmbed(color) {
+		switch (color) {
+		case "result":
+			color = "#7fe254";
+			break;
+		case "error":
+			color = "#f54f38";
+		}
+
+		return new Discord.MessageEmbed()
+			.setColor(color);
+	}
+
+	/**
+	 * Returns a predefined common error embed.<br>
+	 * Possible errors are:
+	 * - `bridge`: "You must be in a bridge channel to do that!"
+	 *
+	 * @param {String} error
+	 * @return {Discord.MessageEmbed}
+	 */
+	errorEmbed(error) {
+		switch (error) {
+		case "bridge":
+			return this.createEmbed("error")
+				.setTitle("You must be in a bridge channel to do that!");
+		}
 	}
 }
 
