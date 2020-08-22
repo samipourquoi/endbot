@@ -57,39 +57,38 @@ class Rcon {
 	}
 
 	/**
-	 * Drains the pending queue.
-	 * This is used to be able to send multiple
-	 * packets in a small amount of time without
-	 * throwing an error.
+	 * Sends next pending command to theserver.
+	 * It is only called when we have received a response from the previous packet.
+	 * It is made to not make the client disconnect from the Rcon server.
+	 *
+	 * @see sendCommand
 	 */
-	drain() {
-		if (this.draining) return;
-
-		// Recursion messes up the "this", so we must use
-		// something like that to be able to use it.
-		let dis = this;
-		let workerDrain = () => {
-			if (dis.queue.length > 0) {
-				dis.draining = true;
-				let packet = dis.queue.shift();
-				dis.connection.write(packet.buffer, workerDrain);
-			} else {
-				dis.draining = false;
-			}
-		};
-		workerDrain();
+	nextDrain() {
+		if (this.queue.length > 0) {
+			this.draining = true;
+			let packet = this.queue.shift();
+			this.connection.write(packet.buffer);
+		} else {
+			this.draining = false;
+		}
 	}
 
 	sendCommand(command) {
 		let packet = new Packet(this.generateId(), 2, command);
 		this.queue.push(packet);
-		this.drain();
+
+		if (!this.draining) this.nextDrain();
 
 		return new Promise((resolve, reject) => {
-			this.connection.on("data", data => {
+			let onData = data => {
 				data = Packet.read(data);
-				if (data.id == packet.id) resolve(data);
-			});
+				if (data.id == packet.id) {
+					this.connection.removeListener("data", onData);
+					this.nextDrain();
+					resolve(data);
+				}
+			};
+			this.connection.on("data", onData);
 
 			setTimeout(() => {
 				reject("Timeout exceeded");

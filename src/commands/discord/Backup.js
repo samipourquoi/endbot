@@ -52,12 +52,13 @@ class Backup extends Command {
 		message.channel.send(embed);
 	}
 
-	backup(rcon, serverPath) {
+	async backup(rcon, serverPath) {
 		if (!fs.existsSync("./backups")) {
 			fs.mkdirSync("./backups");
 		}
 
-		// TODO: Add save-off/save-on. Requires some rewrite of the RCON wrapper.
+		await rcon.sendCommand("save-off");
+		await rcon.warn("A backup is starting...");
 
 		let date = new Date();
 		let month = date.getMonth().toString().padStart(2, "0");
@@ -71,6 +72,9 @@ class Backup extends Command {
 		let backupName = `on_${month}-${day}-${year}_at_${hours}-${minutes}-${seconds}.${this.client.config["backup-format"]}`;
 		
 		exec(`cd /${serverPath} && tar --exclude="./server.jar" -zcvf ${process.cwd()}/backups/${backupName} .`);
+
+		await rcon.sendCommand("save-on");
+		await rcon.succeed("The backup is finished!");
 
 		return backupName;
 	}
