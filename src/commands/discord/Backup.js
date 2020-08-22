@@ -57,6 +57,8 @@ class Backup extends Command {
 			fs.mkdirSync("./backups");
 		}
 
+		// TODO: Add save-off/save-on. Requires some rewrite of the RCON wrapper.
+
 		let date = new Date();
 		let month = date.getMonth().toString().padStart(2, "0");
 		let day = date.getDate().toString().padStart(2, "0");
