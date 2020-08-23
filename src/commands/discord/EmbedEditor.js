@@ -1,6 +1,7 @@
 "use strict";
 
 const Discord = require("discord.js");
+const url = require("url");
 
 const Command = require("../Command.js");
 
@@ -28,6 +29,7 @@ class EmbedEditor extends Command {
 				break;
 
 			case "delete":
+				this.ongoing.delete(message.author.id);
 				break;
 
 			case "title":
@@ -48,6 +50,10 @@ class EmbedEditor extends Command {
 
 			case "field":
 				this.field(message, args.slice(1));
+				break;
+
+			case "publish":
+				this.publish(message, args.slice(1));
 				break;
 
 			default:
@@ -171,7 +177,7 @@ class EmbedEditor extends Command {
 				embed.addField(
 					name.substring(1, name.length - 1),
 					value.substring(1, value.length - 1),
-					inline
+					Boolean(inline).valueOf()
 				);
 				message.channel.send(embed);
 			} else {
@@ -184,6 +190,33 @@ class EmbedEditor extends Command {
 				message.channel.send(embed);
 			} else {
 				message.channel.send(this.client.errorEmbed("args"));
+			}
+		} else {
+			message.channel.send(this.client.errorEmbed("args"));
+		}
+	}
+
+	publish(message, args) {
+		if (!this.ongoing.has(message.author.id)) {
+			message.channel.send(
+				this.client.createEmbed("error")
+					.setTitle("You don't have an ongoing embed! Do " + this.client.prefix + "embed create")
+			);
+			return;
+		}
+
+		let url_ = url.parse(args[0]);
+		if (url_.hostname == "discordapp.com") {
+			let urlPath = url_.pathname.split("/");
+			let id = urlPath[3];
+			let token = urlPath[4];
+			let webhook = new Discord.WebhookClient(id, token);
+
+			if (message.member.hasPermission("MANAGE_CHANNELS")) {
+				webhook.send(this.ongoing.get(message.author.id));
+				message.channel.send(this.client.createEmbed("result").setTitle("Successfully sent the embed"));
+			} else {
+				message.channel.send(this.client.createEmbed("result").setTitle("You don't have the require permissions to do this!"));
 			}
 		} else {
 			message.channel.send(this.client.errorEmbed("args"));
