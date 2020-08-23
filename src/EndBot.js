@@ -19,7 +19,8 @@ class EndBot extends Discord.Client {
 			"ping": new (require("./commands/discord/Ping"))(this),
 			"backup": new (require("./commands/discord/Backup"))(this),
 			"scoreboard": new (require("./commands/discord/Scoreboard"))(this),
-			"help": new (require("./commands/discord/Help"))(this)
+			"help": new (require("./commands/discord/Help"))(this),
+			"online": new (require("./commands/discord/Online"))(this)
 		};
 		this.serverCommands = {
 			"scoreboard": new (require("./commands/server/Scoreboard"))(this),
