@@ -1,6 +1,7 @@
 "use strict";
 
 const Discord = require("discord.js");
+const fs = require("fs");
 
 const Rcon = require("./rcon/Rcon");
 const Bridge = require("./rcon/Bridge");
@@ -15,18 +16,20 @@ class EndBot extends Discord.Client {
 		this.prefix = config.prefix;
 		this.servers = {};
 		this.bridges = new Map();
-		this.discordCommands = {
-			"ping": new (require("./commands/discord/Ping"))(this),
-			"backup": new (require("./commands/discord/Backup"))(this),
-			"scoreboard": new (require("./commands/discord/Scoreboard"))(this),
-			"help": new (require("./commands/discord/Help"))(this),
-			"online": new (require("./commands/discord/Online"))(this)
-		};
-		this.serverCommands = {
-			"scoreboard": new (require("./commands/server/Scoreboard"))(this),
-			"help": new (require("./commands/server/Help"))(this)
-		};
+		this.discordCommands = this.readCommands("src/commands/discord/");
+		this.serverCommands = this.readCommands("src/commands/server/");
 		this.rcons = [];
+	}
+
+	readCommands(module) {
+		let commands = {};
+		fs.readdirSync(module).forEach(file => {
+			let commandPath = "./" + module.split("/").slice(1).join("/") + file;
+			let command = new (require(commandPath))(this);
+			commands[command.info.usage.split(" ")[0]] = command;
+		});
+
+		return commands;
 	}
 
 	init() {
