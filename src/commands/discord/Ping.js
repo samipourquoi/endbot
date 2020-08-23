@@ -8,7 +8,7 @@ class Ping extends Command {
 		this.info = {
 			"name": "Ping",
 			"usage": "ping",
-			"description": "Check if the bot is online."
+			"description": "Check if the bot is online"
 		};
 	}
 

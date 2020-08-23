@@ -8,7 +8,7 @@ class Help extends ServerCommand {
 		this.info = {
 			"name": "Help",
 			"usage": "help",
-			"description": "Send a help pannel on the server."
+			"description": "Send a help pannel on the server"
 		};
 	}
 

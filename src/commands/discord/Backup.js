@@ -12,7 +12,7 @@ class Backup extends Command {
 		this.info = {
 			"name": "Backup",
 			"usage": "backup | backup [Server Name]",
-			"description": "Backups a server."
+			"description": "Backups a server"
 		};
 	}
 

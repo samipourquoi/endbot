@@ -2,13 +2,8 @@
 
 const Discord = require("discord.js");
 
-const Ping = require("./commands/discord/Ping");
 const Rcon = require("./rcon/Rcon");
 const Bridge = require("./rcon/Bridge");
-const ServerScoreboard = require("./commands/server/Scoreboard");
-const DiscordServer = require("./commands/discord/Scoreboard");
-const Help = require("./commands/server/Help");
-const Backup = require("./commands/discord/Backup");
 
 const config = require("../config.json");
 
@@ -21,13 +16,14 @@ class EndBot extends Discord.Client {
 		this.servers = {};
 		this.bridges = new Map();
 		this.discordCommands = {
-			"ping": new Ping(this),
-			"backup": new Backup(this),
-			"scoreboard": new DiscordServer(this)
+			"ping": new (require("./commands/discord/Ping"))(this),
+			"backup": new (require("./commands/discord/Backup"))(this),
+			"scoreboard": new (require("./commands/discord/Scoreboard"))(this),
+			"help": new (require("./commands/discord/Help"))(this)
 		};
 		this.serverCommands = {
-			"scoreboard": new ServerScoreboard(this),
-			"help": new Help(this)
+			"scoreboard": new (require("./commands/server/Scoreboard"))(this),
+			"help": new (require("./commands/server/Help"))(this)
 		};
 		this.rcons = [];
 	}

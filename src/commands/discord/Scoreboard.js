@@ -22,7 +22,7 @@ class Scoreboard extends Command {
 		this.info = {
 			"name": "Scoreboard",
 			"usage": "scoreboard <objective>",
-			"description": "Creates an image of the ingame scoreboard associated to that objective, for all whitelisted players."
+			"description": "Creates an image of the ingame scoreboard associated to that objective, for all whitelisted players"
 		};
 	}
 
