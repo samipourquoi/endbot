@@ -32,8 +32,6 @@ class Online extends Command {
 					online.players = "No online players";
 				}
 
-				console.log(online);
-
 				let embed = this.client.createEmbed("result")
 					.setTitle("Online players on " + rcon.name)
 					.addField(`${online.onlineCount}/${online.maxCount}`, online.players);

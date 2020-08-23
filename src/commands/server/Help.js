@@ -25,7 +25,6 @@ class Help extends ServerCommand {
 		}
 
 		let message = "[\"\"," + help.join(",\"\\n\",") + "]";
-		console.log(`tellraw @a ${message}`);
 		rcon.sendCommand("tellraw @a " + message);
 	}
 }

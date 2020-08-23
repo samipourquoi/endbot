@@ -55,8 +55,6 @@ class Bridge {
 			}
 		});
 		this.logWatcher.add(this.logPath);
-
-		this.channel.send(`Connected to ${rcon.name}!`);
 	}
 
 	toMinecraft(message) {

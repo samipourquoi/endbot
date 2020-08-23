@@ -27,7 +27,7 @@ class Rcon {
 				port: this.port
 			}, () => {
 				this.authenticate()
-					.then(console.log)
+					.then()
 					.catch(console.error);
 			});
 		};
@@ -35,7 +35,6 @@ class Rcon {
 		connect();
 
 		this.connection.on("error", e => {
-			console.error(e);
 			console.error(`Couldn't connect to ${this.name} Rcon. Retrying in 5 seconds.`);
 			setTimeout(connect, 5*1000);
 		});

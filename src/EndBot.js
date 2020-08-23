@@ -41,6 +41,7 @@ class EndBot extends Discord.Client {
 		let keys = Object.keys(config.servers);
 		for (let i = 0; i < keys.length; i++) {
 			let server = config.servers[keys[i]];
+			let channel = this.guild.channels.cache.get(server["bridge-channel"]);
 
 			// Setup RCON
 			let rcon = this.servers[server.name] = new Rcon({
@@ -51,10 +52,10 @@ class EndBot extends Discord.Client {
 			}, this);
 			rcon.connection.on("auth", () => {
 				this.servers[server.name].sendMessage("Hello World!", { author: "EndBot", color: "dark_purple"});
+				channel.send(`Connected to ${rcon.name}!`);
 			});
 
 			// Setup bridge channels
-			let channel = this.guild.channels.cache.get(server["bridge-channel"]);
 			this.bridges.set(channel.id, new Bridge(channel, rcon, server["log-path"], this));
 			this.rcons.push(rcon);
 		}
