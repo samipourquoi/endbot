@@ -9,7 +9,7 @@ class Scoreboard extends ServerCommand {
 		super(client);
 		this.info = {
 			"name": "Scoreboard",
-			"usage": "scoreboard <objective> [query <player>]",
+			"usage": "scoreboard <objective | clear> [query <player>]",
 			"description": "Displays a scoreboad in game."
 		};
 	}
@@ -18,6 +18,12 @@ class Scoreboard extends ServerCommand {
 		if (args.length == 1) {
 			let scoreboard = everyScoreboard[args[0]];
 			if (scoreboard == undefined) scoreboard = args[0];
+
+			if (scoreboard == "clear") {
+				rcon.sendCommand("scoreboard objectives setdisplay sidebar");
+				rcon.succeed("Cleared the sidebar from any objective");
+				return;
+			}
 
 			rcon.sendCommand(`scoreboard objectives setdisplay sidebar ${scoreboard}`)
 				.then(data => {
