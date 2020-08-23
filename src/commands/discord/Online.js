@@ -43,6 +43,8 @@ class Online extends Command {
 			}
 		}
 
+		// TODO: Add global online, not only in bridge channels
+
 		await message.channel.send(this.client.errorEmbed("bridge"));
 	}
 
