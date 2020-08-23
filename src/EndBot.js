@@ -19,6 +19,7 @@ class EndBot extends Discord.Client {
 		this.token = config.token;
 		this.prefix = config.prefix;
 		this.servers = {};
+		this.bridges = new Map();
 		this.discordCommands = {
 			"ping": new Ping(this),
 			"backup": new Backup(this),
@@ -28,7 +29,6 @@ class EndBot extends Discord.Client {
 			"scoreboard": new ServerScoreboard(this),
 			"help": new Help(this)
 		};
-		this.bridges = new Map();
 		this.rcons = [];
 	}
 
@@ -116,6 +116,7 @@ class EndBot extends Discord.Client {
 	 * Returns a predefined common error embed.<br>
 	 * Possible errors are:
 	 * - `bridge`: "You must be in a bridge channel to do that!"
+	 * - `args`: "Invalid arguments! Do !help for more info."
 	 *
 	 * @param {String} error
 	 * @return {Discord.MessageEmbed}
@@ -125,6 +126,9 @@ class EndBot extends Discord.Client {
 		case "bridge":
 			return this.createEmbed("error")
 				.setTitle("You must be in a bridge channel to do that!");
+		case "args":
+			return this.createEmbed("error")
+				.setTitle("Invalid arguments! Do " + this.prefix + "help for more info.");
 		}
 	}
 }
