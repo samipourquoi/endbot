@@ -118,6 +118,7 @@ class EndBot extends Discord.Client {
 	 * Possible errors are:
 	 * - `bridge`: "You must be in a bridge channel to do that!"
 	 * - `args`: "Invalid arguments! Do !help for more info."
+	 * - `unexpected`: "An unexpected error has occured while performing that command"
 	 *
 	 * @param {String} error
 	 * @return {Discord.MessageEmbed}
@@ -130,6 +131,9 @@ class EndBot extends Discord.Client {
 		case "args":
 			return this.createEmbed("error")
 				.setTitle("Invalid arguments! Do " + this.prefix + "help for more info.");
+		case "unexpected":
+			return this.createEmbed("error")
+				.setTitle("An unexpected error has occured while performing that command");
 		}
 	}
 }
