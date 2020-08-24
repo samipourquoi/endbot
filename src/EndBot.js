@@ -33,18 +33,11 @@ class EndBot extends Discord.Client {
 	}
 
 	init() {
-		this.guild = this.guilds.cache.get(config["guild-id"]);
-
-		if (this.guilds.cache.size == undefined) {
-			console.error("EndBot isn't in the configured server!");
-			process.abort();
-		}
-
 		// Setup listeners
 		let keys = Object.keys(config.servers);
 		for (let i = 0; i < keys.length; i++) {
 			let server = config.servers[keys[i]];
-			let channel = this.guild.channels.cache.get(server["bridge-channel"]);
+			let channel = this.channels.cache.get(server["bridge-channel"]);
 
 			// Setup RCON
 			let rcon = this.servers[server.name] = new Rcon({
