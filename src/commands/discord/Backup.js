@@ -11,7 +11,7 @@ class Backup extends Command {
 		super(client);
 		this.info = {
 			"name": "Backup",
-			"usage": "backup | backup [Server Name]",
+			"usage": "backup",
 			"description": "Backups a server"
 		};
 	}
