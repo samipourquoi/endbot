@@ -30,6 +30,12 @@ Lastly, activate the Developper mode on Discord to grab necessary IDs, in [this 
 
 # Config file
 
+In the `server.properties` of your server(s), change these properties:
+- `broadcast-rcon-to-ops` to `false` to prevent command log spam to ops
+- `enable-rcon` to `true`
+- `rcon.port` choose a unique port
+- `rcon.password` choose a password.
+
 Copy `config.template.json` to `config.json` in the root directory.
 Fill in the fields:
 - `token` Token of your discord bot
@@ -37,13 +43,13 @@ Fill in the fields:
 - `backup-role` ID of the role allowed to use the [`backup`](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md#backup) 
 command.
 - `backup-format` Format in which the archived backup will be in. Defaulted and recommended to use `tar.gz`.
-- `servers` Array of the configuration of all servers
+- `servers` Array of the configuration of all servers. You can add as many as you want.
     - `name` Name with which the bot will use when refering to that server.
     - `host` IP of the server, without any ports.
     - `rcon-port` Port of the Rcon of the server.
     - `rcon-password` Password of the Rcon.
     - `bridge-channel` ID of the channel that will be used as a bridge.
-    - `log-path` Absolute path to the `latest.log` file of the server. It's usually fount in `logs`.
+    - `log-path` Absolute path to the `latest.log` file of the server. It's usually found in `logs`.
 
 # Run
 
