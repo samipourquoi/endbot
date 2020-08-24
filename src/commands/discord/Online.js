@@ -17,7 +17,6 @@ class Online extends Command {
 			let iterator = this.client.bridges.entries();
 			for (let i = 0; i < this.client.bridges.size; i++) {
 				let bridge = iterator.next().value[1];
-				console.log(bridge);
 				await message.channel.send(await this.getOnlinePlayers(bridge.rcon));
 			}
 			return;
