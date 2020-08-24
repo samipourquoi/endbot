@@ -33,7 +33,10 @@ class Help extends Command {
 			description += `**${info.name}**: ${info.description}: \`${info.usage}\`\n\n`;
 		}
 
+		description += "\n[Full documentation here](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md)";
+
 		embed.setDescription(description);
+		// https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md
 
 		message.channel.send(embed);
 	}
