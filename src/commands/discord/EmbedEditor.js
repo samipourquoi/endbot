@@ -2,6 +2,7 @@
 
 const Discord = require("discord.js");
 const url = require("url");
+const https = require("https");
 
 const Command = require("../Command.js");
 
@@ -25,11 +26,15 @@ class EmbedEditor extends Command {
 		try {
 			switch (args[0]) {
 			case "create":
-				this.create(message, args);
+				this.create(message, args.slice(1));
 				break;
 
 			case "delete":
 				this.ongoing.delete(message.author.id);
+				message.channel.send(
+					this.client.createEmbed("result")
+						.setTitle("Successfully deleted your ongoing embed")
+				);
 				break;
 
 			case "title":
@@ -60,7 +65,7 @@ class EmbedEditor extends Command {
 				if (!this.ongoing.has(message.author.id)) {
 					message.channel.send(
 						this.client.createEmbed("error")
-							.setTitle("You don't have an ongoing embed! Do " + this.client.prefix + "embed create")
+							.setTitle("You don't have an ongoing embed! Do " + this.client.prefix + "embed delete")
 					);
 					break;
 				} else {
@@ -77,20 +82,22 @@ class EmbedEditor extends Command {
 	}
 
 	create(message, args) {
-		let embed;
-		switch (args[1]) {
+		if (this.ongoing.has(message.author.id)) {
+			message.channel.send(
+				this.client.createEmbed("error")
+					.setTitle("You already have an ongoing embed! Do " + this.client.prefix + "embed reset")
+			);
+			return;
+		}
+
+		switch (args[0]) {
 		case "from":
+			this.createFrom(message, args.slice(1));
 			break;
 
 		default:
-			if (this.ongoing.has(message.author.id)) {
-				message.channel.send(
-					this.client.createEmbed("error")
-						.setTitle("You already have an ongoing embed! Do " + this.client.prefix + "embed reset")
-				);
-				break;
-			}
-			embed = new Discord.MessageEmbed();
+			// eslint-disable-next-line no-case-declarations
+			let embed = new Discord.MessageEmbed();
 			this.ongoing.set(message.author.id, embed);
 			message.channel.send(embed);
 			break;
@@ -136,6 +143,39 @@ class EmbedEditor extends Command {
 		} else {
 			message.channel.send(this.client.errorEmbed("args"));
 		}
+	}
+
+	createFrom(message, args) {
+		let request = new Promise((resolve, reject) => {
+			let options = new URL(args[0]);
+			let req = https.request(options, res => {
+				res.setEncoding("utf-8");
+				let data = "";
+				res.on("data", d => {
+					data += d;
+				});
+				res.on("end", () => {
+					try {
+						resolve(JSON.parse(data));
+					} catch (e) {
+						reject(e);
+					}
+				});
+			});
+			req.once("error", reject);
+			req.end();
+		});
+
+		request.then(json => {
+			let embed = new Discord.MessageEmbed(json);
+			this.ongoing.set(message.author.id, embed);
+			message.channel.send(embed);
+		}).catch(err => {
+			message.channel.send(
+				this.client.errorEmbed("unexpected")
+					.setDescription(err)
+			);
+		});
 	}
 
 	footer(message, args) {
@@ -205,6 +245,14 @@ class EmbedEditor extends Command {
 			return;
 		}
 
+		if (args[0].substring(0, 2) == "<#") {
+			this.client.channels.fetch(args[0].substring(2, args[0].length-1))
+				.then(channel => {
+					channel.send(this.ongoing.get(message.author.id));
+				});
+			return;
+		}
+
 		let url_ = url.parse(args[0]);
 		if (url_.hostname == "discordapp.com") {
 			let urlPath = url_.pathname.split("/");
@@ -218,9 +266,10 @@ class EmbedEditor extends Command {
 			} else {
 				message.channel.send(this.client.createEmbed("result").setTitle("You don't have the require permissions to do this!"));
 			}
-		} else {
-			message.channel.send(this.client.errorEmbed("args"));
+
+			return;
 		}
+		message.channel.send(this.client.errorEmbed("args"));
 	}
 
 	toString() {
