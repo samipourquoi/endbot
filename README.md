@@ -22,7 +22,7 @@ Then install the dependencies:
 $ npm install
 ```
 
-Configure the bot in the next section. Learn about the JSON syntaxt if you don't know it yet [here](https://www.digitalocean.com/community/tutorials/an-introduction-to-json).
+Configure the bot in the next section. Learn about the JSON syntax if you don't know it yet [here](https://www.digitalocean.com/community/tutorials/an-introduction-to-json).
 
 Create a discord app by following [this tutorial](https://discordpy.readthedocs.io/en/latest/discord.html).
 
@@ -53,7 +53,17 @@ command.
 
 # Run
 
-To start the bot, run 
+To start the bot, run:
 ```shell script
 $ npm start
 ``` 
+
+There are some flags useful for debugging:
+- `--no-servers` will disable the connection of the bot to the MC servers. It will crash if someone tries to execute
+a command requiring a server.
+- `--debug` will print debug informations, like those from the discord connection.
+
+To use a flag, do: (notice the `--`)
+```shell script
+$ npm start -- <flags>
+```
