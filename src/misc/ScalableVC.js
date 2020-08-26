@@ -16,7 +16,7 @@ class ScalableVC {
 		this.load();
 	}
 
-	voiceEvent(oldState, newState){
+	async voiceEvent(oldState, newState){
 		if(!this.canWork) return;
 
 		// Setup class variables for other methods
@@ -26,15 +26,15 @@ class ScalableVC {
 		// Figure out what has actually happened
 		if(this.oldState === null){
 			// Old state was nothing, someone has joined
-			this.joinAction();
+			await this.joinAction();
 		} else if(this.newState === null){
 			// New state is nothing, someone has left
-			this.leaveAction();
+			await this.leaveAction();
 		} else if(this.newState.id !== this.oldState.id){
 			// Something else happened. Check that the id is not the same, therefore the person has moved channels.
 			// If the person stays in the same channel they have (been) muted/deafened
-			this.leaveAction();
-			this.joinAction();
+			await this.leaveAction();
+			await this.joinAction();
 		}
 	}
 
@@ -55,23 +55,17 @@ class ScalableVC {
 		let foundCreateChannel = false;
 		this.newState.guild.channels.cache.forEach(function(item){
 			if(item.type !== "voice") return;
-			console.log("Testing", item.name);
 			if(foundCreateChannel) return;
-			if(item.name === config.scalableVC.createChannelName){
-				foundCreateChannel = true;
-				console.log("Found + channel");
-			}
+			if(item.name === config.scalableVC.createChannelName) foundCreateChannel = true;
 		});
 
 		// Create a new joinable channel
 		console.log(foundCreateChannel);
-		if(foundCreateChannel === false){
-			console.log("Creating new channel");
-			this.newState.guild.channels.create(config.scalableVC.createChannelName,{"parent": config.scalableVC.categoryId, "type": "voice"});
-		}
+		if(foundCreateChannel === false) await this.newState.guild.channels.create(config.scalableVC.createChannelName,
+			{"parent": config.scalableVC.categoryId, "type": "voice"});
 	}
 
-	leaveAction(){
+	async leaveAction(){
 		// Check this is a channel we can delete
 		if(!this.activeChannelNames.includes(this.oldState.name)) return;
 
@@ -101,7 +95,7 @@ class ScalableVC {
 		this.availableChannelNames.push(channelName);
 
 		// Yeet vc
-		this.oldState.delete();
+		await this.oldState.delete();
 	}
 
 	load(){
