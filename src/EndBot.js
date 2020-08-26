@@ -95,7 +95,7 @@ class EndBot extends Discord.Client {
 	parseDiscordCommand(message, command, ...args) {
 		let cmd = this.discordCommands[command];
 		if (cmd === undefined) return;
-		console.log(message.content, "was ran by", message.author.username);
+		// console.log(message.content, "was ran by", message.author.username);
 		cmd.run(message, ...args);
 	}
 
