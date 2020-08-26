@@ -46,7 +46,7 @@ Usage:
 - `embed publish <webhook url>` posts the embed as the provided webhook. 
 - `embed title|description|footer "<content>"`
 - `embed color <hex color>`
-- `embed field add "<name>","<value>",<inline>:boolean`
+- `embed field add "<name>","<value>",<inline>` with inline being a boolean
 - `embed field splice <index>`
 
 ## Server
