@@ -8,7 +8,7 @@ class Execute extends Command {
 	constructor(client) {
 		super(client);
 		this.info = {
-			"name": "Execute Command",
+			"name": "Execute",
 			"usage": "execute",
 			"description": "Execute a command on a server from a bridge channel"
 		};
