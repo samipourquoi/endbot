@@ -48,6 +48,13 @@ Usage:
 - `embed field add "<name>","<value>",<inline>:boolean`
 - `embed field splice <index>`
 
+### Scalable VC
+The scalable VC system
+
+Usade:
+- `togglesvc` This will toggle if the ScalableVC System can work.. The current state will be reacted into the command
+- `resetsvc` his will revert the ScalableVC system back to it's original state, and clean up the channels. Run when bugs are encountered
+
 ## Server
 
 ### Help

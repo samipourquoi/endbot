@@ -9,7 +9,7 @@ class ToggleSVC extends Command {
 		this.info = {
 			"name": "Toggle Scalable VC",
 			"usage": "togglesvc",
-			"description": "(Admin Only) This will toggle if the ScalableVC System can work.. The current state will be reacted into the command"
+			"description": "(Admin Only) This will toggle if the ScalableVC System can work. The current state will be reacted into the command"
 		};
 	}
 
