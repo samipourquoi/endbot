@@ -31,4 +31,4 @@ class FancyConsole extends Console {
 	}
 }
 
-module.exports = FancyConsole;
+module.exports = new FancyConsole();

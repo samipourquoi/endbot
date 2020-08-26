@@ -5,7 +5,7 @@ const ScalableVC = require("./src/misc/ScalableVC");
 const EndBot = require("./src/EndBot");
 const client = module.exports = new EndBot();
 
-console = new FancyConsole();
+console = FancyConsole;
 
 console.log("Logging in...");
 client.login(client.token);

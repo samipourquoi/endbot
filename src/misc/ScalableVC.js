@@ -51,8 +51,16 @@ class ScalableVC {
 		// Set the current VC to the channel name
 		this.newState.setName(channelName);
 
+		// Check if a joinable channel exists
+		let foundCreateChannel = false;
+		this.oldState.guild.channels.cache().forEach(function(item){
+			if(foundCreateChannel) return;
+			if(item.name === config.scalableVC.createChannelName) foundCreateChannel = true;
+		});
+
 		// Create a new joinable channel
-		this.newState.guild.channels.create(config.scalableVC.createChannelName, {"parent": config.scalableVC.categoryId, "type": "voice"});
+		if(!foundCreateChannel)	this.newState.guild.channels.create(config.scalableVC.createChannelName,
+			{"parent": config.scalableVC.categoryId, "type": "voice"});
 	}
 
 	leaveAction(){
