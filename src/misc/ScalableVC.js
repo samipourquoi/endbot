@@ -137,7 +137,7 @@ class ScalableVC {
 		});
 
 		// If we don't have the required channel, make one
-		if(!foundCreateChannel) this.newState.guild.channels.create(config.scalableVC.createChannelName,{"parent": config.scalableVC.categoryId, "type": "voice"});
+		if(!foundCreateChannel) message.guild.channels.create(config.scalableVC.createChannelName,{"parent": config.scalableVC.categoryId, "type": "voice"});
 
 		if(!changesMade) console.log("[ResetSVC] No Changes were made");
 
