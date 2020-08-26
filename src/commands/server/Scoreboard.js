@@ -15,17 +15,18 @@ class Scoreboard extends ServerCommand {
 	}
 
 	async run(rcon, authorName, args) {
-		if (args.length == 1) {
+		if (args.length == 1 || args[1] == "list") {
 			let scoreboard = everyScoreboard[args[0]];
 			if (scoreboard == undefined) scoreboard = args[0];
+			let mode = (args[1] == "list") ? "list" : "sidebar";
 
 			if (scoreboard == "clear") {
-				rcon.sendCommand("scoreboard objectives setdisplay sidebar");
-				rcon.succeed("Cleared the sidebar from any objective");
+				await rcon.sendCommand(`scoreboard objectives setdisplay ${mode}`);
+				await rcon.succeed(`Cleared the ${mode} from any objective`);
 				return;
 			}
 
-			rcon.sendCommand(`scoreboard objectives setdisplay sidebar ${scoreboard}`)
+			rcon.sendCommand(`scoreboard objectives setdisplay ${mode} ${scoreboard}`)
 				.then(data => {
 					if (data.body.includes("Unknown scoreboard objective")) {
 						rcon.error(data.body);
