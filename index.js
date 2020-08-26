@@ -6,6 +6,10 @@ const client = module.exports = new EndBot();
 
 console = new FancyConsole();
 
+const ScalableVC = require("./src/misc/ScalableVC");
+const EndBot = require("./src/EndBot");
+const client = module.exports = new EndBot();
+
 console.log("Logging in...");
 client.login(client.token);
 
@@ -19,3 +23,4 @@ client.once("ready", () => {
 });
 
 client.on("message", client.filterDiscord);
+client.on("voiceStateUpdate", (oldState, newState) => ScalableVC.voiceEvent(oldState, newState));
