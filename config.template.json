@@ -1,9 +1,10 @@
 {
 	"token": "",
 	"prefix": "!",
-	"admin-role": "734889872317350019",
+
 	"backup-role": "234567891234567891",
 	"backup-format": "tar.gz",
+
 	"servers": [
 		{
 			"name": "Server",
@@ -14,6 +15,7 @@
 			"log-path": "path/to/latest.log"
 		}
 	],
+
 	"scalableVC": {
 		"createChannelName": "+",
 		"channelNames": [

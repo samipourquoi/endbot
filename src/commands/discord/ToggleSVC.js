@@ -14,7 +14,7 @@ class ToggleSVC extends Command {
 	}
 
 	run(message) {
-		if (!message.member.roles.cache.has(this.client.config["admin-role"])) {
+		if (!message.member.hasPermission("MANAGE_CHANNELS")) {
 			message.channel.send("da fuck you tryin' to do");
 			return;
 		}

@@ -50,11 +50,11 @@ Usage:
 - `embed field splice <index>`
 
 ### Scalable VC
-The scalable VC system
+The scalable VC system. You must have the "Manage Channels" permissions to run the following commands.
 
-Usade:
-- `togglesvc` This will toggle if the ScalableVC System can work.. The current state will be reacted into the command
-- `resetsvc` his will revert the ScalableVC system back to it's original state, and clean up the channels. Run when bugs are encountered
+Usage:
+- `togglesvc` This will toggle if the ScalableVC System can work. The current state will be reacted into the command.
+- `resetsvc` his will revert the ScalableVC system back to its original state, and clean up the channels. Run when bugs you encounter bugs.
 
 ## Server
 
