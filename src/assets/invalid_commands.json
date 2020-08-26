@@ -1,0 +1,9 @@
+[
+	"Incorrect argument for command",
+	"Unknown or incomplete command",
+	"Expected whitespace to end one argument, but found trailing data",
+	"Could not parse command:",
+	"<--[HERE]",
+	"No player was found",
+	"An unexpected error occurred trying to execute that command"
+]

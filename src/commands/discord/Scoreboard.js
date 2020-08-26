@@ -96,9 +96,9 @@ class Scoreboard extends Command {
 
 		scores.push([
 			"Total",
-			String(scores.reduce((a, b) => {
-				return parseInt(a[1]) + parseInt(b[1]);
-			}))
+			(scores.length == 0) ? 0 : String(scores.reduce((a, b) => {
+				return a + parseInt(b[1]);
+			}, 0))
 		]);
 
 		return scores;
