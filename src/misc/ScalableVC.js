@@ -61,8 +61,11 @@ class ScalableVC {
 
 		// Create a new joinable channel
 		console.log(foundCreateChannel);
-		if(foundCreateChannel === false) await this.newState.guild.channels.create(config.scalableVC.createChannelName,
-			{"parent": config.scalableVC.categoryId, "type": "voice"});
+		if(foundCreateChannel === false) {
+			console.log("Creating a new joinable channel");
+			await this.newState.guild.channels.create(config.scalableVC.createChannelName,
+				{"parent": config.scalableVC.categoryId, "type": "voice"});
+		}
 	}
 
 	async leaveAction(){
