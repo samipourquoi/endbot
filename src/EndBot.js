@@ -18,6 +18,10 @@ try {
 class EndBot extends Discord.Client {
 	constructor() {
 		super();
+		this.flags = {
+			noservers: process.argv.includes("--no-servers"),
+			debug: process.argv.includes("--debug")
+		};
 		this.config = config;
 		this.token = config.token;
 		this.prefix = config.prefix;
@@ -27,6 +31,7 @@ class EndBot extends Discord.Client {
 		this.serverCommands = this.readCommands("src/commands/server/");
 		this.rcons = [];
 	}
+
 
 	readCommands(module) {
 		let commands = {};
@@ -39,7 +44,7 @@ class EndBot extends Discord.Client {
 		return commands;
 	}
 
-	init() {
+	initServers() {
 		// Setup listeners
 		let keys = Object.keys(config.servers);
 		for (let i = 0; i < keys.length; i++) {

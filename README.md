@@ -57,7 +57,17 @@ command.
     - `categoryID` The category the new VCs should be created in
 # Run
 
-To start the bot, run 
+To start the bot, run:
 ```shell script
 $ npm start
 ``` 
+
+There are some flags useful for debugging:
+- `--no-servers` will disable the connection of the bot to the MC servers. It will crash if someone tries to execute
+a command requiring a server.
+- `--debug` will print debug informations, like those from the discord connection.
+
+To use a flag, do: (notice the `--`)
+```shell script
+$ npm start -- <flags>
+```
