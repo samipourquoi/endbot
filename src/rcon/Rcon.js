@@ -36,6 +36,7 @@ class Rcon {
 
 		this.connection.on("error", e => {
 			console.error(`Couldn't connect to ${this.name} Rcon. Retrying in 5 seconds.`);
+			if (this.client.flags.debug) console.error(e);
 			setTimeout(connect, 5*1000);
 		});
 	}

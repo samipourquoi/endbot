@@ -35,6 +35,12 @@ It will as well get the total value from all scores.
 
 Usage: `scoreboard <objective>`
 
+### Execute
+Execute a command on a server from a bridge channel. Only persons having the role specified in the `op-role` field,
+in the config file, will be able to run that command.
+
+Usage: `execute <command>`
+
 ### Embed Editor
 Creates and edits embeds.
 
@@ -53,8 +59,8 @@ Usage:
 The scalable VC system. You must have the "Manage Channels" permissions to run the following commands.
 
 Usage:
-- `togglesvc` This will toggle if the ScalableVC System can work. The current state will be reacted into the command.
-- `resetsvc` his will revert the ScalableVC system back to its original state, and clean up the channels. Run when bugs you encounter bugs.
+- `togglesvc` toggles if the ScalableVC System can work. The current state will be reacted into the command.
+- `resetsvc` reverts the ScalableVC system back to its original state, and clean up the channels. Run when you encounter bugs.
 
 ## Server
 
@@ -67,6 +73,8 @@ Usage: `help`
 Displays a scoreboad in game, for non-ops.
 
 Usage:
-- `scoreboard <objective>`
+- `scoreboard <objective>` displays an objective on the sidebar
+- `scoreboard clear` clears any objective from the sidebar
 - `scoreboard <objective> query <player>` Queries a score from a player.
 - `scoreboard <objective> total` Gets the total of all scores combined
+- `scoreboard <objective> list` displays objective to the player list (by pressing tab)

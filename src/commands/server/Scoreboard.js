@@ -15,17 +15,18 @@ class Scoreboard extends ServerCommand {
 	}
 
 	async run(rcon, authorName, args) {
-		if (args.length == 1) {
+		if (args.length == 1 || args[1] == "list") {
 			let scoreboard = everyScoreboard[args[0]];
 			if (scoreboard == undefined) scoreboard = args[0];
+			let mode = (args[1] == "list") ? "list" : "sidebar";
 
 			if (scoreboard == "clear") {
-				rcon.sendCommand("scoreboard objectives setdisplay sidebar");
-				rcon.succeed("Cleared the sidebar from any objective");
+				await rcon.sendCommand(`scoreboard objectives setdisplay ${mode}`);
+				await rcon.succeed(`Cleared the ${mode} from any objective`);
 				return;
 			}
 
-			rcon.sendCommand(`scoreboard objectives setdisplay sidebar ${scoreboard}`)
+			rcon.sendCommand(`scoreboard objectives setdisplay ${mode} ${scoreboard}`)
 				.then(data => {
 					if (data.body.includes("Unknown scoreboard objective")) {
 						rcon.error(data.body);
@@ -34,7 +35,8 @@ class Scoreboard extends ServerCommand {
 				});
 		} else if (args[1] == "query") {
 			let player = args[2];
-			let objective = args[0];
+			let objective = everyScoreboard[args[0]];
+			if (objective == undefined) objective = args[0];
 			if (player == undefined) {
 				rcon.error("Missing argument: scoreboard query <player>");
 			} else {
@@ -42,7 +44,8 @@ class Scoreboard extends ServerCommand {
 			}
 		} else if (args[1] == "total") {
 			let players = await this.getWhitelist(rcon);
-			let objective = args[0];
+			let objective = everyScoreboard[args[0]];
+			if (objective == undefined) objective = args[0];
 			let scores = [];
 			for (let i = 0; i < players.length; i++) {
 				let player = players[i];

@@ -8,14 +8,17 @@ class Execute extends Command {
 	constructor(client) {
 		super(client);
 		this.info = {
-			"name": "Execute Command",
+			"name": "Execute",
 			"usage": "execute",
 			"description": "Execute a command on a server from a bridge channel"
 		};
 	}
 
 	async run(message, args) {
-		return;
+		if (!message.member.roles.cache.has(this.client.config["op-role"])) {
+			await message.channel.send("da fuck you tryin' to do");
+			return;
+		}
 
 		let rcon = this.client.bridges.get(message.channel.id).rcon;
 		let command = args.join(" ");

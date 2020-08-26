@@ -21,7 +21,7 @@ class Scoreboard extends Command {
 		super(client);
 		this.info = {
 			"name": "Scoreboard",
-			"usage": "scoreboard <objective> [total|query <player>]",
+			"usage": "scoreboard <objective>|clear [list|total|query <player>]",
 			"description": "Creates an image of the ingame scoreboard associated to that objective, for all whitelisted players"
 		};
 	}

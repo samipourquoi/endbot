@@ -1,11 +1,9 @@
 "use strict";
 
-const FancyConsole = require("./src/FancyConsole");
-const EndBot = require("./src/EndBot");
+console = require("./src/misc/FancyConsole");
 const ScalableVC = require("./src/misc/ScalableVC");
+const EndBot = require("./src/EndBot");
 const client = module.exports = new EndBot();
-
-console = FancyConsole;
 
 console.log("Logging in...");
 client.login(client.token);
@@ -23,4 +21,3 @@ client.once("ready", () => {
 
 client.on("message", client.filterDiscord);
 client.on("voiceStateUpdate", (oldState, newState) => ScalableVC.voiceEvent(oldState, newState));
-
