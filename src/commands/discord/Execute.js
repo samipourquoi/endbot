@@ -15,6 +15,8 @@ class Execute extends Command {
 	}
 
 	async run(message, args) {
+		return;
+
 		let rcon = this.client.bridges.get(message.channel.id).rcon;
 		let command = args.join(" ");
 
