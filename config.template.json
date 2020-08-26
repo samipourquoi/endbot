@@ -5,6 +5,8 @@
 	"backup-role": "234567891234567891",
 	"backup-format": "tar.gz",
 
+	"op-role": "234567891234567891",
+
 	"servers": [
 		{
 			"name": "Server",

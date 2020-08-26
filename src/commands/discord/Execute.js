@@ -15,7 +15,10 @@ class Execute extends Command {
 	}
 
 	async run(message, args) {
-		return;
+		if (!message.member.roles.cache.has(this.client.config["op-role"])) {
+			await message.channel.send("da fuck you tryin' to do");
+			return;
+		}
 
 		let rcon = this.client.bridges.get(message.channel.id).rcon;
 		let command = args.join(" ");
