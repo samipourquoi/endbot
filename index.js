@@ -1,11 +1,9 @@
 "use strict";
 
-const FancyConsole = require("./src/FancyConsole");
+console = require("./src/FancyConsole");
 const ScalableVC = require("./src/misc/ScalableVC");
 const EndBot = require("./src/EndBot");
 const client = module.exports = new EndBot();
-
-console = FancyConsole;
 
 console.log("Logging in...");
 client.login(client.token);
