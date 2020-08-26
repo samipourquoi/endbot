@@ -34,7 +34,8 @@ class Scoreboard extends ServerCommand {
 				});
 		} else if (args[1] == "query") {
 			let player = args[2];
-			let objective = args[0];
+			let objective = everyScoreboard[args[0]];
+			if (objective == undefined) objective = args[0];
 			if (player == undefined) {
 				rcon.error("Missing argument: scoreboard query <player>");
 			} else {
@@ -42,7 +43,8 @@ class Scoreboard extends ServerCommand {
 			}
 		} else if (args[1] == "total") {
 			let players = await this.getWhitelist(rcon);
-			let objective = args[0];
+			let objective = everyScoreboard[args[0]];
+			if (objective == undefined) objective = args[0];
 			let scores = [];
 			for (let i = 0; i < players.length; i++) {
 				let player = players[i];
