@@ -1,7 +1,7 @@
 "use strict";
 
-const EndBot = require("./src/EndBot");
-const client = module.exports = new EndBot();
+
+// Requires setting up console first for proper logging
 const { Console } = require("console");
 
 console = new (class extends Console {
@@ -11,17 +11,17 @@ console = new (class extends Console {
 
 	log(...data) {
 		let time = this.getTime();
-		super.log(`\x1b[37m${time}\x1b[0m`, ...data);
+		super.log("[endbot]", `\x1b[37m${time}\x1b[0m`, "[INFO]", ...data);
 	}
 
 	error(...data) {
 		let time = this.getTime();
-		super.log(`\x1b[37m${time}\x1b[31m`, ...data, "\x1b[0m");
+		super.log("[endbot]", `\x1b[37m${time}\x1b[31m`, "[ERROR]", ...data, "\x1b[0m");
 	}
 
 	warn(...data) {
 		let time = this.getTime();
-		super.log(`\x1b[37m${time}\x1b[33m`, ...data, "\x1b[0m");
+		super.log("[endbot]", `\x1b[37m${time}\x1b[33m`, "[WARNING]", ...data, "\x1b[0m");
 	}
 
 	getTime() {
@@ -33,12 +33,17 @@ console = new (class extends Console {
 	}
 });
 
+const ScalableVC = require("./src/misc/ScalableVC");
+const EndBot = require("./src/EndBot");
+const client = module.exports = new EndBot();
+
 console.log("Logging in...");
 client.login(client.token);
 
 client.once("ready", () => {
-	client.init();
+	//client.init();
 	console.log("EndBot is on! 😎");
 });
 
 client.on("message", client.filterDiscord);
+client.on("voiceStateUpdate", (oldState, newState) => ScalableVC.voiceEvent(oldState, newState));
