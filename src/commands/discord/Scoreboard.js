@@ -21,7 +21,7 @@ class Scoreboard extends Command {
 		super(client);
 		this.info = {
 			"name": "Scoreboard",
-			"usage": "scoreboard <objective>",
+			"usage": "scoreboard <objective> [total|query <player>]",
 			"description": "Creates an image of the ingame scoreboard associated to that objective, for all whitelisted players"
 		};
 	}
@@ -58,6 +58,7 @@ class Scoreboard extends Command {
 		context.fillStyle = LIGHT_GREY;
 		for (let i = 0; i < scores.length; i++) {
 			let name = scores[i][0];
+			if (name == "Total") context.fillStyle = WHITE;
 			context.fillText(name, MARGIN, (FONT_SIZE+SPACE_BETWEEN)*(i+1) + MARGIN * 2 + OBJECTIVE_NAME_SPACE);
 		}
 
@@ -92,6 +93,13 @@ class Scoreboard extends Command {
 		scores.sort((a, b) => {
 			return b[1]-a[1];
 		});
+
+		scores.push([
+			"Total",
+			String(scores.reduce((a, b) => {
+				return parseInt(a[1]) + parseInt(b[1]);
+			}))
+		]);
 
 		return scores;
 	}

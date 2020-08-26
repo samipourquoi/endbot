@@ -31,6 +31,7 @@ Usage: `ping`
 ### Scoreboard
 Creates an image of the ingame scoreboard associated to that objective, for all whitelisted players.
 It will fetch scores from the first server declared in the config, from all whitelisted players.
+It will as well get the total value from all scores.
 
 Usage: `scoreboard <objective>`
 
@@ -45,7 +46,7 @@ Usage:
 - `embed publish <webhook url>` posts the embed as the provided webhook. 
 - `embed title|description|footer "<content>"`
 - `embed color <hex color>`
-- `embed field add "<name>","<value>",<inline>:boolean`
+- `embed field add "<name>","<value>",<inline>` with inline being a boolean
 - `embed field splice <index>`
 
 ### Scalable VC
@@ -68,3 +69,4 @@ Displays a scoreboad in game, for non-ops.
 Usage:
 - `scoreboard <objective>`
 - `scoreboard <objective> query <player>` Queries a score from a player.
+- `scoreboard <objective> total` Gets the total of all scores combined
