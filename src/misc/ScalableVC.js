@@ -38,7 +38,7 @@ class ScalableVC {
 		}
 	}
 
-	joinAction(){
+	async joinAction(){
 		// Let's check if the person wants to create a new channel
 		if(this.newState.name !== config.scalableVC.createChannelName) return;
 
@@ -49,18 +49,26 @@ class ScalableVC {
 		console.log("[ScalableVC] Creating a new VC (", channelName, ")");
 
 		// Set the current VC to the channel name
-		this.newState.setName(channelName);
+		await this.newState.setName(channelName);
 
 		// Check if a joinable channel exists
 		let foundCreateChannel = false;
-		this.oldState.guild.channels.cache().forEach(function(item){
+		this.newState.guild.channels.cache.forEach(function(item){
+			if(item.type !== "voice") return;
+			console.log("Testing", item.name);
 			if(foundCreateChannel) return;
-			if(item.name === config.scalableVC.createChannelName) foundCreateChannel = true;
+			if(item.name === config.scalableVC.createChannelName){
+				foundCreateChannel = true;
+				console.log("Found + channel");
+			}
 		});
 
 		// Create a new joinable channel
-		if(!foundCreateChannel)	this.newState.guild.channels.create(config.scalableVC.createChannelName,
-			{"parent": config.scalableVC.categoryId, "type": "voice"});
+		console.log(foundCreateChannel);
+		if(foundCreateChannel === false){
+			console.log("Creating new channel");
+			this.newState.guild.channels.create(config.scalableVC.createChannelName,{"parent": config.scalableVC.categoryId, "type": "voice"});
+		}
 	}
 
 	leaveAction(){
@@ -127,6 +135,9 @@ class ScalableVC {
 				changesMade = true;
 			}
 		});
+
+		// If we don't have the required channel, make one
+		if(!foundCreateChannel) this.newState.guild.channels.create(config.scalableVC.createChannelName,{"parent": config.scalableVC.categoryId, "type": "voice"});
 
 		if(!changesMade) console.log("[ResetSVC] No Changes were made");
 
