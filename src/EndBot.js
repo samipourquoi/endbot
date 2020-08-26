@@ -6,7 +6,14 @@ const fs = require("fs");
 const Rcon = require("./rcon/Rcon");
 const Bridge = require("./rcon/Bridge");
 
-const config = require("../config.json");
+let config;
+
+try {
+	config = require("../config.json");
+} catch (e) {
+	console.error("Unable to load config");
+	process.exit(1);
+}
 
 class EndBot extends Discord.Client {
 	constructor() {
@@ -71,7 +78,7 @@ class EndBot extends Discord.Client {
 	}
 
 	filterServer(rcon, message) {
-		if (message.charAt(0) == this.prefix) return;
+		if (message.charAt(0) === this.prefix) return;
 
 		let author = message.substring(1, message.indexOf(">"));
 		let command = message.split(" ");
@@ -82,13 +89,14 @@ class EndBot extends Discord.Client {
 
 	parseDiscordCommand(message, command, ...args) {
 		let cmd = this.discordCommands[command];
-		if (cmd == undefined) return;
+		if (cmd === undefined) return;
+		console.log(message.content, "was ran by", message.author.username);
 		cmd.run(message, ...args);
 	}
 
 	parseServerCommand(rcon, authorName, command, ...args) {
 		let cmd = this.serverCommands[command];
-		if (cmd == undefined) return;
+		if (cmd === undefined) return;
 
 		cmd.run(rcon, authorName, ...args);
 	}

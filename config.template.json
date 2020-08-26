@@ -1,18 +1,26 @@
 {
-	"token": "",
-	"prefix": "!",
+  "token": "",
+  "prefix": "!",
 
-	"backup-role": "234567891234567891",
-	"backup-format": "tar.gz",
+  "admin-role": "734889872317350019",
+  "backup-role": "234567891234567891",
+  "backup-format": "tar.gz",
 
-	"servers": [
-		{
-			"name": "Server",
-			"host": "localhost",
-			"rcon-port": "25575",
-			"rcon-password": "supersecret",
-			"bridge-channel": "345678912345678912",
-			"log-path": "path/to/latest.log"
-		}
-	]
+  "servers": [
+	{
+	  "name": "Server",
+	  "host": "localhost",
+	  "rcon-port": "25575",
+	  "rcon-password": "supersecret",
+	  "bridge-channel": "345678912345678912",
+	  "log-path": "path/to/latest.log"
+	}
+  ],
+
+  "scalableVC": {
+	"createChannelName": "+",
+	"channelNames": ["Black", "Dark Gray", "Gray", "White", "Light Purple", "Dark Purple", "Green", "Dark Green",
+	  "Gold", "Yellow", "Red", "Dark Red", "Aqua", "Dark Aqua", "Blue", "Dark Blue"],
+	"categoryId": "748140168262844416"
+  }
 }

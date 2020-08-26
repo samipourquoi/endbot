@@ -22,11 +22,11 @@ Then install the dependencies:
 $ npm install
 ```
 
-Configure the bot in the next section. Learn about the JSON syntaxt if you don't know it yet [here](https://www.digitalocean.com/community/tutorials/an-introduction-to-json).
+Configure the bot in the next section. Learn about the JSON syntax if you don't know it yet [here](https://www.digitalocean.com/community/tutorials/an-introduction-to-json).
 
 Create a discord app by following [this tutorial](https://discordpy.readthedocs.io/en/latest/discord.html).
 
-Lastly, activate the Developper mode on Discord to grab necessary IDs, in [this page](https://discordia.me/en/developer-mode).
+Lastly, activate the Developer mode on Discord to grab necessary IDs, in [this page](https://discordia.me/en/developer-mode).
 
 # Config file
 
@@ -40,6 +40,7 @@ Copy `config.template.json` to `config.json` in the root directory.
 Fill in the fields:
 - `token` Token of your discord bot
 - `prefix` Prefix of the bot. Defaulted to `!`. Feel free to change it to whatever single character you want.
+- `admin-role` ID of the role allowed to use the SVC control commands, `togglesvc`, `resetsvc`.
 - `backup-role` ID of the role allowed to use the [`backup`](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md#backup) 
 command.
 - `backup-format` Format in which the archived backup will be in. Defaulted and recommended to use `tar.gz`.
@@ -50,7 +51,10 @@ command.
     - `rcon-password` Password of the Rcon.
     - `bridge-channel` ID of the channel that will be used as a bridge.
     - `log-path` Absolute path to the `latest.log` file of the server. It's usually found in `logs`.
-
+- `scalableVC` Configuration for the scalableVC system
+    - `createChannelName` The name of the channel people should join to create a new vc
+    - `channelNames` A list of names the system will use to create new VCs
+    - `categoryID` The category the new VCs should be created in
 # Run
 
 To start the bot, run 
