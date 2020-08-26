@@ -14,6 +14,11 @@ class ToggleSVC extends Command {
 	}
 
 	run(message) {
+		if (!message.member.roles.cache.has(this.client.config["admin-role"])) {
+			message.channel.send("da fuck you tryin' to do");
+			return;
+		}
+
 		ScalableVC.toggle(message);
 	}
 
