@@ -85,11 +85,14 @@ class Bridge {
 				this.channel.send(message[0]);
 				this.client.filterServer(this.rcon, message[0]);
 
-				// [samipourquoi: Set own game mode to Survival Mode]
+			} else if (line.includes("[type]:")) {
+				// do nothing
+
+			// [samipourquoi: Set own game mode to Survival Mode]
 			} else if (((message = line.match(/\[.+: .+/)) != null)) {
 				this.channel.send(`*${message[0]}*`);
 
-				// samipourquoi fell out the world
+			// samipourquoi fell out the world
 			} else if (isSpecialMessage(line)) {
 				this.channel.send(line);
 			}
