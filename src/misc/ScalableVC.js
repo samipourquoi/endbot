@@ -9,11 +9,16 @@ try {
 	process.exit(1);
 }
 
+const EndBot = require("../EndBot");
+
 class ScalableVC {
 	constructor(){
 		console.log("Scalable VC Activated");
 		this.canWork = true;
-		this.load();
+	}
+
+	setGuild(guild){
+		this.guild = guild.array()[0];
 	}
 
 	async voiceEvent(oldState, newState){
@@ -89,19 +94,17 @@ class ScalableVC {
 		await this.oldState.delete();
 	}
 
-	load(){
-		console.log("Loading ScalableVC");
-		this.availableChannelNames = config.scalableVC.channelNames;
-		this.activeChannelNames = [];
-	}
-
 	reset(message){
 		console.log("Resetting ScalableVC System");
-		this.load();
+
+		this.availableChannelNames = config.scalableVC.channelNames;
+		this.activeChannelNames = [];
 
 		let foundCreateChannel = false;
-		let channels = message.guild.channels.cache;
+		let channels = this.guild.channels.cache;
 		let availableChannelNames = this.availableChannelNames;
+		let acn = availableChannelNames;
+		let activeChannelNames = this.activeChannelNames;
 		let changesMade = false;
 		channels.forEach(function (item) {
 			if(item.type !== "voice") return;
@@ -115,18 +118,33 @@ class ScalableVC {
 			if(item.name === config.scalableVC.createChannelName) foundCreateChannel = true;
 
 			if(availableChannelNames.includes(item.name)) {
-				console.warn("Removed channel named", item.name);
-				item.delete();
+				console.warn("Detected channel named", item.name);
+
+				// Find the index of the channel that was left in the array
+				let found = false;
+				let foundIndex;
+				for(let i=0; i<acn.length && !found; i++){
+					if(acn[i] === item.name){
+						found = true;
+						foundIndex = i;
+					}
+				}
+
+				[acn[foundIndex], acn[acn.length - 1]] = [acn[acn.length - 1], acn[foundIndex]];
+				activeChannelNames.push(availableChannelNames.pop());
+
 				changesMade = true;
 			}
 		});
 
 		// If we don't have the required channel, make one
-		if(!foundCreateChannel) message.guild.channels.create(config.scalableVC.createChannelName,{"parent": config.scalableVC.categoryId, "type": "voice"});
+		if(!foundCreateChannel) this.guild.channels.create(config.scalableVC.createChannelName,{"parent": config.scalableVC.categoryId, "type": "voice"});
 
 		if(!changesMade) console.log("[ResetSVC] No Changes were made");
 
-		message.react("✅");
+		if(message !== undefined){
+			message.react("✅");
+		}
 	}
 
 	toggle(message){
