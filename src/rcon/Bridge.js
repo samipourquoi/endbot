@@ -59,7 +59,7 @@ class Bridge {
 
 	toMinecraft(message) {
 		// Gets the color of the user
-		let aboveRole = message.member.roles.cache.array()[0];
+		let aboveRole = message.member.roles.highest;
 		let color = "white";
 		if (message.member.roles.cache.array()[0].name != "@everyone") {
 			let roleColor = aboveRole.color;
