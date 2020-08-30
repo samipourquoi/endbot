@@ -91,6 +91,8 @@ class Rcon {
 			this.connection.on("data", onData);
 
 			setTimeout(() => {
+				this.connection.removeListener("data", onData);
+				this.nextDrain();
 				reject("Timeout exceeded");
 			}, this.timeout);
 		});
