@@ -80,19 +80,17 @@ class Rcon {
 		if (!this.draining) this.nextDrain();
 
 		return new Promise((resolve, reject) => {
-			let onData = data => {
+			this.connection.once("data", data => {
 				data = Packet.read(data);
+				this.nextDrain();
 				if (data.id == packet.id) {
-					this.connection.removeListener("data", onData);
-					this.nextDrain();
 					resolve(data);
+				} else {
+					reject("Received unexpected data");
 				}
-			};
-			this.connection.on("data", onData);
+			})
 
 			setTimeout(() => {
-				this.connection.removeListener("data", onData);
-				this.nextDrain();
 				reject("Timeout exceeded");
 			}, this.timeout);
 		});
