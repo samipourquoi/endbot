@@ -99,7 +99,7 @@ class Bridge {
 				messages.push(line);
 			}
 		}
-		this.channel.send(messages.join("\n"), { spit: true });
+		if (messages.length > 0) this.channel.send(messages.join("\n"), { spit: true });
 		this.lastIndex = logs.length;
 	}
 }
