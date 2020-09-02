@@ -86,11 +86,12 @@ class Bridge {
 				messages.push(message[0]);
 				this.client.filterServer(this.rcon, message[0]);
 
-			} else if (line.includes("[type]:")) {
+				// lost connection: Disconnected
+			} else if (line.includes("[type]:") || line.includes("[Rcon]:")) {
 				// do nothing
 
 			// [samipourquoi: Set own game mode to Survival Mode]
-			} else if (((message = line.match(/\[.+: .+/)) != null)) {
+			} else if (((message = line.match(/\[.{1,20}: .+/)) != null)) {
 				messages.push(`*${message[0]}*`);
 
 			// samipourquoi fell out the world
