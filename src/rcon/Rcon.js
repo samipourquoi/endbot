@@ -20,15 +20,25 @@ class Rcon {
 		this.queue = [];
 		this.draining = false;
 
+		this.packets = new Map();
+
 		let connect = () => {
 			console.log(`Connecting to ${this.name} Rcon...`);
 			this.connection = net.createConnection({
 				host: this.host,
 				port: this.port
 			}, () => {
-				this.authenticate()
-					.then()
-					.catch(console.error);
+				this.authenticate().then(() => {
+					this.connection.on("data", data => {
+						data = Packet.read(data);
+						let resolve = this.packets.get(data.id);
+						if (resolve != undefined) {
+							this.packets.delete(data.id);
+							resolve(data);
+						}
+						this.nextDrain();
+					});
+				}).catch(console.error);
 			});
 		};
 
@@ -80,17 +90,9 @@ class Rcon {
 		if (!this.draining) this.nextDrain();
 
 		return new Promise((resolve, reject) => {
-			let onData = data => {
-				data = Packet.read(data);
-				if (data.id == packet.id) {
-					this.connection.removeListener("data", onData);
-					this.nextDrain();
-					resolve(data);
-				}
-			};
-			this.connection.on("data", onData);
-
+			this.packets.set(packet.id, resolve);
 			setTimeout(() => {
+				this.packets.delete(packet.id);
 				reject("Timeout exceeded");
 			}, this.timeout);
 		});

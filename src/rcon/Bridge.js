@@ -74,6 +74,7 @@ class Bridge {
 		let logs = fs.readFileSync(this.logPath, {encoding: "utf-8"}).split("\n");
 
 		// In case multiple messages get sent in the same tick
+		let messages = [];
 		for (let i = 0; i < logs.length - this.lastIndex; i++) {
 			let line = logs[this.lastIndex + i - 1];
 			line = line.substring(33);
@@ -82,21 +83,23 @@ class Bridge {
 
 			// <samipourquoi> Lorem ipsum
 			if ((message = line.match(/<.+> .+/)) != null) {
-				this.channel.send(message[0]);
+				messages.push(message[0]);
 				this.client.filterServer(this.rcon, message[0]);
 
-			} else if (line.includes("[type]:")) {
+				// lost connection: Disconnected
+			} else if (line.includes("[type]:") || line.includes("[Rcon]:")) {
 				// do nothing
 
 			// [samipourquoi: Set own game mode to Survival Mode]
-			} else if (((message = line.match(/\[.+: .+/)) != null)) {
-				this.channel.send(`*${message[0]}*`);
+			} else if (((message = line.match(/\[.{1,20}: .+/)) != null)) {
+				messages.push(`*${message[0]}*`);
 
 			// samipourquoi fell out the world
 			} else if (isSpecialMessage(line)) {
-				this.channel.send(line);
+				messages.push(line);
 			}
 		}
+		if (messages.length > 0) this.channel.send(messages.join("\n"), { spit: true });
 		this.lastIndex = logs.length;
 	}
 }
