@@ -103,7 +103,7 @@ class Bridge {
 			}
 			
 		}
-		if (messages.length > 0) this.channel.send(messages.join("\n"), { split: true, disableMentions: "everyone" });
+		if (messages.length > 0) this.channel.send(messages.join("\n"), { split: true, disableMentions: "all" });
 		this.lastIndex = logs.length;
 	}
 }
