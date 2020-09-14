@@ -98,8 +98,9 @@ class Bridge {
 			} else if (isSpecialMessage(line)) {
 				messages.push(line);
 			}
+			
 		}
-		if (messages.length > 0) this.channel.send(messages.join("\n"), { spit: true });
+		if (messages.length > 0) this.channel.send(messages.join("\n"), { split: true, disableMentions: "everyone" });
 		this.lastIndex = logs.length;
 	}
 }
