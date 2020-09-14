@@ -40,7 +40,7 @@ class Online extends Command {
 		let response = data.body.split(" ");
 		let online = {
 			onlineCount: response[2],
-			maxCount: response[6],
+			maxCount: (response[6] == "of") ? response[7] : response[6],
 			players: response.slice(9)
 		};
 
