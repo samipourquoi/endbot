@@ -7,11 +7,11 @@ Click [here](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md) for
 
 # Setup
 
-Make sure you have the latest version of [Node](https://nodejs.org/en/) installed. 
+Make sure you have the latest version of [Node](https://nodejs.org/en/) installed.
 
 First of all, open the command line. Do not copy the `$` at the start of each command.
 
-Run this command to clone and open the bot files: 
+Run this command to clone and open the bot files:
 ```shell script
 $ git clone https://github.com/samipourquoi/endbot.git
 $ cd endbot
@@ -40,7 +40,7 @@ Copy `config.template.json` to `config.json` in the root directory.
 Fill in the fields:
 - `token` Token of your discord bot
 - `prefix` Prefix of the bot. Defaulted to `!`. Feel free to change it to whatever single character you want.
-- `backup-role` ID of the role allowed to use the [`backup`](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md#backup) 
+- `backup-role` ID of the role allowed to use the [`backup`](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md#backup)
 command.
 - `backup-format` Format in which the archived backup will be in. Defaulted and recommended to use `tar.gz`.
 - `op-role`: ID of the role allowed to use the [`execute`](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md#execute) command.
@@ -51,16 +51,13 @@ command.
     - `rcon-password` Password of the Rcon.
     - `bridge-channel` ID of the channel that will be used as a bridge.
     - `log-path` Absolute path to the `latest.log` file of the server. It's usually found in `logs`.
-- `scalableVC` Configuration for the scalableVC system
-    - `createChannelName` The name of the channel people should join to create a new vc
-    - `channelNames` A list of names the system will use to create new VCs
-    - `categoryID` The category the new VCs should be created in
+
 # Run
 
 To start the bot, run:
 ```shell script
 $ npm start
-``` 
+```
 
 There are some flags useful for debugging:
 - `--no-servers` will disable the connection of the bot to the MC servers. It will crash if someone tries to execute

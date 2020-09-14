@@ -16,28 +16,5 @@
 			"bridge-channel": "345678912345678912",
 			"log-path": "path/to/latest.log"
 		}
-	],
-
-	"scalableVC": {
-		"createChannelName": "+",
-		"channelNames": [
-			"Black",
-			"Dark Gray",
-			"Gray",
-			"White",
-			"Light Purple",
-			"Dark Purple",
-			"Green",
-			"Dark Green",
-			"Gold",
-			"Yellow",
-			"Red",
-			"Dark Red",
-			"Aqua",
-			"Dark Aqua",
-			"Blue",
-			"Dark Blue"
-		],
-		"categoryId": "748140168262844416"
-	}
+	]
 }

@@ -19,7 +19,7 @@ Usage: `backup`
 ### Online
 Sends the list of all online players across servers.
 
-Usage: 
+Usage:
 - `online` in a bridge channel
 - `online --all`
 
@@ -49,18 +49,11 @@ Usage:
 - `embed create from <url>` creates an embed from raw JSON, from an URL. Use https://leovoel.github.io/embed-visualizer/.
 - `embed delete` deletes your ongoing embed.
 - `embed publish <#channel>` posts the embed to the provided channel.
-- `embed publish <webhook url>` posts the embed as the provided webhook. 
+- `embed publish <webhook url>` posts the embed as the provided webhook.
 - `embed title|description|footer "<content>"`
 - `embed color <hex color>`
 - `embed field add "<name>","<value>",<inline>` with inline being a boolean
 - `embed field splice <index>`
-
-### Scalable VC
-The scalable VC system. You must have the "Manage Channels" permissions to run the following commands.
-
-Usage:
-- `togglesvc` toggles if the ScalableVC System can work. The current state will be reacted into the command.
-- `resetsvc` reverts the ScalableVC system back to its original state, and clean up the channels. Run when you encounter bugs.
 
 ## Server
 
