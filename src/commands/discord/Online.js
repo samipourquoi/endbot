@@ -13,30 +13,25 @@ class Online extends Command {
 	}
 
 	async run(message, args) {
-		if (args[0] == "--all") {
+		let rcon;		
+		let servers = this.client.config.servers;
+		let keys = Object.keys(servers);
+		
+		for (let i = 0; i < keys.length; i++) {
+			let server = servers[keys[i]];
+			if (server["bridge-channel"] == message.channel.id) rcon = this.client.bridges.get(message.channel.id).rcon;
+		}
+		
+		if (args[0] == "--all" || rcon == undefined) {
 			let iterator = this.client.bridges.entries();
 			for (let i = 0; i < this.client.bridges.size; i++) {
 				let bridge = iterator.next().value[1];
 				await message.channel.send(await this.getOnlinePlayers(bridge.rcon));
 			}
 			return;
+		} else  {
+			await message.channel.send(await this.getOnlinePlayers(rcon));
 		}
-
-		let servers = this.client.config.servers;
-		let keys = Object.keys(servers);
-		for (let i = 0; i < keys.length; i++) {
-			let server = servers[keys[i]];
-
-			if (server["bridge-channel"] == message.channel.id) {
-				let rcon = this.client.bridges.get(message.channel.id).rcon;
-				await message.channel.send(await this.getOnlinePlayers(rcon));
-				return;
-			}
-		}
-
-		await message.channel.send(this.client.errorEmbed("bridge"));
-
-		// TODO: Add global online, not only in bridge channels
 	}
 
 	async getOnlinePlayers(rcon) {

@@ -20,7 +20,7 @@ Usage: `backup`
 Sends the list of all online players across servers.
 
 Usage:
-- `online` in a bridge channel
+- `online`
 - `online --all`
 
 ### Ping
