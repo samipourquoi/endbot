@@ -15,7 +15,7 @@ class EmbedEditor extends Command {
 	constructor(client) {
 		super(client);
 		this.info = {
-			"name": "EmbedEditor Editor",
+			"name": "Embed Editor",
 			"usage": "embed create",
 			"description": "Creates and edits embeds"
 		};
