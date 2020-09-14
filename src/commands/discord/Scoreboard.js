@@ -21,7 +21,7 @@ class Scoreboard extends Command {
 		super(client);
 		this.info = {
 			"name": "Scoreboard",
-			"usage": "scoreboard <objective>",
+			"usage": "scoreboard <objective> --all",
 			"alias": "s",
 			"description": "Creates an image of the ingame scoreboard associated to that objective, for all whitelisted players"
 		};
@@ -38,7 +38,7 @@ class Scoreboard extends Command {
 		let rcon = this.client.bridges.get(this.client.config.servers[0]["bridge-channel"]).rcon;
 		let objective = args[0];
 		// eslint-disable-next-line no-prototype-builtins
-		let scores = await this.getData(rcon, (scoreboards.hasOwnProperty(args[0])) ? scoreboards[args[0]] : args[0]);
+		let scores = await this.getData(rcon, (scoreboards.hasOwnProperty(args[0])) ? scoreboards[args[0]] : args[0], (args[1] == "--all"));
 
 		let canvas = createCanvas(300, (FONT_SIZE+SPACE_BETWEEN)*scores.length + MARGIN*3 + OBJECTIVE_NAME_SPACE);
 		registerFont("./src/assets/minecraft.otf", { family: "Minecraft" });
@@ -78,8 +78,8 @@ class Scoreboard extends Command {
 		});
 	}
 
-	async getData(rcon, objective) {
-		let players = await this.getWhitelist(rcon);
+	async getData(rcon, objective, all) {
+		let players = await this.getPlayers(rcon, all);
 
 		// Get scores for each player
 		let scores = [];
@@ -105,8 +105,14 @@ class Scoreboard extends Command {
 		return scores;
 	}
 
-	async getWhitelist(rcon) {
-		let data = await rcon.sendCommand("whitelist list");
+	async getPlayers(rcon, all) {
+		let data;
+		if (all) {
+			data = await rcon.sendCommand("scoreboard players list");
+		} else {
+			data = await rcon.sendCommand("whitelist list");
+		}
+		
 		let players = data.body.substring(data.body.indexOf(":")+2).split(", ");
 		return players;
 	}

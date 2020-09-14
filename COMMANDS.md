@@ -35,7 +35,10 @@ Creates an image of the ingame scoreboard associated to that objective, for all 
 It will fetch scores from the first server declared in the config, from all whitelisted players.
 It will as well get the total value from all scores.
 
-Usage: `scoreboard <objective>`
+Usage: 
+- `scoreboard <objective>`
+- `scoreboard <objective> --all` will get scores for all the players that have ever logged on the server.
+
 Alias: `s`
 
 ### Execute
