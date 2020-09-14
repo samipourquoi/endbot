@@ -39,6 +39,11 @@ class EndBot extends Discord.Client {
 			let commandPath = "./" + module.split("/").slice(1).join("/") + file;
 			let command = new (require(commandPath))(this);
 			commands[command.info.usage.split(" ")[0]] = command;
+			
+			let alias;
+			if ((alias = command.info.alias) != undefined) {
+				commands[alias] = command;
+			}
 		});
 
 		return commands;

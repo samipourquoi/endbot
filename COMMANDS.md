@@ -23,6 +23,8 @@ Usage:
 - `online`
 - `online --all`
 
+Alias: `o`
+
 ### Ping
 Checks if the bot is online.
 
@@ -34,6 +36,7 @@ It will fetch scores from the first server declared in the config, from all whit
 It will as well get the total value from all scores.
 
 Usage: `scoreboard <objective>`
+Alias: `s`
 
 ### Execute
 Execute a command on a server from a bridge channel. Only persons having the role specified in the `op-role` field,
@@ -71,3 +74,5 @@ Usage:
 - `scoreboard <objective> query <player>` Queries a score from a player.
 - `scoreboard <objective> total` Gets the total of all scores combined
 - `scoreboard <objective> list` displays objective to the player list (by pressing tab)
+
+Alias: `s`

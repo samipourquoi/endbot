@@ -10,6 +10,7 @@ class Scoreboard extends ServerCommand {
 		this.info = {
 			"name": "Scoreboard",
 			"usage": "scoreboard <objective | clear> [query <player>]",
+			"alias": "s",
 			"description": "Displays a scoreboad in game"
 		};
 	}

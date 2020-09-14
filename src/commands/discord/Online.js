@@ -8,6 +8,7 @@ class Online extends Command {
 		this.info = {
 			"name": "Online",
 			"usage": "online [--all]",
+			"alias": "o",
 			"description": "Sends the list of all online players across servers"
 		};
 	}
