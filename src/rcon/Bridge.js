@@ -78,6 +78,9 @@ class Bridge {
 		for (let i = 0; i < logs.length - this.lastIndex; i++) {
 			let line = logs[this.lastIndex + i - 1];
 			line = line.substring(33);
+			
+			// Escapes markdown characters
+			line = line.replace(/([_*~`])/g, "\\$1");
 
 			let message = "";
 
