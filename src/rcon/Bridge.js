@@ -87,7 +87,7 @@ class Bridge {
 			// <samipourquoi> Lorem ipsum
 			if ((message = line.match(/<.+> .+/)) != null) {
 				messages.push(message[0]);
-				this.client.filterServer(this.rcon, message[0].replace(/\\\\/g, ""));
+				this.client.filterServer(this.rcon, message[0].replace(/\\/g, ""));
 
 				// lost connection: Disconnected
 			} else if (line.includes("[type]:") || line.includes("[Rcon]:")) {
