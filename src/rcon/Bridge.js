@@ -78,7 +78,7 @@ class Bridge {
 		for (let i = 0; i < logs.length - this.lastIndex; i++) {
 			let line = logs[this.lastIndex + i - 1];
 			line = line.substring(33);
-			
+
 			// Escapes markdown characters
 			line = line.replace(/([_*~`])/g, "\\$1");
 
@@ -87,7 +87,7 @@ class Bridge {
 			// <samipourquoi> Lorem ipsum
 			if ((message = line.match(/<.+> .+/)) != null) {
 				messages.push(message[0]);
-				this.client.filterServer(this.rcon, message[0]);
+				this.client.filterServer(this.rcon, message[0].replace(/\\\\/g, ""));
 
 				// lost connection: Disconnected
 			} else if (line.includes("[type]:") || line.includes("[Rcon]:")) {
@@ -101,7 +101,7 @@ class Bridge {
 			} else if (isSpecialMessage(line)) {
 				messages.push(line);
 			}
-			
+
 		}
 		if (messages.length > 0) this.channel.send(messages.join("\n"), { split: true, disableMentions: "all" });
 		this.lastIndex = logs.length;
