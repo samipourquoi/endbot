@@ -14,15 +14,15 @@ class Online extends Command {
 	}
 
 	async run(message, args) {
-		let rcon;		
+		let rcon;
 		let servers = this.client.config.servers;
 		let keys = Object.keys(servers);
-		
+
 		for (let i = 0; i < keys.length; i++) {
 			let server = servers[keys[i]];
 			if (server["bridge-channel"] == message.channel.id) rcon = this.client.bridges.get(message.channel.id).rcon;
 		}
-		
+
 		if (args[0] == "--all" || rcon == undefined) {
 			let iterator = this.client.bridges.entries();
 			for (let i = 0; i < this.client.bridges.size; i++) {
@@ -50,7 +50,7 @@ class Online extends Command {
 
 		let embed = this.client.createEmbed("result")
 			.setTitle("Online players on " + rcon.name)
-			.addField(`${online.onlineCount}/${online.maxCount}`, online.players);
+			.addField(`${online.onlineCount}/${online.maxCount}`, online.players.replace(/([_*~`])/g, "\\$1"););
 
 		return embed;
 	}
