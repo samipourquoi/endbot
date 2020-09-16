@@ -79,15 +79,16 @@ class Bridge {
 			let line = logs[this.lastIndex + i - 1];
 			line = line.substring(33);
 
-			// Escapes markdown characters
-			line = line.replace(/([_*~`])/g, "\\$1");
+			// Escapes markdown characters in username
+			let escaped = line.replace(/([_*~`])/g, "\\$1");
+			line = escaped.substring(0, escaped.indexOf(">")) + line.substring(line.indexOf(">"));
 
 			let message = "";
 
 			// <samipourquoi> Lorem ipsum
 			if ((message = line.match(/<.+> .+/)) != null) {
 				messages.push(message[0]);
-				this.client.filterServer(this.rcon, message[0].replace(/\\/g, ""));
+				this.client.filterServer(this.rcon, message[0]);
 
 				// lost connection: Disconnected
 			} else if (line.includes("[type]:") || line.includes("[Rcon]:")) {
