@@ -217,7 +217,7 @@ class EmbedEditor extends Command {
 				embed.addField(
 					name.substring(1, name.length - 1),
 					value.substring(1, value.length - 1),
-					Boolean(inline).valueOf()
+					(inline == "true") ? true : false
 				);
 				message.channel.send(embed);
 			} else {
