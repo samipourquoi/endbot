@@ -50,7 +50,7 @@ class Online extends Command {
 
 		let embed = this.client.createEmbed("result")
 			.setTitle("Online players on " + rcon.name)
-			.addField(`${online.onlineCount}/${online.maxCount}`, online.players.replace(/([_*~`])/g, "\\$1"));
+			.addField(`${online.onlineCount}/${online.maxCount}`, online.players.join("\n").replace(/([_*~`])/g, "\\$1"));
 
 		return embed;
 	}
