@@ -6,11 +6,6 @@ const https = require("https");
 
 const Command = require("../Command.js");
 
-/*
-Here are all the regex used for the arguments:
-	/^"([^"]+|.*\\".*)"$/: Only a string enclosed by ", which can be escaped with \
- */
-
 class EmbedEditor extends Command {
 	constructor(client) {
 		super(client);
