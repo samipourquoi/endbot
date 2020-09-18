@@ -55,10 +55,10 @@ command.
 	
 ## Optional fields
 - `colors-override`: For instance, the color `#B96AD0` appears gray in game when speaking through a bridge,
-but appears pink to our eyes. The color actually is closer to gray than pink, but we don't see it this way. To solve that issue, you can include the following:
+but appears purple to our eyes. The color actually is closer to gray than purple, but we don't see it this way. To solve that issue, you can include the following:
 ```json
 "colors-override": {
-	"#B96AD0": "pink"
+	"#B96AD0": "light_purple"
 }
 ```
 The list of color names are: `dark_red`, `red`, `gold`, `yellow`, `dark_green`, `green`, 
