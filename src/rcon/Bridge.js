@@ -66,7 +66,8 @@ class Bridge {
 			color = closestMinecraftColor(roleColor);
 		}
 
-		this.rcon.sendMessage(message.content, { author: message.author.username, color: color });
+		let finalMessage = this.identifierToName(message.content);
+		this.rcon.sendMessage(finalMessage, { author: message.author.username, color: color });
 	}
 
 
@@ -104,8 +105,31 @@ class Bridge {
 			}
 
 		}
-		if (messages.length > 0) this.channel.send(messages.join("\n"), { split: true, disableMentions: "all" });
+
+		let finalMessage = this.nameToIdentifier(messages.join("\n"));
+		if (messages.length > 0) this.channel.send(finalMessage, { split: true, disableMentions: "all" });
 		this.lastIndex = logs.length;
+	}
+
+	nameToIdentifier(message) {
+		let potentialEmotes = message.match(/(:.+?:)/gm);
+		if (potentialEmotes == null) return message;
+
+		const guildEmotes = new Map();
+		this.channel.guild.emojis.cache.array().forEach(emote => {
+			guildEmotes.set(`:${emote.name}:`, `<:${emote.name}:${emote.id}>`);
+		});
+
+		for (let i = 0; i < potentialEmotes.length; i++) {
+			message = message.replace(new RegExp(`(${potentialEmotes})`, "gm"), guildEmotes.get(potentialEmotes[i]) || "$1");
+			console.log(message);
+		}
+
+		return message;
+	}
+
+	identifierToName(message) {
+		return message.replace(/<(:[a-zA-Z]+:)[0-9]+>/gm, "$1");
 	}
 }
 
