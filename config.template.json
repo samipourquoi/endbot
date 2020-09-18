@@ -16,5 +16,7 @@
 			"bridge-channel": "345678912345678912",
 			"log-path": "path/to/latest.log"
 		}
-	]
+	],
+	
+	"colors-override": {}
 }

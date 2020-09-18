@@ -51,6 +51,18 @@ command.
     - `rcon-password` Password of the Rcon.
     - `bridge-channel` ID of the channel that will be used as a bridge.
     - `log-path` Absolute path to the `latest.log` file of the server. It's usually found in `logs`.
+	
+	
+## Optional fields
+- `colors-override`: For instance, the color `#B96AD0` appears gray in game when speaking through a bridge,
+but appears pink to our eyes. The color actually is closer to gray than pink, but we don't see it this way. To solve that issue, you can include the following:
+```json
+"colors-override": {
+	"#B96AD0": "pink"
+}
+```
+The list of color names are: `dark_red`, `red`, `gold`, `yellow`, `dark_green`, `green`, 
+`aqua`, `dark_aqua`, `dark_blue`, `blue`, `light_purple`, `dark_purple`, `white`, `gray`, `dark_gray`, `black`.
 
 # Run
 

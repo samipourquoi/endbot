@@ -22,7 +22,7 @@ const COLORS = {
 	"dark_gray": "#555555",
 	"black": "#000000"
 };
-const nearestColor = require("nearest-color").from(COLORS);
+const nearestColor = require("nearest-color").from(COLORS);;
 
 class Bridge {
 	constructor(channel, rcon, logPath, client) {
@@ -30,6 +30,17 @@ class Bridge {
 		this.rcon = rcon;
 		this.lastIndex = 1;
 		this.client = client;
+		this.colorsOverride = this.client.config["colors-override"] || {};
+
+		// Makes the hex color uniform
+		let keys = Object.keys(this.colorsOverride);
+		for (let i = 0; i < keys.length; i++) {
+		 	this.colorsOverride[
+				keys[i].charAt(0) == "#" ?
+				keys[i].substring(1).toUpperCase() :
+				keys[i].toUpperCase()
+			] = this.colorsOverride[keys[i]];
+		}
 
 		// Log reader
 		this.logPath = logPath;
@@ -62,8 +73,9 @@ class Bridge {
 		let aboveRole = message.member.roles.highest;
 		let color = "white";
 		if (message.member.roles.cache.array()[0].name != "@everyone") {
-			let roleColor = aboveRole.color;
-			color = closestMinecraftColor(roleColor);
+			let roleColor = parseInt(aboveRole.color);
+			let hexColor = roleColor.toString(16).padStart(6, "0").toUpperCase();
+			color = this.colorsOverride[hexColor] || closestMinecraftColor(roleColor);
 		}
 
 		let finalMessage = this.identifierToName(message.content);
