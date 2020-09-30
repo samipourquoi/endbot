@@ -33,6 +33,7 @@
 		"canvas": "^2.6.1",
 		"discord.js": "^12.2.0",
 		"miteru": "^0.6.7",
-		"nearest-color": "^0.4.4"
+		"nearest-color": "^0.4.4",
+		"tail": "^2.0.4"
 	}
 }
