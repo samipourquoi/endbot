@@ -34,7 +34,6 @@
 		"discord.js": "^12.2.0",
 		"miteru": "^0.6.7",
 		"nearest-color": "^0.4.4",
-		"tail": "^2.0.4",
 		"text-file-follower": "^0.1.0"
 	}
 }
