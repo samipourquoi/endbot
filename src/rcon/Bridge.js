@@ -43,29 +43,7 @@ class Bridge {
 
 		// Log reader
 		this.logPath = logPath;
-		// this.logWatcher = Miteru.watch(event => {
-		// 	switch (event) {
-		// 	case "init":
-		// 		console.log(`Watching ${rcon.name} logs`);
-		// 		this.lastIndex = fs.readFileSync(this.logPath, { encoding: "utf-8" }).split("\n").length;
-		// 		break;
-		// 
-		// 	case "change":
-		// 		this.onMessage();
-		// 		break;
-		// 
-		// 	case "unlink":
-		// 		console.log(`${rcon.name} log file is getting reseted...`);
-		// 		this.lastIndex = 1;
-		// 		break;
-		// 
-		// 	case "add":
-		// 		console.log(`${rcon.name} log file has successfully been reseted`);
-		// 		break;
-		// 	}
-		// });
-		// this.logWatcher.add(this.logPath);
-
+		
 		this.lastMessageType = "msg";
 		this.logWatcher = new Follower(this.logPath);
 		this.logWatcher.on("line", (filename, line) => {
