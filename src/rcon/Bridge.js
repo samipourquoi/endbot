@@ -22,7 +22,7 @@ const COLORS = {
 	"dark_gray": "#555555",
 	"black": "#000000"
 };
-const nearestColor = require("nearest-color").from(COLORS);;
+const nearestColor = require("nearest-color").from(COLORS);
 
 class Bridge {
 	constructor(channel, rcon, logPath, client) {
@@ -35,10 +35,8 @@ class Bridge {
 		// Makes the hex color uniform
 		let keys = Object.keys(this.colorsOverride);
 		for (let i = 0; i < keys.length; i++) {
-		 	this.colorsOverride[
-				keys[i].charAt(0) == "#" ?
-				keys[i].substring(1).toUpperCase() :
-				keys[i].toUpperCase()
+			this.colorsOverride[
+				keys[i].charAt(0) == "#" ? keys[i].substring(1).toUpperCase() : keys[i].toUpperCase()
 			] = this.colorsOverride[keys[i]];
 		}
 
@@ -140,7 +138,7 @@ class Bridge {
 		return message;
 	}
 
-	identifierToName(message) {
+	identifierToName(message) {
 		return message.replace(/<(:[a-zA-Z]+:)[0-9]+>/gm, "$1");
 	}
 }

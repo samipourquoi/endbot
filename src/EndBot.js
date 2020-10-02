@@ -41,7 +41,7 @@ class EndBot extends Discord.Client {
 			commands[command.info.usage.split(" ")[0]] = command;
 			
 			let alias;
-			if ((alias = command.info.alias) != undefined) {
+			if ((alias = command.info.alias) != undefined) {
 				commands[alias] = command;
 			}
 		});
