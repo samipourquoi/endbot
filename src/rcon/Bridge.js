@@ -67,7 +67,7 @@ class Bridge {
 
 	onMessage(line) {
 		line = line.substring(33);
-		let sendableText;
+		let sendableText = "";
 
 		// Escapes markdown characters in username
 		let escaped = line.replace(/([_*~`])/g, "\\$1");
