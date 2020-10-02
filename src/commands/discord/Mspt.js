@@ -35,7 +35,7 @@ class Mspt extends Command {
 				await message.channel.send(await this.queryMSPT(bridge.rcon));
 			}
 			return;
-		} else  {
+		} else {
 			await message.channel.send(await this.queryMSPT(rcon));
 		}
 	}
@@ -56,7 +56,7 @@ class Mspt extends Command {
 				.setTitle(`TPS: ${tps.toFixed(1)} MSPT: ${mspt.toFixed(1)}`)
 				.setColor("#ff483b");
 			return embed;
-		} else if(mspt.toFixed(1) <= 25) {
+		} else if (mspt.toFixed(1) <= 25) {
 			let embed = new Discord.MessageEmbed()
 				.setTitle(`TPS: ${tps.toFixed(1)} MSPT: ${mspt.toFixed(1)}`)
 				.setColor("#27f207");
