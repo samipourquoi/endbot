@@ -106,7 +106,6 @@ class Bridge {
 			return;
 		}
 
-		console.log(sendableText)
 		let finalMessage = this.nameToIdentifier(sendableText);
 		this.channel.send(finalMessage, { split: true, disableMentions: "all" });
 	}
@@ -122,7 +121,6 @@ class Bridge {
 
 		for (let i = 0; i < potentialEmotes.length; i++) {
 			message = message.replace(new RegExp(`(${potentialEmotes})`, "gm"), guildEmotes.get(potentialEmotes[i]) || "$1");
-			console.log(message);
 		}
 
 		return message;
