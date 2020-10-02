@@ -102,7 +102,7 @@ class Bridge {
 				this.client.filterServer(this.rcon, message[0]);
 
 				// lost connection: Disconnected
-			} else if (line.includes("[type]:") || line.includes("[Rcon]:")) {
+			} else if (line.includes("[type]:") || line.includes("[Rcon]:" || line.includes("[Rcon:"))) {
 				// do nothing
 
 			// [samipourquoi: Set own game mode to Survival Mode]
