@@ -1,6 +1,7 @@
 "use strict";
 
 const Miteru = require("miteru");
+const Follower = require("text-file-follower");
 const fs = require("fs");
 
 const SPECIAL_MESSAGES = require("../assets/special_messages.json");
@@ -42,28 +43,34 @@ class Bridge {
 
 		// Log reader
 		this.logPath = logPath;
-		this.logWatcher = Miteru.watch(event => {
-			switch (event) {
-			case "init":
-				console.log(`Watching ${rcon.name} logs`);
-				this.lastIndex = fs.readFileSync(this.logPath, { encoding: "utf-8" }).split("\n").length;
-				break;
+		// this.logWatcher = Miteru.watch(event => {
+		// 	switch (event) {
+		// 	case "init":
+		// 		console.log(`Watching ${rcon.name} logs`);
+		// 		this.lastIndex = fs.readFileSync(this.logPath, { encoding: "utf-8" }).split("\n").length;
+		// 		break;
+		// 
+		// 	case "change":
+		// 		this.onMessage();
+		// 		break;
+		// 
+		// 	case "unlink":
+		// 		console.log(`${rcon.name} log file is getting reseted...`);
+		// 		this.lastIndex = 1;
+		// 		break;
+		// 
+		// 	case "add":
+		// 		console.log(`${rcon.name} log file has successfully been reseted`);
+		// 		break;
+		// 	}
+		// });
+		// this.logWatcher.add(this.logPath);
 
-			case "change":
-				this.onMessage();
-				break;
-
-			case "unlink":
-				console.log(`${rcon.name} log file is getting reseted...`);
-				this.lastIndex = 1;
-				break;
-
-			case "add":
-				console.log(`${rcon.name} log file has successfully been reseted`);
-				break;
-			}
+		this.lastMessageType = "msg";
+		this.logWatcher = new Follower(this.logPath);
+		this.logWatcher.on("line", (filename, line) => {
+			this.onMessage(line);
 		});
-		this.logWatcher.add(this.logPath);
 	}
 
 	toMinecraft(message) {
@@ -81,44 +88,49 @@ class Bridge {
 	}
 
 
-	onMessage() {
-		let logs = fs.readFileSync(this.logPath, {encoding: "utf-8"}).split("\n");
+	onMessage(line) {
+		line = line.substring(33);
+		let sendableText;
 
-		// In case multiple messages get sent in the same tick
-		let messages = [];
-		for (let i = 0; i < logs.length - this.lastIndex; i++) {
-			let line = logs[this.lastIndex + i - 1];
-			line = line.substring(33);
+		// Escapes markdown characters in username
+		let escaped = line.replace(/([_*~`])/g, "\\$1");
+		line = escaped.substring(0, escaped.indexOf(">")) + line.substring(line.indexOf(">"));
 
-			// Escapes markdown characters in username
-			let escaped = line.replace(/([_*~`])/g, "\\$1");
-			line = escaped.substring(0, escaped.indexOf(">")) + line.substring(line.indexOf(">"));
+		let message = "";
 
-			let message = "";
+		// <samipourquoi> Lorem ipsum
+		if ((message = line.match(/<.+> .+/)) != null) {
+			sendableText = message[0];
+			this.client.filterServer(this.rcon, message[0]);
+			this.lastMessageType = "msg";
 
-			// <samipourquoi> Lorem ipsum
-			if ((message = line.match(/<.+> .+/)) != null) {
-				messages.push(message[0]);
-				this.client.filterServer(this.rcon, message[0]);
+		// lost connection: Disconnected
+		} else if (line.includes("[type]:") || line.includes("[Rcon]:")) {
+			// do nothing
 
-				// lost connection: Disconnected
-			} else if (line.includes("[type]:") || line.includes("[Rcon]:")) {
-				// do nothing
-
-			// [samipourquoi: Set own game mode to Survival Mode]
-			} else if (((message = line.match(/\[.{1,20}: .+/)) != null)) {
-				messages.push(`*${message[0]}*`);
-
-			// samipourquoi fell out the world
-			} else if (isSpecialMessage(line)) {
-				messages.push(line);
+		// [samipourquoi: Set own game mode to Survival Mode]
+		} else if (((message = line.match(/\[.{1,20}: .+/)) != null)) {
+			if (this.lastMessageType == "msg") {
+				sendableText = `*${message[0]}*`;
+				this.lastMessageType = "cmd";
+			} else if (this.lastMessageType == "cmd") {
+				sendableText = "// more commands...";
+				this.lastMessageType = "...";
+			} else {
+				return;
 			}
 
+		// samipourquoi fell out the world
+		} else if (isSpecialMessage(line)) {
+			sendableText = line;
+			this.lastMessageType = "msg";
+		} else {
+			return;
 		}
 
-		let finalMessage = this.nameToIdentifier(messages.join("\n"));
-		if (messages.length > 0) this.channel.send(finalMessage, { split: true, disableMentions: "all" });
-		this.lastIndex = logs.length;
+		console.log(sendableText)
+		let finalMessage = this.nameToIdentifier(sendableText);
+		this.channel.send(finalMessage, { split: true, disableMentions: "all" });
 	}
 
 	nameToIdentifier(message) {
