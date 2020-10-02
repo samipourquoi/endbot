@@ -41,6 +41,15 @@ Usage:
 
 Alias: `s`
 
+### MSPT & TPS
+Sends the MSPT (millisecond per tick) and TPS (ticks per second) of a server. **REQUIRES [CARPET MOD](https://github.com/gnembon/fabric-carpet)
+TO WORK PROPERLY**
+
+Usage:
+- `tps`
+- `mspt` both work the exact same way
+- `mspt --all`
+
 ### Execute
 Execute a command on a server from a bridge channel. Only persons having the role specified in the `op-role` field,
 in the config file, will be able to run that command.
