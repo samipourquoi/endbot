@@ -43,7 +43,29 @@ class Bridge {
 
 		// Log reader
 		this.logPath = logPath;
-		
+		// this.logWatcher = Miteru.watch(event => {
+		// 	switch (event) {
+		// 	case "init":
+		// 		console.log(`Watching ${rcon.name} logs`);
+		// 		this.lastIndex = fs.readFileSync(this.logPath, { encoding: "utf-8" }).split("\n").length;
+		// 		break;
+		// 
+		// 	case "change":
+		// 		this.onMessage();
+		// 		break;
+		// 
+		// 	case "unlink":
+		// 		console.log(`${rcon.name} log file is getting reseted...`);
+		// 		this.lastIndex = 1;
+		// 		break;
+		// 
+		// 	case "add":
+		// 		console.log(`${rcon.name} log file has successfully been reseted`);
+		// 		break;
+		// 	}
+		// });
+		// this.logWatcher.add(this.logPath);
+
 		this.lastMessageType = "msg";
 		this.logWatcher = new Follower(this.logPath);
 		this.logWatcher.on("line", (filename, line) => {
@@ -83,7 +105,7 @@ class Bridge {
 			this.lastMessageType = "msg";
 
 		// lost connection: Disconnected
-		} else if (line.includes("[type]:") || line.includes("[Rcon]:")) {
+		} else if (line.includes("[type]:") || line.includes("[Rcon")) {
 			// do nothing
 
 		// [samipourquoi: Set own game mode to Survival Mode]
@@ -106,6 +128,7 @@ class Bridge {
 			return;
 		}
 
+		console.log(sendableText)
 		let finalMessage = this.nameToIdentifier(sendableText);
 		this.channel.send(finalMessage, { split: true, disableMentions: "all" });
 	}
@@ -121,6 +144,7 @@ class Bridge {
 
 		for (let i = 0; i < potentialEmotes.length; i++) {
 			message = message.replace(new RegExp(`(${potentialEmotes})`, "gm"), guildEmotes.get(potentialEmotes[i]) || "$1");
+			console.log(message);
 		}
 
 		return message;
