@@ -105,7 +105,7 @@ class Bridge {
 			return;
 		}
 
-		if (sendableText.length > 0) return;
+		if (sendableText.length < 0) return;
 		let finalMessage = this.nameToIdentifier(sendableText);
  		this.channel.send(finalMessage, { split: true, disableMentions: "all" });
 	}
