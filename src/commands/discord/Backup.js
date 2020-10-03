@@ -69,7 +69,7 @@ class Backup extends Command {
 		let seconds = date.getSeconds().toString().padStart(2, "0");
 
 		// on_08-20-2020_at_01-10-07.tar.gz
-		let backupName = `on_${month}-${day}-${year}_at_${hours}-${minutes}-${seconds}.${this.client.config["backup-format"]}`;
+		let backupName = `on_${month}-${day}-${year}_at_${hours}-${minutes}-${seconds}_${rcon.name}.${this.client.config["backup-format"]}`;
 		
 		execSync(`cd /${serverPath} && tar --exclude="./server.jar" -zcf ${process.cwd()}/backups/${backupName} .`, { stdio: "inherit" });
 
