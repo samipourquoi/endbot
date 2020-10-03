@@ -1,8 +1,6 @@
 "use strict";
 
-const Miteru = require("miteru");
 const Follower = require("text-file-follower");
-const fs = require("fs");
 
 const SPECIAL_MESSAGES = require("../assets/special_messages.json");
 const COLORS = {
@@ -107,7 +105,7 @@ class Bridge {
 
 		if (sendableText.length == 0) return;
 		let finalMessage = this.nameToIdentifier(sendableText);
- 		this.channel.send(finalMessage, { split: true, disableMentions: "all" });
+		this.channel.send(finalMessage, { split: true, disableMentions: "all" });
 	}
 
 	nameToIdentifier(message) {
