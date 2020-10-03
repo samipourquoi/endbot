@@ -114,19 +114,19 @@ class Rcon {
 	}
 
 	log(...args) {
-		return this.sendCommand(`tellraw @a {"text": "${args.join("")}", "color": "red"}`);
+		return this.sendCommand(`tellraw @a {"text": "${args.join("").replace(/"/gm, "\\\"")}", "color": "red"}`);
 	}
 
 	succeed(...args) {
-		return this.sendCommand(`tellraw @a {"text": "${args.join("")}", "color": "green"}`);
+		return this.sendCommand(`tellraw @a {"text": "${args.join("").replace(/"/gm, "\\\"")}", "color": "green"}`);
 	}
 
 	warn(...args) {
-		return this.sendCommand(`tellraw @a {"text": "${args.join("")}", "color": "gold"}`);
+		return this.sendCommand(`tellraw @a {"text": "${args.join("").replace(/"/gm, "\\\"")}", "color": "gold"}`);
 	}
 
 	error(...args) {
-		return this.sendCommand(`tellraw @a {"text": "${args.join("")}", "color": "red"}`);
+		return this.sendCommand(`tellraw @a {"text": "${args.join("").replace(/"/gm, "\\\"")}", "color": "red"}`);
 	}
 }
 
