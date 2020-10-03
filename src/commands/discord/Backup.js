@@ -16,7 +16,7 @@ class Backup extends Command {
 		};
 	}
 
-	run(message) {
+	async run(message) {
 		if (!message.member.roles.cache.has(this.client.config["backup-role"])) {
 			message.channel.send("da fuck you tryin' to do");
 			return;
@@ -36,7 +36,7 @@ class Backup extends Command {
 				embed.setTitle("Backup is running...");
 				message.channel.send(embed);
 
-				let backupName = this.backup(rcon, serverPath);
+				let backupName = await this.backup(rcon, serverPath);
 
 				embed = this.client.createEmbed("result")
 					.setTitle("Backup is finished!")
