@@ -2,6 +2,7 @@
 
 config.json
 backups
+endbot.db
 
 # macOS
 
