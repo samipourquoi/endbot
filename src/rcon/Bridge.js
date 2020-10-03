@@ -86,7 +86,7 @@ class Bridge {
 			// do nothing
 
 		// [samipourquoi: Set own game mode to Survival Mode]
-		} else if (((message = line.match(/\[.{1,20}: .+/)) != null)) {
+		} else if (((message = line.match(/\[.{1,20}: .+]/)) != null)) {
 			if (this.lastMessageType == "msg") {
 				sendableText = `*${message[0]}*`;
 				this.lastMessageType = "cmd";
