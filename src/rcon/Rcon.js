@@ -114,20 +114,24 @@ class Rcon {
 	}
 
 	log(...args) {
-		return this.sendCommand(`tellraw @a {"text": "${args.join("").replace(/"/gm, "\\\"")}", "color": "red"}`);
+		return this.sendCommand(`tellraw @a {"text": "${escape(args.join(""))}", "color": "red"}`);
 	}
 
 	succeed(...args) {
-		return this.sendCommand(`tellraw @a {"text": "${args.join("").replace(/"/gm, "\\\"")}", "color": "green"}`);
+		return this.sendCommand(`tellraw @a {"text": "${escape(args.join(""))}", "color": "green"}`);
 	}
 
 	warn(...args) {
-		return this.sendCommand(`tellraw @a {"text": "${args.join("").replace(/"/gm, "\\\"")}", "color": "gold"}`);
+		return this.sendCommand(`tellraw @a {"text": "${escape(args.join(""))}", "color": "gold"}`);
 	}
 
 	error(...args) {
-		return this.sendCommand(`tellraw @a {"text": "${args.join("").replace(/"/gm, "\\\"")}", "color": "red"}`);
+		return this.sendCommand(`tellraw @a {"text": "${escape(args.join(""))}", "color": "red"}`);
 	}
+}
+
+function escape(string) {
+	return string.replace(/("'{}:)/gm, "\\$1")
 }
 
 module.exports = Rcon;
