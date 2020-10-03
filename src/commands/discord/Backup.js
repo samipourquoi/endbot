@@ -61,7 +61,7 @@ class Backup extends Command {
 		await rcon.warn("A backup is starting...");
 
 		let date = new Date();
-		let month = date.getMonth().toString().padStart(2, "0");
+		let month = (date.getMonth() + 1).toString().padStart(2, "0");
 		let day = date.getDate().toString().padStart(2, "0");
 		let year = date.getFullYear();
 		let hours = date.getHours().toString().padStart(2, "0");
