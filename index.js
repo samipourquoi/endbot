@@ -13,6 +13,7 @@ client.once("ready", () => {
 	if (!client.flags.noservers) {
 		client.initServers();
 	}
+	client.initDatabase();
 	console.log("EndBot is on! 😎");
 });
 
