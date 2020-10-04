@@ -50,8 +50,13 @@ class Preset extends ServerCommand {
 			objectives = JSON.parse(input);
 			if (!Array.isArray(objectives)) {
 				throw new Error("not an array");
+			} else if (objectives.length == 0) {
+				throw new Error("can't accept empty arrays");
+			} else if (!objectives.every(e => e != "")) {
+				throw new Error("one or more strings are empty")
 			}
 		} catch (e) {
+			console.error(e);
 			rcon.error(`Unable to parse ${input}: ${e}`);
 			return;
 		}
