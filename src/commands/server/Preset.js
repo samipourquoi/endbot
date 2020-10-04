@@ -93,8 +93,15 @@ class Preset extends ServerCommand {
 		}
 	}
 	
-	list(rcon, args) {
-		
+	async list(rcon, args) {
+		// /tellraw @s [{"text":"dig","color":"gray"},{"color":"white","text":": u-stone,u-diorite","hoverEvent":{"action":"show_text","value":"owned by samipourquoi"}}]
+		let presets = await this.client.db.async_all("SELECT * FROM presets", { rcon: rcon });
+		let messages = [];
+		presets.forEach(preset => {
+			messages.push(`{"text":"${preset.name}","color":"gray","hoverEvent":\
+			{"action":"show_text","value":"owned by ${preset.username}"}},{"color":"white","text":": ${preset.objectives}"}`);
+		});
+		rcon.sendCommand(`tellraw @a [${messages.join(`,"\\n",`)}]`);
 	}
 
 	delay(rcon, args) {
