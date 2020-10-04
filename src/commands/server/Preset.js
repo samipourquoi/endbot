@@ -3,6 +3,9 @@
 const ServerCommand = require("../ServerCommand.js");
 const scoreboards = require("../../assets/scoreboards.json");
 
+// Delay before changing of scoreboard, in seconds
+let delay = 20;
+
 class Preset extends ServerCommand {
 	constructor(client) {
 		super(client);
@@ -11,7 +14,6 @@ class Preset extends ServerCommand {
 			"usage": "preset <name>",
 			"description": "Displays succesively a list of objectives over and over."
 		};
-		this.delay = 30;
 		this.servers = new Map();
 	}
 
@@ -94,9 +96,11 @@ class Preset extends ServerCommand {
 	list(rcon, args) {
 		
 	}
-	
+
 	delay(rcon, args) {
-		
+		let newDelay = parseInt(args[0] || 20);
+		delay = (5 < newDelay && newDelay < 60*5) ? newDelay : delay;
+		rcon.succeed(`Changed delay to '${delay}'`);
 	}
 	
 	/**
@@ -104,8 +108,9 @@ class Preset extends ServerCommand {
 	 * Will loop over and over, and display the appropriate scoreboards
 	 * when the presets are enabled.
 	 */
-	static loop(rcon) {
-		setInterval(async () => {
+	static async loop(rcon) {
+		while (true) {
+			await new Promise(resolve => setTimeout(resolve, delay*1000));
 			let preset = rcon.preset;
 			if (preset.enabled) {
 				preset.i++;
@@ -113,7 +118,7 @@ class Preset extends ServerCommand {
 				let objectiveName = preset.objectives[preset.i];
 				await rcon.sendCommand(`scoreboard objectives setdisplay sidebar ${scoreboards[objectiveName] || objectiveName}`);
 			}
-		}, 10000);
+		}
 	}
 
 	toString() {
