@@ -33,23 +33,23 @@ class EmbedEditor extends Command {
 				break;
 
 			case "title":
-				this.title(message, args.slice(1));
+				this.setTitle(message, args.slice(1));
 				break;
 
 			case "description":
-				this.description(message, args.slice(1));
+				this.setDescription(message, args.slice(1));
 				break;
 
 			case "footer":
-				this.footer(message, args.slice(1));
+				this.setFooter(message, args.slice(1));
 				break;
 
 			case "color":
-				this.color(message, args.slice(1));
+				this.setColor(message, args.slice(1));
 				break;
 
 			case "field":
-				this.field(message, args.slice(1));
+				this.setField(message, args.slice(1));
 				break;
 
 			case "publish":
@@ -114,7 +114,7 @@ class EmbedEditor extends Command {
 		}
 	}
 
-	title(message, args) {
+	setTitle(message, args) {
 		if (!this.setCheck(message, args)) return;
 		let embed = this.ongoing.get(message.author.id);
 
@@ -127,7 +127,7 @@ class EmbedEditor extends Command {
 		}
 	}
 
-	description(message, args) {
+	setDescription(message, args) {
 		if (!this.setCheck(message, args)) return;
 		let embed = this.ongoing.get(message.author.id);
 
@@ -173,7 +173,7 @@ class EmbedEditor extends Command {
 		});
 	}
 
-	footer(message, args) {
+	setFooter(message, args) {
 		if (!this.setCheck(message, args)) return;
 		let embed = this.ongoing.get(message.author.id);
 
@@ -186,7 +186,7 @@ class EmbedEditor extends Command {
 		}
 	}
 
-	color(message, args) {
+	setColor(message, args) {
 		if (!this.setCheck(message, args)) return;
 		let embed = this.ongoing.get(message.author.id);
 
@@ -199,7 +199,7 @@ class EmbedEditor extends Command {
 		}
 	}
 
-	field(message, args) {
+	setField(message, args) {
 		if (!this.setCheck(message, args)) return;
 		let embed = this.ongoing.get(message.author.id);
 
