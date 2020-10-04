@@ -1,7 +1,7 @@
 "use strict";
 
 const Discord = require("discord.js");
-const SQLite = require("sqlite3");
+const Database = require("./misc/Database");
 const fs = require("fs");
 
 const Rcon = require("./rcon/Rcon");
@@ -31,7 +31,7 @@ class EndBot extends Discord.Client {
 		this.discordCommands = this.readCommands("src/commands/discord/");
 		this.serverCommands = this.readCommands("src/commands/server/");
 		this.rcons = [];
-		this.db = new SQLite.Database("endbot.db");
+		this.db = new Database("endbot.db");
 	}
 
 
