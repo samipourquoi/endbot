@@ -18,7 +18,7 @@ class Preset extends ServerCommand {
 	run(rcon, authorName, args) {
 		switch (args[0]) {
 		case "set": 	this.set(rcon, args.slice(1), authorName); break;
-		case "remove": 	this.remove(rcon, args.slice(1)); break;
+		case "remove": 	this.remove(rcon, args.slice(1), authorName); break;
 		case "list": 	this.list(rcon, args.slice(1)); break;
 		case "display": this.display(rcon, args.slice(1)); break;
 		case "delay": 	this.delay(rcon, args.slice(1)); break;
@@ -79,8 +79,22 @@ class Preset extends ServerCommand {
 		});
 	}
 	
-	remove(rcon, args) {
-		
+	remove(rcon, args, authorName) {
+		let name = args[0];
+		// Check if the user owns the presets
+		this.client.db.get("SELECT * FROM presets WHERE username = ? AND name = ?;", [authorName, name], (err, data) => {
+			if (err) rcon.error(err);
+			if (data == undefined) {
+				rcon.warn(`Couldn't find any preset '${name}' that you own`);
+				return;
+			}
+			
+			this.client.db.run("DELETE FROM presets WHERE username = ? AND name = ?", [authorName, name], err2 => {
+				if (err2) rcon.error(err2);
+				rcon.succeed(`Successfully deleted preset '${name}'`);
+				rcon.preset.enabled = false;
+			})
+		});
 	}
 	
 	list(rcon, args) {
