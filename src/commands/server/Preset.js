@@ -1,6 +1,7 @@
 "use strict";
 
 const ServerCommand = require("../ServerCommand.js");
+const scoreboards = require("../../assets/scoreboards.json");
 
 class Preset extends ServerCommand {
 	constructor(client) {
@@ -37,7 +38,7 @@ class Preset extends ServerCommand {
 			rcon.preset.objectives = objectives;
 			rcon.preset.enabled = true;
 			
-			rcon.sendCommand(`scoreboard objectives setdisplay sidebar ${objectives[0]}`);
+			rcon.sendCommand(`scoreboard objectives setdisplay sidebar ${scoreboard[objectives[0]] || objectives[0]}`);
 		})
 	}
 	
@@ -96,7 +97,9 @@ class Preset extends ServerCommand {
 			if (preset.enabled) {
 				preset.i++;
 				preset.i %= preset.objectives.length;
-				await rcon.sendCommand(`scoreboard objectives setdisplay sidebar ${preset.objectives[preset.i]}`);
+				let objectiveName = preset.objectives[preset.i];
+				console.log(scoreboards[objectiveName] || objectiveName);
+				await rcon.sendCommand(`scoreboard objectives setdisplay sidebar ${scoreboards[objectiveName] || objectiveName}`);
 			}
 		}, 10000);
 	}
