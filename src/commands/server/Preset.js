@@ -11,7 +11,7 @@ class Preset extends ServerCommand {
 		super(client);
 		this.info = {
 			"name": "Scoreboard Preset",
-			"usage": "preset <name>",
+			"usage": "preset <set|remove|display|list> [<objectives>]",
 			"description": "Displays succesively a list of objectives over and over."
 		};
 		this.servers = new Map();
