@@ -111,7 +111,6 @@ class Preset extends ServerCommand {
 				preset.i++;
 				preset.i %= preset.objectives.length;
 				let objectiveName = preset.objectives[preset.i];
-				console.log(scoreboards[objectiveName] || objectiveName);
 				await rcon.sendCommand(`scoreboard objectives setdisplay sidebar ${scoreboards[objectiveName] || objectiveName}`);
 			}
 		}, 10000);
