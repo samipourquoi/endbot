@@ -88,3 +88,16 @@ Usage:
 - `scoreboard <objective> list` displays objective to the player list (by pressing tab)
 
 Alias: `s`
+
+### Scoreboard presets
+Save, and then succesively display configured objectives.
+
+Usage:
+- `preset set foo ["objective1","objective2"]`:
+	- creates a preset named 'foo' with the objectives 'objective1' and 'objective2';
+	- if a preset named 'foo' is already configured, it will override it;
+	- You can't override a preset if you didn't create it.
+- `preset remove foo` removes the preset named 'foo'.
+- `preset display foo` succesively displays the objectives configured in 'foo'.
+- `preset delay <duration>` sets the duration between each objective.
+- `preset list` lists all the configured presets.
