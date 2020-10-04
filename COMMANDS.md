@@ -101,3 +101,5 @@ Usage:
 - `preset display foo` succesively displays the objectives configured in 'foo'.
 - `preset delay <duration>` sets the duration between each objective.
 - `preset list` lists all the configured presets.
+
+Note: you can 'stop' displaying a preset by doing `scoreboard clear` or any other command.
