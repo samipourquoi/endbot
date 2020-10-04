@@ -77,7 +77,8 @@ class EndBot extends Discord.Client {
 	}
 	
 	initDatabase() {
-		this.db.run("CREATE TABLE IF NOT EXISTS presets (username TEXT, name TEXT UNIQUE, objectives TEXT);");
+		this.db.async_run("CREATE TABLE IF NOT EXISTS presets (username TEXT, name TEXT UNIQUE, objectives TEXT);")
+			.then(() => console.log("[Database] Created 'presets' table"));
 	}
 
 	filterDiscord(message) {

@@ -25,27 +25,27 @@ class Preset extends ServerCommand {
 		}
 	}
 	
-	display(rcon, args) {
+	async display(rcon, args) {
 		let name = args[0];
-		this.client.db.get("SELECT objectives FROM presets WHERE name = ?", [name], (err, data) => {
-			if (err) rcon.error(err);
-			if (data == undefined) {
-				rcon.error(`No preset is assigned to ${name}`);
-				return;
-			}
-			
-			let objectives = data.objectives.split(",");
-			rcon.preset.objectives = objectives;
-			rcon.preset.enabled = true;
-			
-			rcon.sendCommand(`scoreboard objectives setdisplay sidebar ${scoreboards[objectives[0]] || objectives[0]}`);
-		});
+		let result = await this.client.db.async_get("SELECT objectives FROM presets WHERE name = ?", { params: [name], rcon: rcon });
+		
+		if (!result) {
+			rcon.error(`No preset is assigned to ${name}`);
+			return;
+		}
+		
+		let objectives = result.objectives.split(",");
+		rcon.preset.objectives = objectives;
+		rcon.preset.enabled = true;
+		
+		await rcon.sendCommand(`scoreboard objectives setdisplay sidebar ${scoreboards[objectives[0]] || objectives[0]}`);
 	}
 	
-	set(rcon, args, authorName) {
+	async set(rcon, args, authorName) {
 		let name = args[0];
 		let input = args.slice(1).join("");
 		let objectives;
+		
 		try {
 			objectives = JSON.parse(input);
 			if (!Array.isArray(objectives)) {
@@ -56,45 +56,39 @@ class Preset extends ServerCommand {
 				throw new Error("one or more strings are empty");
 			}
 		} catch (e) {
-			console.error(e);
 			rcon.error(`Unable to parse ${input}: ${e}`);
 			return;
 		}
 		
 		// Check if there is already a preset from another user
-		this.client.db.get("SELECT * FROM presets WHERE NOT username = ? AND name = ?;", [authorName, name], (err, data) => {
-			if (err) rcon.error(err);
+		let result = await this.client.db.async_get("SELECT * FROM presets WHERE NOT username = ? AND name = ?;", { params: [authorName, name] });
 			
-			// If there is, send error
-			if (data != undefined) {
-				rcon.error(`Preset ${name} is already used by ${data.username}`);
-				return;
-			}
-			
-			// Otherwise set the preset
-			this.client.db.run("REPLACE INTO presets VALUES (?, ?, ?);", [authorName, name, objectives.toString()], (err2) => {
-				if (err2) rcon.error(err2);
-				else rcon.succeed(`Successfully set preset ${name} to value ${objectives}`);
+		if (result) {
+			rcon.error(`Preset '${name}' is already used by '${result.username}'`);
+			return;
+		} else {
+			await this.client.db.async_run("REPLACE INTO presets VALUES (?, ?, ?);", {
+				params: [authorName, name, objectives.toString()],
+				rcon: rcon
 			});
-		});
+			
+			rcon.succeed(`Successfully set preset ${name} to value ${objectives}`);
+		}
 	}
 	
-	remove(rcon, args, authorName) {
+	async remove(rcon, args, authorName) {
 		let name = args[0];
 		// Check if the user owns the presets
-		this.client.db.get("SELECT * FROM presets WHERE username = ? AND name = ?;", [authorName, name], (err, data) => {
-			if (err) rcon.error(err);
-			if (data == undefined) {
-				rcon.warn(`Couldn't find any preset '${name}' that you own`);
-				return;
-			}
+		let result = await this.client.db.async_get("SELECT * FROM presets WHERE username = ? AND name = ?;", { params: [authorName, name] });
+		
+		if (!result) {
+			rcon.warn(`Couldn't find any preset '${name}' that you own`);
+		} else {
+			await this.client.db.async_run("DELETE FROM presets WHERE username = ? AND name = ?;", { params: [authorName, name], rcon: rcon });
 			
-			this.client.db.run("DELETE FROM presets WHERE username = ? AND name = ?", [authorName, name], err2 => {
-				if (err2) rcon.error(err2);
-				rcon.succeed(`Successfully deleted preset '${name}'`);
-				rcon.preset.enabled = false;
-			})
-		});
+			rcon.succeed(`Successfully deleted preset '${name}'`);
+			rcon.preset.enabled = false;
+		}
 	}
 	
 	list(rcon, args) {
