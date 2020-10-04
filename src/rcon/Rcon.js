@@ -143,7 +143,7 @@ class Rcon {
 }
 
 function escape(string) {
-	return string.replace(/("'{}:)/gm, "\\$1")
+	return string.replace(/(")/gm, "\\$1")
 }
 
 module.exports = Rcon;
