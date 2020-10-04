@@ -17,11 +17,11 @@ class Preset extends ServerCommand {
 
 	run(rcon, authorName, args) {
 		switch (args[0]) {
-			case "set": 	this.set(rcon, args.slice(1), authorName); break;
-			case "remove": 	this.remove(rcon, args.slice(1)); break;
-			case "list": 	this.list(rcon, args.slice(1)); break;
-			case "display": this.display(rcon, args.slice(1)); break;
-			case "delay": 	this.delay(rcon, args.slice(1)); break;
+		case "set": 	this.set(rcon, args.slice(1), authorName); break;
+		case "remove": 	this.remove(rcon, args.slice(1)); break;
+		case "list": 	this.list(rcon, args.slice(1)); break;
+		case "display": this.display(rcon, args.slice(1)); break;
+		case "delay": 	this.delay(rcon, args.slice(1)); break;
 		}
 	}
 	
@@ -38,8 +38,8 @@ class Preset extends ServerCommand {
 			rcon.preset.objectives = objectives;
 			rcon.preset.enabled = true;
 			
-			rcon.sendCommand(`scoreboard objectives setdisplay sidebar ${scoreboard[objectives[0]] || objectives[0]}`);
-		})
+			rcon.sendCommand(`scoreboard objectives setdisplay sidebar ${scoreboards[objectives[0]] || objectives[0]}`);
+		});
 	}
 	
 	set(rcon, args, authorName) {
@@ -53,7 +53,7 @@ class Preset extends ServerCommand {
 			} else if (objectives.length == 0) {
 				throw new Error("can't accept empty arrays");
 			} else if (!objectives.every(e => e != "")) {
-				throw new Error("one or more strings are empty")
+				throw new Error("one or more strings are empty");
 			}
 		} catch (e) {
 			console.error(e);
@@ -74,7 +74,7 @@ class Preset extends ServerCommand {
 			// Otherwise set the preset
 			this.client.db.run("REPLACE INTO presets VALUES (?, ?, ?);", [authorName, name, objectives.toString()], (err2) => {
 				if (err2) rcon.error(err2);
-				else rcon.succeed(`Successfully set preset ${name} to value ${objectives}`)
+				else rcon.succeed(`Successfully set preset ${name} to value ${objectives}`);
 			});
 		});
 	}

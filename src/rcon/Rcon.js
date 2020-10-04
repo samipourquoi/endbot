@@ -17,8 +17,8 @@ class Rcon {
 		this.timeout = 8000;
 
 		this.client = client;
-		
-	 	/** @see src/commands/server/Preset.js */
+
+		/** @see src/commands/server/Preset.js */
 		this.preset = {
 			enabled: false,
 			objectives: [],
@@ -60,7 +60,7 @@ class Rcon {
 		
 		this.connection.on("auth", e => {
 			Preset.loop(this);
-		})
+		});
 	}
 
 	authenticate() {
@@ -143,7 +143,7 @@ class Rcon {
 }
 
 function escape(string) {
-	return string.replace(/(")/gm, "\\$1")
+	return string.replace(/(")/gm, "\\$1");
 }
 
 module.exports = Rcon;
