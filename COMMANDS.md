@@ -70,6 +70,12 @@ Usage:
 - `embed field add "<name>","<value>",<inline>` with inline being a boolean
 - `embed field splice <index>`
 
+### SQL
+Makes SQL queries to the database. Only persons having the role specified in the `op-role` field,
+in the config file, will be able to run that command.
+
+Usage: `sql <statement>`
+
 ## Server
 
 ### Help
