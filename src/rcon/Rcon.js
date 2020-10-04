@@ -3,9 +3,10 @@
 const net = require("net");
 
 const Packet = require("./Packet");
+const Preset = require("../commands/server/Preset");
 
 /**
- * Class representing a single instance of an Rcon.
+ * Class representing a single instance of an Rcon, and more generally a server.
  */
 class Rcon {
 	constructor({ host, port, password, name }, client) {
@@ -16,6 +17,13 @@ class Rcon {
 		this.timeout = 8000;
 
 		this.client = client;
+		
+	 	/** @see src/commands/server/Preset.js */
+		this.preset = {
+			enabled: false,
+			objectives: [],
+			i: 0
+		};
 
 		this.queue = [];
 		this.draining = false;
@@ -49,6 +57,10 @@ class Rcon {
 			if (this.client.flags.debug) console.error(e);
 			setTimeout(connect, 5*1000);
 		});
+		
+		this.connection.on("auth", e => {
+			Preset.loop(this);
+		})
 	}
 
 	authenticate() {

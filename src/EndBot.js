@@ -76,7 +76,7 @@ class EndBot extends Discord.Client {
 		}
 	}
 	
-	initDabase() {
+	initDatabase() {
 		this.db.run("CREATE TABLE IF NOT EXISTS presets (username TEXT, name TEXT UNIQUE, objectives TEXT);");
 	}
 

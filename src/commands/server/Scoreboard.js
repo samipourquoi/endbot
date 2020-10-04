@@ -24,6 +24,7 @@ class Scoreboard extends ServerCommand {
 			if (scoreboard == "clear") {
 				await rcon.sendCommand(`scoreboard objectives setdisplay ${mode}`);
 				await rcon.succeed(`Cleared the ${mode} from any objective`);
+				rcon.preset.enabled = false;
 				return;
 			}
 
@@ -32,6 +33,8 @@ class Scoreboard extends ServerCommand {
 					if (data.body.includes("Unknown scoreboard objective")) {
 						rcon.error(data.body);
 						// TODO: Autocomplete
+					} else {
+						rcon.preset.enabled = false;
 					}
 				});
 		} else if (args[1] == "query") {

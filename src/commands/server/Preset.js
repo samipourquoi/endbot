@@ -10,6 +10,8 @@ class Preset extends ServerCommand {
 			"usage": "preset <name>",
 			"description": "Displays succesively a list of objectives over and over."
 		};
+		this.delay = 30;
+		this.servers = new Map();
 	}
 
 	run(rcon, authorName, args) {
@@ -23,7 +25,20 @@ class Preset extends ServerCommand {
 	}
 	
 	display(rcon, args) {
-		
+		let name = args[0];
+		this.client.db.get("SELECT objectives FROM presets WHERE name = ?", [name], (err, data) => {
+			if (err) rcon.error(err);
+			if (data == undefined) {
+				rcon.error(`No preset is assigned to ${name}`);
+				return;
+			}
+			
+			let objectives = data.objectives.split(",");
+			rcon.preset.objectives = objectives;
+			rcon.preset.enabled = true;
+			
+			rcon.sendCommand(`scoreboard objectives setdisplay sidebar ${objectives[0]}`);
+		})
 	}
 	
 	set(rcon, args, authorName) {
@@ -68,6 +83,22 @@ class Preset extends ServerCommand {
 	
 	delay(rcon, args) {
 		
+	}
+	
+	/**
+	 * Gets called for each server once authentified.
+	 * Will loop over and over, and display the appropriate scoreboards
+	 * when the presets are enabled.
+	 */
+	static loop(rcon) {
+		setInterval(async () => {
+			let preset = rcon.preset;
+			if (preset.enabled) {
+				preset.i++;
+				preset.i %= preset.objectives.length;
+				await rcon.sendCommand(`scoreboard objectives setdisplay sidebar ${preset.objectives[preset.i]}`);
+			}
+		}, 10000);
 	}
 
 	toString() {
