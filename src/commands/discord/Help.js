@@ -40,10 +40,6 @@ class Help extends Command {
 
 		message.channel.send(embed);
 	}
-
-	toString() {
-		return this.info;
-	}
 }
 
 module.exports = Help;

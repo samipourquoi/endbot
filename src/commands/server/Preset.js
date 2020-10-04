@@ -127,10 +127,6 @@ class Preset extends ServerCommand {
 			}
 		}
 	}
-
-	toString() {
-		return this.info;
-	}
 }
 
 module.exports = Preset;

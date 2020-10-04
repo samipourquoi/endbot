@@ -24,10 +24,6 @@ class Sql extends Command {
 			message.channel.send(`\`\`\`diff\n-${error}\`\`\``);
 		});
 	}
-
-	toString() {
-		return this.info;
-	}
 }
 
 module.exports = Sql;

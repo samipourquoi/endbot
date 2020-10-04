@@ -21,6 +21,10 @@ class Command {
 	get description() {
 		return this.info.description;
 	}
+	
+	toString() {
+		return `**${this.name}**: ${this.description}; \`${this.usage}\``;
+	}
 }
 
 module.exports = Command;

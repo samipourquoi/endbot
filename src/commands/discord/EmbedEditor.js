@@ -266,10 +266,6 @@ class EmbedEditor extends Command {
 		}
 		message.channel.send(this.client.errorEmbed("args"));
 	}
-
-	toString() {
-		return this.info;
-	}
 }
 
 module.exports = EmbedEditor;

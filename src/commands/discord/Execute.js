@@ -48,10 +48,6 @@ class Execute extends Command {
 			.setDescription(description);
 		await message.channel.send(embed);
 	}
-
-	toString() {
-		return this.info;
-	}
 }
 
 module.exports = Execute;
