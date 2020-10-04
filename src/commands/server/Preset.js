@@ -106,7 +106,7 @@ class Preset extends ServerCommand {
 
 	delay(rcon, args) {
 		let newDelay = parseInt(args[0] || 20);
-		delay = (5 < newDelay && newDelay < 60*5) ? newDelay : delay;
+		delay = (0 < newDelay && newDelay < 60*5) ? newDelay : delay;
 		rcon.succeed(`Changed delay to '${delay}'`);
 	}
 	
