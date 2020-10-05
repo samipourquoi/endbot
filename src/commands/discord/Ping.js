@@ -15,10 +15,6 @@ class Ping extends Command {
 	run(message) {
 		message.channel.send("Pong!");
 	}
-
-	toString() {
-		return this.info;
-	}
 }
 
 module.exports = Ping;

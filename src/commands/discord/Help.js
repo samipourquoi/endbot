@@ -30,11 +30,9 @@ class Help extends Command {
 		let keys = Object.keys(commands);
 		let lastName;
 		for (let i = 0; i < keys.length; i++) {
-			let info = commands[keys[i]].info;
-			if (info.name !== lastName) {
-				description += `**${info.name}**: ${info.description}: \`${info.usage}\`\n\n`;
-			}
-			lastName = info.name
+      let command = commands[keys[i]];
+			if (command.name != lastName) description += command.toString() + "\n";
+			lastName = command.name;
 		}
 
 		description += "\n[Full documentation here](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md)";
@@ -43,10 +41,6 @@ class Help extends Command {
 		// https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md
 
 		message.channel.send(embed);
-	}
-
-	toString() {
-		return this.info;
 	}
 }
 

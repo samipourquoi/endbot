@@ -57,10 +57,6 @@ class Online extends Command {
 
 		return embed;
 	}
-
-	toString() {
-		return this.info;
-	}
 }
 
 module.exports = Online;
