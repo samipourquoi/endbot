@@ -28,9 +28,13 @@ class Help extends Command {
 		let description = "";
 
 		let keys = Object.keys(commands);
+		let lastName;
 		for (let i = 0; i < keys.length; i++) {
 			let info = commands[keys[i]].info;
-			description += `**${info.name}**: ${info.description}: \`${info.usage}\`\n\n`;
+			if (info.name !== lastName) {
+				description += `**${info.name}**: ${info.description}: \`${info.usage}\`\n\n`;
+			}
+			lastName = info.name
 		}
 
 		description += "\n[Full documentation here](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md)";
