@@ -3,6 +3,7 @@
 const Discord = require("discord.js");
 const Database = require("./misc/Database");
 const fs = require("fs");
+const readdirp = require("readdirp");
 
 const Rcon = require("./rcon/Rcon");
 const Bridge = require("./rcon/Bridge");
@@ -37,9 +38,13 @@ class EndBot extends Discord.Client {
 
 	readCommands(module) {
 		let commands = {};
-		fs.readdirSync(module).forEach(file => {
-			let commandPath = "./" + module.split("/").slice(1).join("/") + file;
-			let command = new (require(commandPath))(this);
+		// Reads recursively all command files in the provided module
+		readdirp(module, { 
+			fileFilter: "*.js",
+			directoryFilter: ["!.git", "!private"]
+		}).on("data", (file) => {
+			if (file.basename.match(/[A-Z]\w*\.js/) == null) return;
+			let command = new (require(file.fullPath))(this);
 			commands[command.info.usage.split(" ")[0]] = command;
 			
 			let alias;
