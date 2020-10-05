@@ -29,24 +29,23 @@ class EndBot extends Discord.Client {
 		this.prefix = config.prefix;
 		this.servers = {};
 		this.bridges = new Map();
-		this.discordCommands = this.readCommands("src/commands/discord/");
-		this.serverCommands = this.readCommands("src/commands/server/");
 		this.rcons = [];
 		this.db = new Database("endbot.db");
 	}
 
 
-	readCommands(module) {
+	async readCommands(modulePath) {
 		let commands = {};
 		// Reads recursively all command files in the provided module
-		readdirp(module, { 
+		let files = await readdirp.promise(modulePath, { 
 			fileFilter: "*.js",
 			directoryFilter: ["!.git", "!private"]
-		}).on("data", (file) => {
+		});
+		
+		files.forEach(file => {
 			if (file.basename.match(/[A-Z]\w*\.js/) == null) return;
 			let command = new (require(file.fullPath))(this);
 			commands[command.info.usage.split(" ")[0]] = command;
-			
 			let alias;
 			if ((alias = command.info.alias) != undefined) {
 				commands[alias] = command;
@@ -54,6 +53,21 @@ class EndBot extends Discord.Client {
 		});
 
 		return commands;
+	}
+	
+	async initCommands() {
+		this.discordCommands = await this.readCommands("src/commands/discord/");
+		this.serverCommands = await this.readCommands("src/commands/server/");
+	}
+	
+	async initModules() {
+		if (!fs.existsSync("modules/")) return;
+		fs.readdirSync("modules/").forEach(async file => {
+			if (!fs.statSync(`modules/${file}`).isDirectory()) return;
+			let endbotModule = require(`../modules/${file}`);
+			let moduleCommands = await this.readCommands(`modules/${file}/${endbotModule.discord}/`);
+			this.discordCommands = { ...this.discordCommands, ...moduleCommands }
+		})
 	}
 
 	initServers() {
