@@ -57,7 +57,7 @@ constructor(client) {
 
 run(message, args) {
 	this.counter += 1;
-	message.channel.send(`The total count is now at ${this.coutner}!`);
+	message.channel.send(`The total count is now at ${this.counter}!`);
 }
 ```
 
