@@ -1,6 +1,6 @@
 "use strict";
 
-require('module-alias/register')
+require("module-alias/register");
 console = require("./src/misc/FancyConsole");
 const EndBot = require("./src/EndBot");
 const client = module.exports = new EndBot();
