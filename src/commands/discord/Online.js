@@ -41,16 +41,19 @@ class Online extends Command {
 		let online = {
 			onlineCount: response[2],
 			maxCount: (response[6] == "of") ? response[7] : response[6],
-			players: response.slice(9)
+			players: response.slice(10)
 		};
+		
+		let embedColor = "result";
 
 		if (online.players[0] == "") {
-			online.players = "No online players";
+			online.players = "No players online.";
+			embedColor = "error";
 		}
 
-		let embed = this.client.createEmbed("result")
-			.setTitle("Online players on " + rcon.name)
-			.addField(`${online.onlineCount}/${online.maxCount}`, online.players.join("\n").replace(/([_*~`])/g, "\\$1"));
+		let embed = this.client.createEmbed(embedColor)
+			.setTitle(`${online.onlineCount}/${online.maxCount}` + " players online on: " + rcon.name)
+			.addField("Player List:", online.players.join("\n").replace(/([_*~`])/g, "\\$1"));
 
 		return embed;
 	}
