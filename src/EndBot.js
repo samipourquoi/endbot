@@ -65,8 +65,12 @@ class EndBot extends Discord.Client {
 		fs.readdirSync("modules/").forEach(async file => {
 			if (!fs.statSync(`modules/${file}`).isDirectory()) return;
 			let endbotModule = require(`../modules/${file}`);
-			let moduleCommands = await this.readCommands(`modules/${file}/${endbotModule.discord}/`);
-			this.discordCommands = { ...this.discordCommands, ...moduleCommands }
+			
+			let discord = await this.readCommands(`modules/${file}/${endbotModule.discord}/`);
+			this.discordCommands = { ...this.discordCommands, ...discord };
+			
+			let server = await this.readCommands(`modules/${file}/${endbotModule.server}/`);
+			this.serverCommands = { ...this.serverCOmmands, ...server };
 		})
 	}
 

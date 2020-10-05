@@ -61,4 +61,33 @@ run(message, args) {
 }
 ```
 
-And here you have your command working! Read the other commands to get a better overview of all the available functions.
+And here you have your command working! 
+
+Now let's do the same command but for the server. Create a new `Counter.js` file in `src/server`. The code will be the following:
+```javascript
+const ServerCommand = require("@root/src/commands/ServerCommand.js");
+
+class Counter extends ServerCommand {
+	constructor(client) {
+		super(client);
+		this.info = {
+			"name": "Counter",
+			"usage": "count",
+			"description": "Check if the bot is online"
+		};
+		this.counter = 0;
+	}
+
+	run(rcon, author, args) {
+		this.counter += 1;
+		rcon.succeed(`${author} added 1 to the total count! It is now at ${this.counter}`);
+	}
+}
+
+module.exports = Counter;
+```
+
+And here you're all set! Read the other commands to get a better overview of all the available functions.
+
+# Contribute
+Feel free to make a Pull Request if you feel like one of your module would be worth addind to the bot!
