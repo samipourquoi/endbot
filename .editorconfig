@@ -5,5 +5,5 @@ charset = utf-8
 end_of_line = lf
 indent_style = tab
 insert_final_newline = true
-max_line_length = 120
+max_line_length = 140
 tab_width = 4
