@@ -27,13 +27,12 @@ class Help extends Command {
 			.setColor("#2F3136");
 		let description = "";
 
-		let addedCommands = [];
 		let keys = Object.keys(commands);
+		let lastName;
 		for (let i = 0; i < keys.length; i++) {
-			let command = commands[keys[i]];
-			if (addedCommands.includes(command.description)) continue;
-			description += command.toString() + "\n";
-			addedCommands.push(command.description);
+      let command = commands[keys[i]];
+			if (command.name != lastName) description += command.toString() + "\n";
+			lastName = command.name;
 		}
 
 		description += "\n[Full documentation here](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md)";

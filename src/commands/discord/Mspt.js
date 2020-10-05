@@ -44,6 +44,7 @@ class Mspt extends Command {
 		let data = await rcon.sendCommand("script run reduce(last_tick_times(),_a+_,0)/100;");
 		let mspt = parseFloat(data.body.split(" ")[2]);
 		let tps;
+		let embedColor;
 
 		if (mspt <= 50) {
 			tps = 20.0;
@@ -52,21 +53,16 @@ class Mspt extends Command {
 		}
 
 		if (mspt.toFixed(1) >= 50) {
-			let embed = new Discord.MessageEmbed()
-				.setTitle(`TPS: ${tps.toFixed(1)} MSPT: ${mspt.toFixed(1)}`)
-				.setColor("#ff483b");
-			return embed;
+			embedColor = "error";
 		} else if (mspt.toFixed(1) <= 25) {
-			let embed = new Discord.MessageEmbed()
-				.setTitle(`TPS: ${tps.toFixed(1)} MSPT: ${mspt.toFixed(1)}`)
-				.setColor("#27f207");
-			return embed;
+			embedColor = "result";
 		} else {
-			let embed = new Discord.MessageEmbed()
-				.setTitle(`TPS: ${tps.toFixed(1)} MSPT: ${mspt.toFixed(1)}`)
-				.setColor("#f2a007");
-			return embed;  
-		}            
+			embedColor = "warn";  
+		}
+		
+		let embed = this.client.createEmbed(embedColor)
+			.setTitle(`${rcon.name} - TPS: ${tps.toFixed(1)} MSPT: ${mspt.toFixed(1)}`)
+		return embed;
 	}
 }
 

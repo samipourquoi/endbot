@@ -94,7 +94,7 @@ class EndBot extends Discord.Client {
 	}
 
 	filterServer(rcon, message) {
-		if (message.charAt(0) === this.prefix) return;
+		if (message.charAt(0) !== this.prefix) return;
 
 		let author = message.substring(1, message.indexOf(">"));
 		let command = message.split(" ");
@@ -120,11 +120,15 @@ class EndBot extends Discord.Client {
 	createEmbed(color) {
 		switch (color) {
 		case "result":
-			color = "#7fe254";
+			color = "#86ff40";
 			break;
 		case "error":
-			color = "#f54f38";
+			color = "#ff483b";
+			break;
+		case "warn":
+			color = "#f2a007";
 		}
+		
 
 		return new Discord.MessageEmbed()
 			.setColor(color);
