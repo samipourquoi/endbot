@@ -4,7 +4,9 @@ backups
 endbot.db
 
 # Modules
-!ping_command
+modules/*
+!modules/ping/
+!modules/embed_editor/
 
 # macOS
 .DS_Store
