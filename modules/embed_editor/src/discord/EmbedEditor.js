@@ -4,7 +4,7 @@ const Discord = require("discord.js");
 const url = require("url");
 const https = require("https");
 
-const Command = require("../Command.js");
+const Command = require("@root/src/commands/Command.js");
 
 class EmbedEditor extends Command {
 	constructor(client) {
