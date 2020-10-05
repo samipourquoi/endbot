@@ -33,9 +33,13 @@
 		"canvas": "^2.6.1",
 		"discord.js": "^12.2.0",
 		"miteru": "^0.6.7",
+		"module-alias": "^2.2.2",
 		"nearest-color": "^0.4.4",
 		"readdirp": "^3.4.0",
 		"sqlite3": "^5.0.0",
 		"text-file-follower": "^0.1.0"
+	},
+	"_moduleAliases": {
+		"@root": "."
 	}
 }
