@@ -1,0 +1,64 @@
+# Modules
+Modules are a great way to add commands that are not directly related to the Minecraft bot.
+The native modules are at the moment:
+- `ping`: Adds the `ping` command. It serves a purpose of example rather than an actual useful command;
+- `embed_editor`: Adds the `embed` command. With it, you can create and modify visually embeds via discord commands.
+
+# Code it yourself!
+You can create your own modules! You can find a simple example in `modules/ping/`.
+
+You need to create that hierarchy to create your own module:
+```
+modules/<module_name>
+├── index.js
+└── src
+    ├── discord
+    └── server
+```
+
+The `index.js` file must contain the following:
+```javascript
+module.exports = {
+	package: "Ping Command",
+	discord: "src/discord",
+	server: "src/server",
+};
+```
+
+Our discord commands will be found in `<module_name>/src/discord`. Let's write a command which adds 1 to a counter every time you execute it.
+Create a file named `Counter.js` and include:
+
+```javascript
+const Command = require("@root/src/commands/Command.js");
+
+class Count extends Command {
+	constructor(client) {
+		super(client);
+		this.info = {
+			"name": "Counter",
+			"usage": "count",
+			"description": "Check if the bot is online"
+		};
+	}
+
+	run(message, args) {
+	}
+}
+
+module.exports = Count;
+```
+
+Now write the actual code! The `run()` function will be executed every time the command is triggered. To implement our counter, we could do:
+```javascript
+constructor(client) {
+	//...
+	this.counter = 0;
+}
+
+run(message, args) {
+	this.counter += 1;
+	message.channel.send(`The total count is now at ${this.coutner}!`);
+}
+```
+
+And here you have your command working! Read the other commands to get a better overview of all the available functions.
