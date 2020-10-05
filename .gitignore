@@ -3,6 +3,9 @@ config.json
 backups
 endbot.db
 
+# Modules
+!ping_command
+
 # macOS
 .DS_Store
 

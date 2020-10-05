@@ -1,6 +1,6 @@
 "use strict";
 
-const Command = require("../Command.js");
+const Command = require("@root/src/commands/Command.js");
 
 class Ping extends Command {
 	constructor(client) {
