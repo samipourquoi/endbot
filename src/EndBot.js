@@ -120,13 +120,13 @@ class EndBot extends Discord.Client {
 	createEmbed(color) {
 		switch (color) {
 		case "result":
-			color = "##86ff40";
+			color = "#86ff40";
 			break;
 		case "error":
 			color = "#ff483b";
 			break;
 		case "warn":
-			color = "f2a007";
+			color = "#f2a007";
 		}
 		
 

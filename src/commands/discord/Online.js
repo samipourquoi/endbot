@@ -47,12 +47,12 @@ class Online extends Command {
 		let embedColor = "result";
 
 		if (online.players[0] == "") {
-			online.players = "No players online.";
+			online.players = ["No players online."];
 			embedColor = "error";
 		}
 
 		let embed = this.client.createEmbed(embedColor)
-			.setTitle(`${online.onlineCount}/${online.maxCount}` + " players online on: " + rcon.name)
+			.setTitle(`${online.onlineCount}/${online.maxCount}` + " Players Online On: " + rcon.name)
 			.addField("Player List:", online.players.join("\n").replace(/([_*~`])/g, "\\$1"));
 
 		return embed;
