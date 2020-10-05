@@ -101,11 +101,11 @@ class Preset extends ServerCommand {
 			messages.push(`{"text":"${preset.name}","color":"gray","hoverEvent":\
 			{"action":"show_text","value":"owned by ${preset.username}"}},{"color":"white","text":": ${preset.objectives}"}`);
 		});
-		rcon.sendCommand(`tellraw @a [${messages.join(`,"\\n",`)}]`);
+		rcon.sendCommand(`tellraw @a [${messages.join(",\"\\n\",")}]`);
 	}
 
 	delay(rcon, args) {
-		let newDelay = parseInt(args[0] || 20);
+		let newDelay = parseInt(args[0] || 20);
 		delay = (0 < newDelay && newDelay < 60*5) ? newDelay : delay;
 		rcon.succeed(`Changed delay to '${delay}'`);
 	}
@@ -116,6 +116,7 @@ class Preset extends ServerCommand {
 	 * when the presets are enabled.
 	 */
 	static async loop(rcon) {
+		// eslint-disable-next-line
 		while (true) {
 			await new Promise(resolve => setTimeout(resolve, delay*1000));
 			let preset = rcon.preset;

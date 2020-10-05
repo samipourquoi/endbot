@@ -61,7 +61,7 @@ class Mspt extends Command {
 		}
 		
 		let embed = this.client.createEmbed(embedColor)
-			.setTitle(`${rcon.name} - TPS: ${tps.toFixed(1)} MSPT: ${mspt.toFixed(1)}`)
+			.setTitle(`${rcon.name} - TPS: ${tps.toFixed(1)} MSPT: ${mspt.toFixed(1)}`);
 		return embed;
 	}
 }

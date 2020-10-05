@@ -30,7 +30,7 @@ class Help extends Command {
 		let keys = Object.keys(commands);
 		let lastName;
 		for (let i = 0; i < keys.length; i++) {
-      let command = commands[keys[i]];
+			let command = commands[keys[i]];
 			if (command.name != lastName) description += command.toString() + "\n";
 			lastName = command.name;
 		}
