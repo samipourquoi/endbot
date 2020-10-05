@@ -45,6 +45,7 @@ class EndBot extends Discord.Client {
 		files.forEach(file => {
 			if (file.basename.match(/[A-Z]\w*\.js/) == null) return;
 			let command = new (require(file.fullPath))(this);
+			if (!command.requirements()) return;
 			commands[command.info.usage.split(" ")[0]] = command;
 			let alias;
 			if ((alias = command.info.alias) != undefined) {

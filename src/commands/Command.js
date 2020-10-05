@@ -25,6 +25,10 @@ class Command {
 	toString() {
 		return `**${this.name}**: ${this.description}; \`${this.usage}\``;
 	}
+	
+	requirements() {
+		return true;
+	}
 }
 
 module.exports = Command;
