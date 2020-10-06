@@ -39,14 +39,14 @@ class Links extends Command {
 		let emote = await this.createEmote(invite.guild);
 	
 		await this.client.db.async_run("REPLACE INTO discord_links VALUES (?, ?, ?)", { params: [name, invite.url, emote.identifier] });
-		let responseEmbed = this.client.createEmbed("result").setTitle(`Successfully added ${name}! <:${emote.identifier}>`)
+		let responseEmbed = this.client.createEmbed("result").setTitle(`Successfully added ${name}! <:${emote.identifier}>`);
 		message.channel.send(responseEmbed);
 	}
 	
 	async createEmote(guild) {
 		let emoteName = guild.name.toLowerCase()
-							.replace(/[^\w ]/g, "")
-							.replace(/ /g, "_");
+			.replace(/[^\w ]/g, "")
+			.replace(/ /g, "_");
 		let iconURL = guild.iconURL({ format: "png" });
 		
 		let canvas = Canvas.createCanvas(128, 128);
@@ -56,7 +56,7 @@ class Links extends Command {
 
 		// How to draw a rounded Rectangle on HTML Canvas?
 		// https://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas
-		context.moveTo(128, 128)
+		context.moveTo(128, 128);
 		context.arcTo(0, 128, 0, 0, 40);
 		context.arcTo(0, 0, 128, 0, 40);
 		context.arcTo(128, 0, 128, 128, 40);
