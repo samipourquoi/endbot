@@ -38,7 +38,7 @@ class Links extends Command {
 		let name = invite.guild.name;
 		let emote = await this.createEmote(invite.guild);
 	
-		await this.client.db.async_run("INSERT or REPLACE INTO discord_links VALUES (?, ?, ?)", { params: [name, invite.url, emote.identifier] });
+		await this.client.db.async_run("REPLACE INTO discord_links VALUES (?, ?, ?)", { params: [name, invite.url, emote.identifier] });
 		let responseEmbed = this.client.createEmbed("result").setTitle(`Successfully added ${name}! <:${emote.identifier}>`)
 		message.channel.send(responseEmbed);
 	}
