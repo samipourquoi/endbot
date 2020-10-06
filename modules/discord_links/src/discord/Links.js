@@ -20,7 +20,7 @@ class Links extends Command {
 		try {			
 			switch (args[0]) {
 			case "add": 	await this.add(message, args.slice(1)); break;
-			case "remove": 	this.remove(message, args.slice(1)); 	break;
+			case "remove": 	await this.remove(message, args.slice(1)); 	break;
 			case "publish": this.publish(message, args.slice(1)); 	break;
 			case "list": 	this.list(message, args.slice(1));	 	break;
 			}
@@ -70,8 +70,21 @@ class Links extends Command {
 		return this.emoteServer.emojis.create(buffer, emoteName);
 	}
 	
-	remove(message, args) {
+	async remove(message, args) {
+		let name = args.join(" ");
+		if (!name) throw "You must provide a guild name!";
 		
+		let emoteResult = await this.client.db.async_get("SELECT emote_id FROM discord_links WHERE name = ?", { params: [name] });
+		if (!emoteResult) throw `Couldn't find '${name}' in the database`;
+		let emoteID = emoteResult.emote_id;
+		emoteID = emoteID.substring(emoteID.indexOf(":") + 1); // Gets the snowflake
+		
+		let emote = await this.emoteServer.emojis.resolve(emoteID);
+		await emote.delete();
+		
+		await this.client.db.async_run("DELETE FROM discord_links WHERE name = ?", { params: [name] });
+		let responseEmbed = this.client.createEmbed("result").setTitle(`Successfully delete '${name}' from the discord links!`);
+		message.channel.send(responseEmbed);
 	}
 	
 	publish(message, args) {
