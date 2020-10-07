@@ -21,7 +21,7 @@ class Links extends Command {
 			switch (args[0]) {
 			case "add": 	await this.add(message, args.slice(1)); break;
 			case "remove": 	await this.remove(message, args.slice(1)); 	break;
-			case "publish": this.publish(message, args.slice(1)); 	break;
+			case "publish": await this.publish(message, args.slice(1)); 	break;
 			case "list": 	this.list(message, args.slice(1));	 	break;
 			}
 		} catch (e) {
@@ -87,8 +87,19 @@ class Links extends Command {
 		message.channel.send(responseEmbed);
 	}
 	
-	publish(message, args) {
+	async publish(message, args) {
+		let embed = new Discord.MessageEmbed()
+			.setColor("#2F3136")
+			.setTitle("Technical Servers:");
+		let links = await this.client.db.async_all("SELECT * FROM discord_links");
+		links.forEach(link => {
+			embed.addField(`<:${link.emote_id}> ${link.name}`, `[${link.invite.substring(8)}](${link.invite})`, true);
+		});
 		
+		let channelName = args[0] || `<#${message.channel.id}>`;
+		
+		let channel = this.client.channels.cache.get(channelName.substring(2, channelName.length-1))
+		await channel.send(embed);
 	}
 	
 	list(message, args) {
