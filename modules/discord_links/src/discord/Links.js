@@ -99,6 +99,9 @@ class Links extends Command {
 			.setColor("#2F3136")
 			.setTitle(registry != "default" ? `${registry.replace("_", " ")}:` : "Technical Servers:");
 		let links = await this.client.db.async_all("SELECT * FROM discord_links WHERE registry = ?", { params: [ registry ]});
+		
+		// Sort alphabetically
+		links.sort((a, b) => a.name.localeCompare(b.name));
 		links.forEach(link => {
 			embed.addField(`<:${link.emote_id}> ${link.name}`, `[${link.invite.substring(8)}](${link.invite})`, true);
 		});
