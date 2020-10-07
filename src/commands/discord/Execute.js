@@ -31,7 +31,6 @@ class Execute extends Command {
 
 		let response = await rcon.sendCommand(command);
 		let embedType = "result";
-		console.log(response);
 		for (let i = 0; i < invalidCommands.length; i++) {
 			let error = invalidCommands[i];
 			if (response.body.includes(error)) {
