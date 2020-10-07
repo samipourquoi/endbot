@@ -34,11 +34,15 @@ class Links extends Command {
 		let inviteText = args[0];
 		if (!inviteText) throw "You must provide an invite link!";
 		
+		let registry = args[1] || "default";
+		
 		let invite = await this.client.fetchInvite(inviteText);
 		let name = invite.guild.name;
 		let emote = await this.createEmote(invite.guild);
 	
-		await this.client.db.async_run("REPLACE INTO discord_links VALUES (?, ?, ?)", { params: [name, invite.url, emote.identifier] });
+		await this.client.db.async_run("REPLACE INTO discord_links VALUES (?, ?, ?, ?)", { 
+			params: [ name, registry, invite.url, emote.identifier ]
+		});
 		let responseEmbed = this.client.createEmbed("result").setTitle(`Successfully added ${name}! <:${emote.identifier}>`);
 		message.channel.send(responseEmbed);
 	}
@@ -72,9 +76,11 @@ class Links extends Command {
 	
 	async remove(message, args) {
 		let name = args.join(" ");
-		if (!name) throw "You must provide a guild name!";
+		if (!name) throw "You must provide a guild name or an invite link!";
 		
-		let emoteResult = await this.client.db.async_get("SELECT emote_id FROM discord_links WHERE name = ?", { params: [name] });
+		let emoteResult = await this.client.db.async_get("SELECT emote_id FROM discord_links WHERE name = ? OR invite = ?", { 
+			params: [ name, name ]
+		});
 		if (!emoteResult) throw `Couldn't find '${name}' in the database`;
 		let emoteID = emoteResult.emote_id;
 		emoteID = emoteID.substring(emoteID.indexOf(":") + 1); // Gets the snowflake
@@ -82,16 +88,17 @@ class Links extends Command {
 		let emote = await this.emoteServer.emojis.resolve(emoteID);
 		await emote.delete();
 		
-		await this.client.db.async_run("DELETE FROM discord_links WHERE name = ?", { params: [name] });
+		await this.client.db.async_run("DELETE FROM discord_links WHERE name = ? OR invite = ?", { params: [ name, name ] });
 		let responseEmbed = this.client.createEmbed("result").setTitle(`Successfully delete '${name}' from the discord links!`);
 		message.channel.send(responseEmbed);
 	}
 	
 	async publish(message, args) {
+		let registry = args[1] || "default";
 		let embed = new Discord.MessageEmbed()
 			.setColor("#2F3136")
-			.setTitle("Technical Servers:");
-		let links = await this.client.db.async_all("SELECT * FROM discord_links");
+			.setTitle(registry != "default" ? `${registry.replace("_", " ")}:` : "Technical Servers:");
+		let links = await this.client.db.async_all("SELECT * FROM discord_links WHERE registry = ?", { params: [ registry ]});
 		links.forEach(link => {
 			embed.addField(`<:${link.emote_id}> ${link.name}`, `[${link.invite.substring(8)}](${link.invite})`, true);
 		});
