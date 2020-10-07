@@ -96,7 +96,7 @@ class Links extends Command {
 		let registry = args[1] || "default";
 		let embed = new Discord.MessageEmbed()
 			.setColor("#2F3136")
-			.setTitle(registry != "default" ? `${registry.replace("_", " ")}:` : "Technical Servers:");
+			.setTitle(registry != "default" ? `${registry.replace(/_/g, " ")}:` : "Technical Servers:");
 		let links = await this.client.db.async_all("SELECT * FROM discord_links WHERE registry = ?", { params: [ registry ]});
 		
 		// Sort alphabetically
