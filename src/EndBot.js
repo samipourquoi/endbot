@@ -121,7 +121,7 @@ class EndBot extends Discord.Client {
 	}
 
 	filterServer(rcon, message) {
-		if (message.charAt(0) !== this.prefix) return;
+		if (message.charAt(message.indexOf(">") + 2) != this.prefix) return;
 
 		let author = message.substring(1, message.indexOf(">"));
 		let command = message.split(" ");
