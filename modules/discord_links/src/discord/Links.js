@@ -19,10 +19,9 @@ class Links extends Command {
 	async run(message, args) {
 		try {			
 			switch (args[0]) {
-			case "add": 	await this.add(message, args.slice(1)); break;
+			case "add": 	await this.add(message, args.slice(1)); 	break;
 			case "remove": 	await this.remove(message, args.slice(1)); 	break;
-			case "publish": await this.publish(message, args.slice(1)); 	break;
-			case "list": 	this.list(message, args.slice(1));	 	break;
+			case "publish": await this.publish(message, args.slice(1)); break;
 			}
 		} catch (e) {
 			let errorEmbed = this.client.createEmbed("error").setTitle(e);
@@ -110,10 +109,6 @@ class Links extends Command {
 		
 		let channel = this.client.channels.cache.get(channelName.substring(2, channelName.length-1))
 		await channel.send(embed);
-	}
-	
-	list(message, args) {
-		
 	}
 }
 
