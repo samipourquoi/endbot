@@ -110,6 +110,10 @@ class Links extends Command {
 		let channel = this.client.channels.cache.get(channelName.substring(2, channelName.length-1));
 		await channel.send(embed);
 	}
+	
+	requirements() {
+		return this.emoteServer != undefined;
+	}
 }
 
 module.exports = Links;
