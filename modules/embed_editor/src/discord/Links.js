@@ -17,6 +17,11 @@ class Links extends Command {
 	}
 		
 	async run(message, args) {
+		if (!message.member.hasPermission("MANAGE_CHANNELS")) {
+			message.channel.send("da fuck you tryin' to do");
+			return;
+		}
+		
 		try {			
 			switch (args[0]) {
 			case "add": 	await this.add(message, args.slice(1)); 	break;
