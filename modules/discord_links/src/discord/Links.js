@@ -107,7 +107,7 @@ class Links extends Command {
 		
 		let channelName = args[0] || `<#${message.channel.id}>`;
 		
-		let channel = this.client.channels.cache.get(channelName.substring(2, channelName.length-1))
+		let channel = this.client.channels.cache.get(channelName.substring(2, channelName.length-1));
 		await channel.send(embed);
 	}
 }
