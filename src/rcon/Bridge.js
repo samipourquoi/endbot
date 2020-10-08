@@ -1,8 +1,11 @@
 "use strict";
 
+const { gifVersion } = require("canvas");
+const { Guild } = require("discord.js");
 const Follower = require("text-file-follower");
 
 const SPECIAL_MESSAGES = require("../assets/special_messages.json");
+const EndBot = require("../EndBot");
 const COLORS = {
 	"dark_red": "#AA0000",
 	"red": "#FF5555",
@@ -59,9 +62,9 @@ class Bridge {
 		}
 
 		let finalMessage = this.identifierToName(message.content);
+		
 		this.rcon.sendMessage(finalMessage, { author: message.author.username, color: color });
 	}
-
 
 	onMessage(line) {
 		line = line.substring(33);
@@ -85,6 +88,7 @@ class Bridge {
 
 		// [samipourquoi: Set own game mode to Survival Mode]
 		} else if (((message = line.match(/\[.{1,20}: .+]/)) != null)) {
+			console.log(message)
 			if (this.lastMessageType == "msg") {
 				sendableText = `*${message[0]}*`;
 				this.lastMessageType = "cmd";

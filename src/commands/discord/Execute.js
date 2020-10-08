@@ -14,10 +14,22 @@ class Execute extends Command {
 		};
 	}
 
-	async run(message, args) {
-		if (!message.member.roles.cache.has(this.client.config["op-role"])) {
-			await message.channel.send("da fuck you tryin' to do");
-			return;
+	async run(message, args) {	
+		let operator_required;
+		let servers = this.client.config.servers;
+		let keys = Object.keys(servers);
+
+		for (let i = 0; i < keys.length; i++) {
+			let server = servers[keys[i]];
+			if (server["bridge-channel"] == message.channel.id) 
+				operator_required = this.client.config.servers[keys[i]]["requires_op-role"];
+		}
+
+		if (String(operator_required).toLocaleLowerCase() === "true") {
+			if (!message.member.roles.cache.has(this.client.config["op-role"])) {
+				await message.channel.send("da fuck you tryin' to do");
+				return;
+			}
 		}
 
 		let rcon = this.client.bridges.get(message.channel.id).rcon;
