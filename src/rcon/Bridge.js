@@ -59,10 +59,16 @@ class Bridge {
 			let hexColor = roleColor.toString(16).padStart(6, "0").toUpperCase();
 			color = this.colorsOverride[hexColor] || closestMinecraftColor(roleColor);
 		}
-
+		let author;
 		let finalMessage = this.identifierToName(message.content);
-		
-		this.rcon.sendMessage(finalMessage, { author: message.author.username, color: color });
+
+		if (message.member.nickname != null) {
+			author = message.member.nickname
+		} else if (message.member.nickname == null) {
+			author = message.author.username
+		}
+	
+		this.rcon.sendMessage(finalMessage, { author: author, color: color });
 	}
 
 	onMessage(line) {
