@@ -2,19 +2,20 @@
 	"token": "",
 	"prefix": "!",
 
-	"backup-role": "234567891234567891",
+	"backup-role": "BACKUP-ROLE",
 	"backup-format": "tar.gz",
 
-	"op-role": "234567891234567891",
+	"op-role": "OP-ROLE",
 
 	"servers": [
 		{
 			"name": "Server",
 			"host": "localhost",
 			"rcon-port": "25575",
-			"rcon-password": "supersecret",
-			"bridge-channel": "345678912345678912",
-			"log-path": "path/to/latest.log"
+			"rcon-password": "secretpassword",
+			"bridge-channel": "BRIDGE-CHANNEL",
+			"requires_op-role": true, 
+			"log-path": "/path/to/latest.log"
 		}
 	],
 	

@@ -50,6 +50,7 @@ command.
     - `rcon-port` Port of the Rcon of the server.
     - `rcon-password` Password of the Rcon.
     - `bridge-channel` ID of the channel that will be used as a bridge.
+    - `requires_op-role` True/False: Wheather or not the op-role is required to execute commands on the server
     - `log-path` Absolute path to the `latest.log` file of the server. It's usually found in `logs`.
 	
 	

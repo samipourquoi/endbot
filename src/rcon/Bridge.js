@@ -1,5 +1,7 @@
 "use strict";
 
+const { gifVersion } = require("canvas");
+const { Guild } = require("discord.js");
 const Follower = require("text-file-follower");
 
 const SPECIAL_MESSAGES = require("../assets/special_messages.json");
@@ -59,9 +61,9 @@ class Bridge {
 		}
 
 		let finalMessage = this.identifierToName(message.content);
+		
 		this.rcon.sendMessage(finalMessage, { author: message.author.username, color: color });
 	}
-
 
 	onMessage(line) {
 		line = line.substring(33);
@@ -70,7 +72,6 @@ class Bridge {
 		// Escapes markdown characters in username
 		let escaped = line.replace(/([_*~`])/g, "\\$1");
 		line = escaped.substring(0, escaped.indexOf(">")) + line.substring(line.indexOf(">"));
-
 		let message = "";
 
 		// <samipourquoi> Lorem ipsum
