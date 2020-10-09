@@ -67,6 +67,11 @@ class EndBot extends Discord.Client {
 			if (!fs.statSync(`modules/${file}`).isDirectory()) return;
 			let endbotModule = require(`../modules/${file}`);
 			
+			let requirements = endbotModule.requirements;
+			if (requirements) {
+				if (!requirements()) return;
+			}
+			
 			let discord = await this.readCommands(`modules/${file}/${endbotModule.discord}/`);
 			this.discordCommands = { ...this.discordCommands, ...discord };
 			
