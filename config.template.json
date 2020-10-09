@@ -14,7 +14,7 @@
 			"rcon-port": "25575",
 			"rcon-password": "secretpassword",
 			"bridge-channel": "BRIDGE-CHANNEL",
-			"requires_op-role": "True",
+			"requires_op-role": true, 
 			"log-path": "/path/to/latest.log"
 		}
 	],

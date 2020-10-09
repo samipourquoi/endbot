@@ -25,7 +25,7 @@ class Execute extends Command {
 				operator_required = this.client.config.servers[keys[i]]["requires_op-role"];
 		}
 
-		if (String(operator_required).toLocaleLowerCase() === "true") {
+		if (operator_required == true) {
 			if (!message.member.roles.cache.has(this.client.config["op-role"])) {
 				await message.channel.send("da fuck you tryin' to do");
 				return;

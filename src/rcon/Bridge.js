@@ -5,7 +5,6 @@ const { Guild } = require("discord.js");
 const Follower = require("text-file-follower");
 
 const SPECIAL_MESSAGES = require("../assets/special_messages.json");
-const EndBot = require("../EndBot");
 const COLORS = {
 	"dark_red": "#AA0000",
 	"red": "#FF5555",
@@ -73,7 +72,6 @@ class Bridge {
 		// Escapes markdown characters in username
 		let escaped = line.replace(/([_*~`])/g, "\\$1");
 		line = escaped.substring(0, escaped.indexOf(">")) + line.substring(line.indexOf(">"));
-
 		let message = "";
 
 		// <samipourquoi> Lorem ipsum
@@ -88,7 +86,6 @@ class Bridge {
 
 		// [samipourquoi: Set own game mode to Survival Mode]
 		} else if (((message = line.match(/\[.{1,20}: .+]/)) != null)) {
-			console.log(message)
 			if (this.lastMessageType == "msg") {
 				sendableText = `*${message[0]}*`;
 				this.lastMessageType = "cmd";
