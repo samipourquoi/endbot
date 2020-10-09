@@ -71,7 +71,7 @@ class EndBot extends Discord.Client {
 			this.discordCommands = { ...this.discordCommands, ...discord };
 			
 			let server = await this.readCommands(`modules/${file}/${endbotModule.server}/`);
-			this.serverCommands = { ...this.serverCOmmands, ...server };
+			this.serverCommands = { ...this.serverCommands, ...server };
 			
 			let setup = endbotModule.setup;
 			if (setup) setup(this);
