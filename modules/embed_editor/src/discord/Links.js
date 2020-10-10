@@ -13,7 +13,7 @@ class Links extends Command {
 			"usage": "links add",
 			"description": "Adds discord invitations to an embed"
 		};
-		this.emoteServer = this.client.guilds.cache.get(EMOTE_SERVER_ID);
+		this.emoteServer = this.client.guilds.cache.get(this.client.moduleConfig["Embed Editor"]["emote-server-id"]);
 	}
 		
 	async run(message, args) {

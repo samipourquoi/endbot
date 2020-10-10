@@ -32,6 +32,7 @@ class EndBot extends Discord.Client {
 		this.bridges = new Map();
 		this.rcons = [];
 		this.db = new Database("endbot.db");
+		this.moduleConfig = {};
 	}
 
 
@@ -72,10 +73,10 @@ class EndBot extends Discord.Client {
 			if (!fs.statSync(`modules/${file}`).isDirectory()) return;
 			let endbotModule = require(`../modules/${file}`);
 			
-			moduleConfig[endbotModule.package] = moduleConfig[endbotModule.package] || {};
+			this.moduleConfig[endbotModule.package] = moduleConfig[endbotModule.package] || {};
 			for (let field in endbotModule.config) {
 				if (!moduleConfig[endbotModule.package][field]) {
-					moduleConfig[endbotModule.package][field] = endbotModule.config[field];
+					this.moduleConfig[endbotModule.package][field] = endbotModule.config[field];
 				}
 			}
 			
@@ -94,7 +95,7 @@ class EndBot extends Discord.Client {
 			if (setup) setup(this);
 		});
 		
-		fs.writeFileSync(moduleConfigPath, "; Module configuration file\n\n" + Ini.stringify(moduleConfig));
+		fs.writeFileSync(moduleConfigPath, "; Module configuration file\n\n" + Ini.stringify(this.moduleConfig));
 	}
 
 	initServers() {

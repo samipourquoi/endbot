@@ -12,7 +12,10 @@ function setup(client) {
 }
 
 module.exports = {
-	package: "Embed Editor Command",
+	package: "Embed Editor",
+	config: {
+		"emote-server-id": ""
+	},
 	
 	discord: "src/discord",
 	server: undefined,
