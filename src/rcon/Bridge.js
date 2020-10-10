@@ -63,9 +63,9 @@ class Bridge {
 		let finalMessage = this.identifierToName(message.content);
 
 		if (message.member.nickname != null) {
-			author = message.member.nickname
+			author = message.member.nickname;
 		} else if (message.member.nickname == null) {
-			author = message.author.username
+			author = message.author.username;
 		}
 	
 		this.rcon.sendMessage(finalMessage, { author: author, color: color });
