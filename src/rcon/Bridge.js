@@ -60,15 +60,25 @@ class Bridge {
 			color = this.colorsOverride[hexColor] || closestMinecraftColor(roleColor);
 		}
 		let author;
+		let attachement;
 		let finalMessage = this.identifierToName(message.content);
 
+		//Gets the user's nickname if applicable
 		if (message.member.nickname != null) {
 			author = message.member.nickname;
 		} else if (message.member.nickname == null) {
 			author = message.author.username;
 		}
-	
-		this.rcon.sendMessage(finalMessage, { author: author, color: color });
+
+		//Sends an image if applicable
+		if (message.attachments.size > 0) {
+			attachement = message.attachments.first();
+			this.rcon.sendImage(author, color, attachement);
+		}
+		else {
+			this.rcon.sendMessage(finalMessage, {author: author, color: color});
+		}
+
 	}
 
 	onMessage(line) {
