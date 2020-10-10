@@ -25,6 +25,7 @@ class Pos extends ServerCommand {
             let position = `${args[0]} is at X:${playerX} Y:${playerY} Z:${playerZ} in ${playerDimension.replace('"', '')}`;
             let message = `{"text":"${position.replace('"', '')}","color": "aqua"}`;
             
+            await rcon.sendCommand(`effect give ${args[0]} minecraft:glowing 30`)
             await rcon.sendCommand(`tellraw @a ` + `${message}`)
         }
         else {

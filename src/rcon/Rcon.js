@@ -121,6 +121,13 @@ class Rcon {
 		return this.sendCommand(tellraw);
 	}
 
+	sendImage(author, color, attachement) {
+		let image = ""
+		image = `tellraw @a [{"text": "[${author}] ", "color":"${color}"},{"text":"${attachement.name}", "clickEvent":{"action":"open_url", "value":"${attachement.url}"}, "hoverEvent":{"action":"show_text", "value":"Click to open in your web browser"},"color":"green"}]`;
+
+		return this.sendCommand(image);
+	}
+
 	generateId() {
 		return Math.floor(Math.random() * Math.floor(2**16));
 	}
