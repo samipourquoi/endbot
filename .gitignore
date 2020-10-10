@@ -4,6 +4,7 @@ backups
 endbot.db
 
 # Modules
+modules.config.ini
 modules/*
 !modules/ping/
 !modules/embed_editor/

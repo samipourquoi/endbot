@@ -2,6 +2,7 @@
 
 const Discord = require("discord.js");
 const Database = require("./misc/Database");
+const Ini = require("ini");
 const fs = require("fs");
 const readdirp = require("readdirp");
 
@@ -62,10 +63,21 @@ class EndBot extends Discord.Client {
 	}
 	
 	async initModules() {
+		let moduleConfigPath = "./modules.config.ini";
+		if (!fs.existsSync(moduleConfigPath)) fs.writeFileSync(moduleConfigPath, "");
+		let moduleConfig = Ini.parse(fs.readFileSync(moduleConfigPath, "utf-8"));	
 		if (!fs.existsSync("modules/")) return;
+		
 		fs.readdirSync("modules/").forEach(async file => {
 			if (!fs.statSync(`modules/${file}`).isDirectory()) return;
 			let endbotModule = require(`../modules/${file}`);
+			
+			moduleConfig[endbotModule.package] = moduleConfig[endbotModule.package] || {};
+			for (let field in endbotModule.config) {
+				if (!moduleConfig[endbotModule.package][field]) {
+					moduleConfig[endbotModule.package][field] = endbotModule.config[field];
+				}
+			}
 			
 			let requirements = endbotModule.requirements;
 			if (requirements) {
@@ -81,6 +93,8 @@ class EndBot extends Discord.Client {
 			let setup = endbotModule.setup;
 			if (setup) setup(this);
 		});
+		
+		fs.writeFileSync(moduleConfigPath, "; Module configuration file\n\n" + Ini.stringify(moduleConfig));
 	}
 
 	initServers() {
