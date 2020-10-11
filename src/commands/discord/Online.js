@@ -1,7 +1,7 @@
 "use strict";
 
 const Command = require("../Command.js");
-const { error, generate } = require("../../misc/Embeds");
+const { error, generate } = require("../../misc/embeds");
 
 class Online extends Command {
 	constructor(client) {
