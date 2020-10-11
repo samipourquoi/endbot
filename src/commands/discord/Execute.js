@@ -1,7 +1,7 @@
 "use strict";
 
 const Command = require("../Command.js");
-
+const { error, generate } = require("../../misc/embeds.js");
 const invalidCommands = require("../../assets/invalid_commands.json");
 
 class Execute extends Command {
@@ -36,7 +36,7 @@ class Execute extends Command {
 		let command = args.join(" ");
 
 		if (rcon == undefined) {
-			let embed = this.client.errorEmbed("bridge");
+			let embed = error("bridge");
 			await message.channel.send(embed);
 			return;
 		}
@@ -54,7 +54,7 @@ class Execute extends Command {
 		let endOfTitle = response.body.length - command.length - "<--[HERE]".length;
 		let title = response.body.substring(0, endOfTitle);
 		let description = response.body.substring(endOfTitle);
-		let embed = this.client.createEmbed(embedType)
+		let embed = generate(embedType)
 			.setTitle(title)
 			.setDescription(description);
 		await message.channel.send(embed);

@@ -162,47 +162,6 @@ class EndBot extends Discord.Client {
 
 		cmd.run(rcon, authorName, ...args);
 	}
-
-	createEmbed(color) {
-		switch (color) {
-		case "result":
-			color = "#86ff40";
-			break;
-		case "error":
-			color = "#ff483b";
-			break;
-		case "warn":
-			color = "#f2a007";
-		}
-		
-
-		return new Discord.MessageEmbed()
-			.setColor(color);
-	}
-
-	/**
-	 * Returns a predefined common error embed.<br>
-	 * Possible errors are:
-	 * - `bridge`: "You must be in a bridge channel to do that!"
-	 * - `args`: "Invalid arguments! Do !help for more info."
-	 * - `unexpected`: "An unexpected error has occured while performing that command"
-	 *
-	 * @param {String} error
-	 * @return {Discord.MessageEmbed}
-	 */
-	errorEmbed(error) {
-		switch (error) {
-		case "bridge":
-			return this.createEmbed("error")
-				.setTitle("You must be in a bridge channel to do that!");
-		case "args":
-			return this.createEmbed("error")
-				.setTitle("Invalid arguments! Do " + this.prefix + "help for more info.");
-		case "unexpected":
-			return this.createEmbed("error")
-				.setTitle("An unexpected error has occured while performing that command");
-		}
-	}
 }
 
 module.exports = EndBot;

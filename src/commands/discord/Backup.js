@@ -3,6 +3,7 @@
 const path = require("path");
 const fs = require("fs");
 const { execSync } = require("child_process");
+const { error, generate } = require("../../misc/embeds.js");
 
 const Command = require("../Command");
 
@@ -32,13 +33,13 @@ class Backup extends Command {
 				let serverPath = path.parse(path.parse(server["log-path"]).dir).dir;
 				let rcon = this.client.bridges.get(message.channel.id).rcon;
 
-				let embed = this.client.createEmbed("result");
+				let embed = generate("result");
 				embed.setTitle("Backup is running...");
 				message.channel.send(embed);
 
 				let backupName = await this.backup(rcon, serverPath);
 
-				embed = this.client.createEmbed("result")
+				embed = generate("result")
 					.setTitle("Backup is finished!")
 					.setFooter(`${backupName}`);
 				message.channel.send(embed);
@@ -47,7 +48,7 @@ class Backup extends Command {
 			}
 		}
 
-		let embed = this.client.createEmbed("error")
+		let embed = generate("error")
 			.setTitle("You must be in a bridge channel to do that!");
 		message.channel.send(embed);
 	}

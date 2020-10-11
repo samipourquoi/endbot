@@ -1,6 +1,7 @@
 "use strict";
 
 const Command = require("../Command.js");
+const { error, generate } = require("../../misc/Embeds");
 
 class Online extends Command {
 	constructor(client) {
@@ -51,7 +52,7 @@ class Online extends Command {
 			embedColor = "error";
 		}
 
-		let embed = this.client.createEmbed(embedColor)
+		let embed = generate(embedColor)
 			.setTitle(`${online.onlineCount}/${online.maxCount}` + " Players Online On: " + rcon.name)
 			.addField("Player List:", online.players.join("\n").replace(/([_*~`])/g, "\\$1"));
 

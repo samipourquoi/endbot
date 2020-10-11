@@ -1,8 +1,8 @@
 "use strict";
 
 const Discord = require("discord.js");
-
 const Command = require("../Command.js");
+const { error, generate } = require("../../misc/embeds.js");
 
 /**
  * @author Jezzers
@@ -60,7 +60,7 @@ class Mspt extends Command {
 			embedColor = "warn";  
 		}
 		
-		let embed = this.client.createEmbed(embedColor)
+		let embed = generate(embedColor)
 			.setTitle(`${rcon.name} - TPS: ${tps.toFixed(1)} MSPT: ${mspt.toFixed(1)}`);
 		return embed;
 	}
