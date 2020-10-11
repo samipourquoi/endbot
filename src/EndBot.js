@@ -73,7 +73,7 @@ class EndBot extends Discord.Client {
 			if (!fs.statSync(`modules/${file}`).isDirectory()) return;
 			let endbotModule = require(`../modules/${file}`);
 			
-			this.moduleConfig[endbotModule.package] = moduleConfig[endbotModule.package] || {};
+			this.moduleConfig[endbotModule.package] = moduleConfig[endbotModule.package] || {};
 			for (let field in endbotModule.config) {
 				if (!this.moduleConfig[endbotModule.package][field]) {
 					this.moduleConfig[endbotModule.package][field] = endbotModule.config[field];
