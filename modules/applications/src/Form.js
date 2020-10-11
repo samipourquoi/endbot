@@ -25,7 +25,7 @@ class Form {
 		this.totalApplications = (await this.client.db.async_get("SELECT value FROM settings WHERE key = \"total_applications\"")).value;
 		
 		if (this.totalApplications < rows.length) {
-			rows.forEach(row => this.createTicket(row));
+			rows.slice(this.totalApplications).forEach(async row => await this.createTicket(row));
 		}
 	}
 	
@@ -49,6 +49,8 @@ class Form {
 			parent: this.client.moduleConfig["Application System"]["category-id"],
 			permissionOverwrites: permissions
 		});
+		
+		await this.client.db.async_run("UPDATE settings SET value = value + 1 WHERE key = \"total_applications\"");
 	}
 }
 
