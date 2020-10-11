@@ -9,9 +9,10 @@ module.exports = {
 		"category-id": "",
 		"archive-category-id": "",
 		"voting-channel": "",
+		"voting-role": "",
 		"form-url": "",
 		"client-email": "",
-		"private-key": "",
+		"private-key": ""
 	},
 	
 	discord: "src/discord",

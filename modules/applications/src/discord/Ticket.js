@@ -30,7 +30,7 @@ class Ticket extends Command {
 		if (isTicket) {
 			await this.client.db.async_run("DELETE FROM tickets WHERE id = ?", { params: message.channel.id });
 			await message.channel.setParent(this.client.moduleConfig["Application System"]["archive-category-id"]);
-			await message.channel.overwritePermissions([]);
+			await message.channel.lockPermissions();
 		} else {
 			throw "This channel is not a ticket";
 		}

@@ -32,7 +32,7 @@ class Form {
 			if (this.totalApplications < rows.length) {
 				rows.slice(this.totalApplications).forEach(async row => await this.createTicket(row));
 			}
-		}, 1000*30); // Every 30 seconds
+		}, 1000*10); // Every 30 seconds
 	}
 	
 	async createTicket(row) {
@@ -58,13 +58,12 @@ class Form {
 	}
 	
 	async createChannel(user, username) {
-		// Creates the ticket 
-		let permissions = user? [{ id: user, allow: "VIEW_CHANNEL" }]: [];
+		// Creates the ticket with the right permissions
 		let channel = await this.guild.channels.create(`${username}-ticket`, { 
-			parent: this.client.moduleConfig["Application System"]["category-id"],
-			permissionOverwrites: permissions
+			parent: this.client.moduleConfig["Application System"]["category-id"]
 		});
-		if (!user) await channel.send(generate("warn").setTitle(`Couldn't find the user ${username}`));
+		if (user) await channel.createOverwrite(user, { "VIEW_CHANNEL": true });
+		else await channel.send(generate("warn").setTitle(`Couldn't find the user ${username}`));
 		await this.client.db.async_run("UPDATE settings SET value = value + 1 WHERE key = \"total_applications\"");
 		return channel;
 	}
