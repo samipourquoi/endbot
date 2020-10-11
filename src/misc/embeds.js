@@ -1,3 +1,5 @@
+"use strict";
+
 const Discord = require("discord.js");
 
 /**
@@ -40,6 +42,7 @@ function generate(color) {
 		break;
 	case "warn":
 		color = "#f2a007";
+		break;
 	default:
 		color = "#2F3136";
 	}
