@@ -14,7 +14,7 @@ client.once("ready", async () => {
 	if (!client.flags.noservers) {
 		client.initServers();
 	}
-	client.initDatabase();
+	await client.initDatabase();
 	await client.initCommands();
 	await client.initModules();
 	console.log("EndBot is on! 😎");

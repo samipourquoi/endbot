@@ -73,9 +73,9 @@ class EndBot extends Discord.Client {
 			if (!fs.statSync(`modules/${file}`).isDirectory()) return;
 			let endbotModule = require(`../modules/${file}`);
 			
-			this.moduleConfig[endbotModule.package] = moduleConfig[endbotModule.package] || {};
+			this.moduleConfig[endbotModule.package] = moduleConfig[endbotModule.package] || {};
 			for (let field in endbotModule.config) {
-				if (!moduleConfig[endbotModule.package][field]) {
+				if (!this.moduleConfig[endbotModule.package][field]) {
 					this.moduleConfig[endbotModule.package][field] = endbotModule.config[field];
 				}
 			}
@@ -92,7 +92,7 @@ class EndBot extends Discord.Client {
 			this.serverCommands = { ...this.serverCommands, ...server };
 			
 			let setup = endbotModule.setup;
-			if (setup) setup(this);
+			if (setup) await setup(this);
 		});
 		
 		fs.writeFileSync(moduleConfigPath, "; Module configuration file\n\n" + Ini.stringify(this.moduleConfig));
@@ -123,8 +123,9 @@ class EndBot extends Discord.Client {
 		}
 	}
 	
-	initDatabase() {
-		this.db.async_run("CREATE TABLE IF NOT EXISTS presets (username TEXT, name TEXT UNIQUE, objectives TEXT);");
+	async initDatabase() {
+		await this.db.async_run("CREATE TABLE IF NOT EXISTS presets (username TEXT, name TEXT UNIQUE, objectives TEXT);");
+		await this.db.async_run("CREATE TABLE IF NOT EXISTS settings (key TEXT UNIQUE, value TEXT)");
 	}
 
 	filterDiscord(message) {

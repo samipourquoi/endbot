@@ -1,10 +1,26 @@
 "use strict";
 
+const Form = require("./src/Form");
+
 module.exports = {
 	package: "Application System",
+	config: {
+		"guild-id": "",
+		"category-id": "",
+		"form-url": "",
+		"client-email": "",
+		"private-key": ""
+	},
+	
 	discord: "src/discord",
+	
 	requirements: client => {
-		// only for endtech and my test discord!
-		return client.guilds.cache.has("476480403612631041") || client.guilds.cache.has("694311004258959390");
+		let guildID = client.moduleConfig["Application System"]["guild-id"];
+		return client.guilds.cache.has(guildID);
+	},
+	setup: async client => {
+		await client.db.async_run("INSERT or IGNORE INTO settings VALUES (?, ?)", { params: [ "total_applications", "0" ] });
+		let form = new Form(client);
+		await form.load();
 	}
 };
