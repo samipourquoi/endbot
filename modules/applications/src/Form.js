@@ -23,12 +23,16 @@ class Form {
 		});
 		await this.doc.loadInfo();
 		let sheet = this.doc.sheetsByIndex[0];
-		let rows = await sheet.getRows();
-		this.totalApplications = (await this.client.db.async_get("SELECT value FROM settings WHERE key = \"total_applications\"")).value;
 		
-		if (this.totalApplications < rows.length) {
-			rows.slice(this.totalApplications).forEach(async row => await this.createTicket(row));
-		}
+		// Fetches new submissions
+		setInterval(async () => {
+			let rows = await sheet.getRows();
+			this.totalApplications = (await this.client.db.async_get("SELECT value FROM settings WHERE key = \"total_applications\"")).value;
+			
+			if (this.totalApplications < rows.length) {
+				rows.slice(this.totalApplications).forEach(async row => await this.createTicket(row));
+			}
+		}, 1000*30); // Every 30 seconds
 	}
 	
 	async createTicket(row) {
