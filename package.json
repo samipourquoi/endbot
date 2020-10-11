@@ -41,6 +41,7 @@
 		"text-file-follower": "^0.1.0"
 	},
 	"_moduleAliases": {
-		"@root": "."
+		"@root": ".",
+		"@util": "./src/misc"
 	}
 }
