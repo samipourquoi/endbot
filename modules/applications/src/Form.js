@@ -1,6 +1,6 @@
 "use strict";
 
-const { GoogleSpreadsheet } = require('google-spreadsheet');
+const { GoogleSpreadsheet } = require("google-spreadsheet");
 const Discord = require("discord.js");
 
 class Form {
@@ -30,6 +30,10 @@ class Form {
 	}
 	
 	async createTicket(row) {
+		let ticketChannel = this.createChannel(row);
+	}
+	
+	async createChannel(row) {
 		let tag = row["What is your Discord Tag?"].split("#");
 		let username = tag[0];
 		let discriminator = tag[1];
@@ -45,12 +49,13 @@ class Form {
 		
 		// Creates the ticket 
 		let permissions = user? [{ id: user, allow: "VIEW_CHANNEL" }]: [];
-		this.guild.channels.create(`${username}-ticket`, { 
+		let channel = this.guild.channels.create(`${username}-ticket`, { 
 			parent: this.client.moduleConfig["Application System"]["category-id"],
 			permissionOverwrites: permissions
 		});
 		
 		await this.client.db.async_run("UPDATE settings SET value = value + 1 WHERE key = \"total_applications\"");
+		return channel;
 	}
 }
 
