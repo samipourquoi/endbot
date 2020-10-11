@@ -8,6 +8,7 @@ module.exports = {
 		"guild-id": "",
 		"category-id": "",
 		"archive-category-id": "",
+		"voting-channel": "",
 		"form-url": "",
 		"client-email": "",
 		"private-key": "",

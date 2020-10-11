@@ -13,6 +13,7 @@ class Form {
 		this.doc = new GoogleSpreadsheet(this.url);
 		this.totalApplications = 0;
 		this.guild = this.client.guilds.cache.get(client.moduleConfig["Application System"]["guild-id"]);
+		this.votingChannel = this.client.channels.cache.get(client.moduleConfig["Application System"]["voting-channel"]);
 	}
 	
 	async load() {
@@ -75,6 +76,7 @@ class Form {
 		let pinned = await channel.send(info);
 		await channel.send(questions);
 		await pinned.pin();
+		await this.votingChannel.send(info.setDescription(`Click [here](${pinned.url}) to access the full application`));
 	}
 }
 
