@@ -74,7 +74,7 @@ class Form {
 		row._sheet.headerValues.forEach((question, i) => {
 			if (!row[question] || i == 0) return;
 			if (i < 9) info.addField(question, row[question]);
-			else questions.addField(question, row[question]);
+			else questions.addField(`__${question}__`, row[question]);
 		});
 		let pinned = await channel.send(info);
 		await channel.send(questions);
