@@ -19,7 +19,9 @@ module.exports = {
 		return client.guilds.cache.has(guildID);
 	},
 	setup: async client => {
+		console.log("hello");
 		await client.db.async_run("INSERT or IGNORE INTO settings VALUES (?, ?)", { params: [ "total_applications", "0" ] });
+		console.log("world");
 		let form = new Form(client);
 		await form.load();
 	}

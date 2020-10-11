@@ -2,6 +2,7 @@
 
 const { GoogleSpreadsheet } = require("google-spreadsheet");
 const Discord = require("discord.js");
+const { generate } = require("@util/embeds.js");
 
 class Form {
 	constructor(client) {
@@ -30,15 +31,16 @@ class Form {
 	}
 	
 	async createTicket(row) {
-		let ticketChannel = this.createChannel(row);
+		let { user, username } = this.findUser(row);
+		let ticketChannel = await this.createChannel(user, username);
+		await this.generateEmbed(row, ticketChannel, username);
 	}
 	
-	async createChannel(row) {
+	findUser(row) {
 		let tag = row["What is your Discord Tag?"].split("#");
 		let username = tag[0];
 		let discriminator = tag[1];
 		let user;
-		
 		// Converts discord tag into User object
 		this.guild.members.cache.forEach(member => {
 			if ((member.nickname == username || member.user.username == username) && member.user.discriminator == discriminator) {
@@ -46,16 +48,32 @@ class Form {
 				return;
 			}
 		});
-		
+		return { user: user, username: username };
+	}
+	
+	async createChannel(user, username) {
 		// Creates the ticket 
 		let permissions = user? [{ id: user, allow: "VIEW_CHANNEL" }]: [];
-		let channel = this.guild.channels.create(`${username}-ticket`, { 
+		let channel = await this.guild.channels.create(`${username}-ticket`, { 
 			parent: this.client.moduleConfig["Application System"]["category-id"],
 			permissionOverwrites: permissions
 		});
-		
+		if (!user) await channel.send(generate("warn").setTitle(`Couldn't find the user ${username}`));
 		await this.client.db.async_run("UPDATE settings SET value = value + 1 WHERE key = \"total_applications\"");
 		return channel;
+	}
+	
+	async generateEmbed(row, channel, username) {
+		let info = generate("endtech").setTitle(`${username}'s Application`);
+		let questions = generate("endtech");
+		row._sheet.headerValues.forEach((question, i) => {
+			if (!row[question] || i == 0) return;
+			if (i < 9) info.addField(question, row[question]);
+			else questions.addField(question, row[question]);
+		});
+		let pinned = await channel.send(info);
+		await channel.send(questions);
+		await pinned.pin();
 	}
 }
 

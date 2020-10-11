@@ -43,6 +43,9 @@ function generate(color) {
 	case "warn":
 		color = "#f2a007";
 		break;
+	case "endtech":
+		color = "#9e3caa";
+		break;
 	default:
 		color = "#2F3136";
 	}
