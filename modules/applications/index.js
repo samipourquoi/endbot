@@ -7,9 +7,10 @@ module.exports = {
 	config: {
 		"guild-id": "",
 		"category-id": "",
+		"archive-category-id": "",
 		"form-url": "",
 		"client-email": "",
-		"private-key": ""
+		"private-key": "",
 	},
 	
 	discord: "src/discord",
@@ -19,9 +20,8 @@ module.exports = {
 		return client.guilds.cache.has(guildID);
 	},
 	setup: async client => {
-		console.log("hello");
+		await client.db.async_run("CREATE TABLE IF NOT EXISTS tickets (id TEXT UNIQUE, applicant TEXT);");
 		await client.db.async_run("INSERT or IGNORE INTO settings VALUES (?, ?)", { params: [ "total_applications", "0" ] });
-		console.log("world");
 		let form = new Form(client);
 		await form.load();
 	}

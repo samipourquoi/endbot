@@ -34,6 +34,7 @@ class Form {
 		let { user, username } = this.findUser(row);
 		let ticketChannel = await this.createChannel(user, username);
 		await this.generateEmbed(row, ticketChannel, username);
+		await this.client.db.async_run("INSERT INTO tickets VALUES (?, ?)", { params: [ticketChannel.id, username] });
 	}
 	
 	findUser(row) {
