@@ -90,4 +90,4 @@ module.exports = Counter;
 And here you're all set! Read the other commands to get a better overview of all the available functions.
 
 # Contribute
-Feel free to make a Pull Request if you feel like one of your module would be worth addind to the bot!
+Feel free to make a Pull Request if you feel like one of your module would be worth adding to the bot!
