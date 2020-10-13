@@ -48,7 +48,7 @@ class Links extends Command {
 		await this.client.db.async_run("REPLACE INTO discord_links VALUES (?, ?, ?, ?)", { 
 			params: [ name, registry, invite.url, emote.identifier ]
 		});
-		let responseEmbed = this.client.createEmbed("result").setTitle(`Successfully added ${name}! <:${emote.identifier}>`);
+		let responseEmbed = generate("result").setTitle(`Successfully added ${name}! <:${emote.identifier}>`);
 		message.channel.send(responseEmbed);
 	}
 	
@@ -94,7 +94,7 @@ class Links extends Command {
 		await emote.delete();
 		
 		await this.client.db.async_run("DELETE FROM discord_links WHERE name = ? OR invite = ?", { params: [ name, name ] });
-		let responseEmbed = this.client.createEmbed("result").setTitle(`Successfully delete '${name}' from the discord links!`);
+		let responseEmbed = generate("result").setTitle(`Successfully delete '${name}' from the discord links!`);
 		message.channel.send(responseEmbed);
 	}
 	
