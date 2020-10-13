@@ -4,6 +4,7 @@ const Command = require("@root/src/commands/Command");
 const Discord = require("discord.js");
 const EMOTE_SERVER_ID = "694311004258959390";
 const Canvas = require("canvas");
+const { error, generate } = require("@util/embeds.js");
 
 class Links extends Command {
 	constructor(client) {
@@ -29,7 +30,7 @@ class Links extends Command {
 			case "publish": await this.publish(message, args.slice(1)); break;
 			}
 		} catch (e) {
-			let errorEmbed = this.client.createEmbed("error").setTitle(e);
+			let errorEmbed = generate("error").setTitle(e);
 			message.channel.send(errorEmbed);
 		}
 	}
