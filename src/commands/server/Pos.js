@@ -6,9 +6,9 @@ class Pos extends ServerCommand {
 	constructor(client) {
 		super(client);
 		this.info = {
-			"name": "Pos",
+			"name": "Position",
 			"usage": "pos [player]",
-			"description": "Send's players postion in chat"
+			"description": "Sends players postion in chat"
 		};
 	}
 

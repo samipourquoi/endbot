@@ -83,6 +83,13 @@ Sends a help pannel on the server.
 
 Usage: `help`
 
+### Position
+Sends the position of a player in the chat and gives you a glow effect for 30 seconds.
+
+Usage:
+- `!pos`
+- `!pos samipourquoi`
+
 ### Scoreboard
 Displays a scoreboad in game, for non-ops.
 
