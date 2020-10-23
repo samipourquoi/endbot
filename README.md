@@ -30,13 +30,13 @@ Lastly, activate the Developer mode on Discord to grab necessary IDs, in [this p
 
 # Config file
 
-In the `server.properties` of your server(s), change these properties:
+In the `server.properties` of your server(s), **change these properties**:
 - `broadcast-rcon-to-ops` to `false` to prevent command log spam to ops
 - `enable-rcon` to `true`
 - `rcon.port` choose a unique port
 - `rcon.password` choose a password.
 
-Copy `config.template.json` to `config.json` in the root directory.
+**Copy `config.template.json` to `config.json` in the root directory.**
 Fill in the fields:
 - `token` Token of your discord bot
 - `prefix` Prefix of the bot. Defaulted to `!`. Feel free to change it to whatever single character you want.
