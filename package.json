@@ -1,13 +1,15 @@
 {
 	"name": "endbot",
 	"version": "1.0.0",
-	"description": "Bot for the technical minecraft server called EndTech.",
+	"description": "Minecraft linking bot with other general utilities.",
+
 	"main": "index.js",
 	"scripts": {
 		"test": "npx madge -c . && npx eslint .",
 		"lint": "npx eslint . --fix",
 		"start": "node ."
 	},
+
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/samipourquoi/endbot.git"
@@ -15,15 +17,23 @@
 	"keywords": [
 		"EndTech",
 		"Minecraft",
-		"Bot",
-		"Node.js"
+		"Discord",
+		"Bot"
 	],
+
 	"author": "samipourquoi",
+	"contributors": [
+		"trunkyredstone",
+		"iDarkLightning",
+		"jezzerswastaken"
+	],
 	"license": "MIT",
+
 	"bugs": {
 		"url": "https://github.com/samipourquoi/endbot/issues"
 	},
 	"homepage": "https://github.com/samipourquoi/endbot#readme",
+
 	"devDependencies": {
 		"eslint": "^7.6.0",
 		"heapdump": "^0.3.15",
