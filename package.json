@@ -6,7 +6,7 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "npx madge -c . && npx eslint .",
-		"lint": "npx eslint . --fix",
+		"lint": "npx eslint .",
 		"start": "node ."
 	},
 
