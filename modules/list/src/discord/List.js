@@ -30,7 +30,7 @@ class List extends Command {
 
 		message.guild.roles.cache.forEach((role) => {
 			if (!(role.name === "@everyone")) {
-				roles[role.name] = role.id;
+				roles[role.name.toLowerCase()] = role.id;
 			} else {
         // roles['everyone'] = role.id;
       }
@@ -43,7 +43,10 @@ class List extends Command {
 					return true;
 				}
 			}
-		};
+    };
+    
+    console.log(roles);
+    console.log(role);
 
 		if (role === '' || role === 'everyone') {
 			// selectedRole = roles.everyone;
@@ -56,8 +59,8 @@ class List extends Command {
 				message.channel.send("Bruh that role doesn't even exist");
 				return;
 			}
-		}
-    
+    }
+
     let membersWithRole = message.guild.roles.cache.get(selectedRole).members.map(m => m.user.tag);
 
     if (String(membersWithRole) === '') {
