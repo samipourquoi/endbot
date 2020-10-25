@@ -1,0 +1,29 @@
+name: Test
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm ci
+    - name: Run Madge for circular dependencies
+      run: npx madge . -c
+    - name: Run Jest
+      uses: stefanoeb/jest-action@1.0.4
+      env:
+        ENDBOT_CI_TOKEN: ${{ secrets.ENDBOT_CI_TOKEN }}
+        ENDBOT_CI_GUILD: ${{ secrets.ENDBOT_CI_GUILD }}
