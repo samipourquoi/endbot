@@ -9,7 +9,6 @@ const readdirp = require("readdirp");
 const Rcon = require("./rcon/Rcon");
 const Bridge = require("./rcon/Bridge");
 
-
 class EndBot extends Discord.Client {
 	constructor(config) {
 		super();
@@ -94,9 +93,9 @@ class EndBot extends Discord.Client {
 
 	initServers() {
 		// Setup listeners
-		let keys = Object.keys(config.servers);
+		let keys = Object.keys(this.config.servers);
 		for (let i = 0; i < keys.length; i++) {
-			let server = config.servers[keys[i]];
+			let server = this.config.servers[keys[i]];
 			let channel = this.channels.cache.get(server["bridge-channel"]);
 
 			// Setup RCON
