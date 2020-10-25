@@ -14,26 +14,26 @@ class List extends Command {
 	}
 
 	async run(message, args) {
-    let role = args.join(" ").toLowerCase();
+		let role = args.join(" ").toLowerCase();
     
-    if (role === '') {
-      if (!message.member.roles.cache.has(this.client.config["backup-role"])) {
-        message.channel.send("da fuck you tryin' to do");
-        return;
-      }
-    }
+		if (role === "") {
+			if (!message.member.roles.cache.has(this.client.config["backup-role"])) {
+				message.channel.send("da fuck you tryin' to do");
+				return;
+			}
+		}
 
 		let roles = {};
     
 		let selectedRole;
-    let titleMsg = `People with ${role}:`;
+		let titleMsg = `People with ${role}:`;
 
 		message.guild.roles.cache.forEach((role) => {
 			if (!(role.name === "@everyone")) {
 				roles[role.name.toLowerCase()] = role.id;
 			} else {
-        // roles['everyone'] = role.id;
-      }
+				// roles['everyone'] = role.id;
+			}
 		});
 
 		const selectRole = () => {
@@ -43,66 +43,66 @@ class List extends Command {
 					return true;
 				}
 			}
-    };
+		};
     
-    console.log(roles);
-    console.log(role);
+		console.log(roles);
+		console.log(role);
 
-		if (role === '' || role === 'everyone') {
+		if (role === "" || role === "everyone") {
 			// selectedRole = roles.everyone;
-      // titleMsg = "Everyone:";
+			// titleMsg = "Everyone:";
       
-      message.channel.send('You currently can\'t list everyone');
-      return;
+			message.channel.send("You currently can't list everyone");
+			return;
 		} else {
 			if (!selectRole()) {
 				message.channel.send("Bruh that role doesn't even exist");
 				return;
 			}
-    }
+		}
 
-    let membersWithRole = message.guild.roles.cache.get(selectedRole).members.map(m => m.user.tag);
+		let membersWithRole = message.guild.roles.cache.get(selectedRole).members.map(m => m.user.tag);
 
-    if (String(membersWithRole) === '') {
-      message.channel.send('There are no people with this role');
-    } else {
-      await message.channel.send(await this.output(membersWithRole, titleMsg));
-    }
+		if (String(membersWithRole) === "") {
+			message.channel.send("There are no people with this role");
+		} else {
+			await message.channel.send(await this.output(membersWithRole, titleMsg));
+		}
 	}
   
 	async output(members, titleMsg) {
-    // commented out code is stuff for sending embeds that are greater than 2000 characters
+		// commented out code is stuff for sending embeds that are greater than 2000 characters
 
-    // let embed;
-    let embedColor = 'result';
-    // let big;
+		// let embed;
+		let embedColor = "result";
+		// let big;
 
-    // if (String(members).length >= 2048) {
-    //   big = true;
+		// if (String(members).length >= 2048) {
+		//   big = true;
 
-    //   const half = Math.ceil(members.length / 2);    
+		//   const half = Math.ceil(members.length / 2);    
 
-    //   const members1 = members.splice(0, half);
-    //   const members2 = members.splice(-half);
+		//   const members1 = members.splice(0, half);
+		//   const members2 = members.splice(-half);
 
-    //   embed = generate(embedColor)
-    //     .setTitle(titleMsg)
-    //     .setDescription(members1);
+		//   embed = generate(embedColor)
+		//     .setTitle(titleMsg)
+		//     .setDescription(members1);
 
-    //   return embed;
-    // } else {
-    //   embed = generate(embedColor)
-    //     .setTitle(titleMsg)
-    //     .setDescription(members)
+		//   return embed;
+		// } else {
+		//   embed = generate(embedColor)
+		//     .setTitle(titleMsg)
+		//     .setDescription(members)
     
-    //   return embed;
-    // }
+		//   return embed;
+		// }
 
-    let embed = generate(embedColor)
-      .setTitle(titleMsg)
-      .setDescription(members)
+		let embed = generate(embedColor)
+			.setTitle(titleMsg)
+			.setDescription(members);
 
-    return embed;
+		return embed;
 	}
 }
 
