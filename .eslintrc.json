@@ -35,5 +35,12 @@
 		"no-global-assign": "off",
 		"eqeqeq": "off",
 		"no-unused-vars": "warn"
-    }
+    },
+	"overrides": [
+		{
+			"files": "*.yml",
+			"rules": {
+			}
+		}
+	]
 }

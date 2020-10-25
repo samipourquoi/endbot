@@ -4,9 +4,12 @@ on:
   - push
   - pull_request
 
-jobs:
-  build:
+env:
+  ENDBOT_CI_TOKEN: ${{ secrets.ENDBOT_CI_TOKEN }}
+  ENDBOT_CI_GUILD: ${{ secrets.ENDBOT_CI_GUILD }}
 
+jobs:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -20,10 +23,5 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - name: Run Madge for circular dependencies
-      run: npx madge . -c
-    - name: Run Jest
-      uses: stefanoeb/jest-action@1.0.4
-      env:
-        ENDBOT_CI_TOKEN: ${{ secrets.ENDBOT_CI_TOKEN }}
-        ENDBOT_CI_GUILD: ${{ secrets.ENDBOT_CI_GUILD }}
+    - name: Run tests
+      run: npm test
