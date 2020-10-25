@@ -10,6 +10,7 @@ modules/*
 !modules/embed_editor/
 !modules/discord_links/
 !modules/applications/
+!modules/list/
 
 # macOS
 .DS_Store
