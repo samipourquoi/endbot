@@ -14,14 +14,17 @@ class Help extends Command {
 		};
 	}
 
-	run(message, args) {
+	async run(message, args) {
 		let commands;
-		if (args[0] == "--server") {
-			commands = this.client.serverCommands;
-		} else {
-			commands = this.client.discordCommands;
-		}
+		if (args[0] == "--server") commands = this.client.serverCommands;
+		else commands = this.client.discordCommands;
 
+		let embed = this.generate(commands);
+
+		await message.channel.send(embed);
+	}
+
+	generate(commands) {
 		let embed = new Discord.MessageEmbed()
 			.setTitle("Help Pannel")
 			.setColor("#2F3136");
@@ -34,13 +37,10 @@ class Help extends Command {
 			if (command.name != lastName) description += command.toString() + "\n";
 			lastName = command.name;
 		}
-
 		description += "\n[Full documentation here](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md)";
-
 		embed.setDescription(description);
-		// https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md
 
-		message.channel.send(embed);
+		return embed;
 	}
 }
 
