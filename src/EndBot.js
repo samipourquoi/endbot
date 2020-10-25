@@ -9,25 +9,17 @@ const readdirp = require("readdirp");
 const Rcon = require("./rcon/Rcon");
 const Bridge = require("./rcon/Bridge");
 
-let config;
-
-try {
-	config = require("../config.json");
-} catch (e) {
-	console.error("Unable to load config");
-	process.exit(1);
-}
 
 class EndBot extends Discord.Client {
-	constructor() {
+	constructor(config) {
 		super();
 		this.flags = {
 			noservers: process.argv.includes("--no-servers"),
 			debug: process.argv.includes("--debug")
 		};
 		this.config = config;
-		this.token = config.token;
-		this.prefix = config.prefix;
+		this.token = this.config.token;
+		this.prefix = this.config.prefix;
 		this.servers = {};
 		this.bridges = new Map();
 		this.rcons = [];

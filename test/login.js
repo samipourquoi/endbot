@@ -5,8 +5,10 @@ const Discord = require("discord.js");
 
 class EndBotMock extends EndBot {
 	constructor() {
-		super();
-		this.token = process.env.ENDBOT_CI_TOKEN;
+		super({
+			prefix: "_",
+			token: process.env.ENDBOT_CI_TOKEN
+		});
 		this.prefix = "_";
 		this.isMock = true;
 	}
