@@ -1,6 +1,5 @@
 "use strict";
 
-const Discord = require("discord.js");
 const { generate } = require("../../../../src/misc/embeds.js");
 const Command = require("../../../../src/commands/Command.js");
 
@@ -11,64 +10,97 @@ class List extends Command {
 			"name": "List",
 			"usage": "list",
 			"description": "Lists all people with certain role"
-    };
-
-    const guild = client.guilds.cache.get('768847066356645910');
+		};
 	}
 
 	async run(message, args) {
-    if (!message.member.roles.cache.has(this.client.config["backup-role"])) {
-			message.channel.send("da fuck you tryin' to do");
-			return;
-		}
-
-    let role = args.join(' ');
-
-    let roles = {
-      everyone: '761385633088274442'
-    };
+    let role = args.join(" ").toLowerCase();
     
-    let selectedRole;
-    let titleMsg = `People with ${role}:`;
-
-    message.guild.roles.cache.forEach((role) => {
-      if (!(role.name === '@everyone')) {
-        roles[role.name] = role.id;
-      }
-    });
-
-    const selectRole = () => {
-      for (let i = 0; i < Object.keys(roles).length; i++) {
-        if (role === Object.keys(roles)[i]) {
-          selectedRole = Object.values(roles)[i];
-          return true;
-        }
-      }
-    }
-
     if (role === '') {
-      selectedRole = roles.everyone;
-      titleMsg = 'Everyone:';
-    } else {
-      if (!selectRole()) {
-        message.channel.send('Bruh that role doesn\'t even exist');
+      if (!message.member.roles.cache.has(this.client.config["backup-role"])) {
+        message.channel.send("da fuck you tryin' to do");
         return;
       }
     }
+
+		let roles = {};
+    
+		let selectedRole;
+    let titleMsg = `People with ${role}:`;
+
+		message.guild.roles.cache.forEach((role) => {
+			if (!(role.name === "@everyone")) {
+				roles[role.name] = role.id;
+			} else {
+        // roles['everyone'] = role.id;
+      }
+		});
+
+		const selectRole = () => {
+			for (let i = 0; i < Object.keys(roles).length; i++) {
+				if (role === Object.keys(roles)[i]) {
+					selectedRole = Object.values(roles)[i];
+					return true;
+				}
+			}
+		};
+
+		if (role === '' || role === 'everyone') {
+			// selectedRole = roles.everyone;
+      // titleMsg = "Everyone:";
+      
+      message.channel.send('You currently can\'t list everyone');
+      return;
+		} else {
+			if (!selectRole()) {
+				message.channel.send("Bruh that role doesn't even exist");
+				return;
+			}
+		}
     
     let membersWithRole = message.guild.roles.cache.get(selectedRole).members.map(m => m.user.tag);
 
-    await message.channel.send(await this.output(membersWithRole, titleMsg));
-  }
+    if (String(membersWithRole) === '') {
+      message.channel.send('There are no people with this role');
+    } else {
+      await message.channel.send(await this.output(membersWithRole, titleMsg));
+    }
+	}
   
-  async output(members, titleMsg) {
+	async output(members, titleMsg) {
+    // commented out code is stuff for sending embeds that are greater than 2000 characters
+
+    // let embed;
     let embedColor = 'result';
+    // let big;
+
+    // if (String(members).length >= 2048) {
+    //   big = true;
+
+    //   const half = Math.ceil(members.length / 2);    
+
+    //   const members1 = members.splice(0, half);
+    //   const members2 = members.splice(-half);
+
+    //   embed = generate(embedColor)
+    //     .setTitle(titleMsg)
+    //     .setDescription(members1);
+
+    //   return embed;
+    // } else {
+    //   embed = generate(embedColor)
+    //     .setTitle(titleMsg)
+    //     .setDescription(members)
+    
+    //   return embed;
+    // }
 
     let embed = generate(embedColor)
       .setTitle(titleMsg)
-      .setDescription(members);
+      .setDescription(members)
+
     return embed;
-  }
+	}
 }
 
 module.exports = List;
