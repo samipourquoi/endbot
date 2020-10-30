@@ -18,8 +18,6 @@ class Ticket extends Command {
 
 	async run(message, args) {		
 		try {
-			if (!message.member.hasPermission("MANAGE_CHANNELS")) throw "da fuck you tryin' to do";
-			
 			switch (args[0]) {
 			case "close": await this.close(message, args.slice(1)); break;
 			case "vote": await this.vote(message, args.slice(1)); break;
