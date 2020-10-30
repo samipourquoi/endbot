@@ -1,6 +1,7 @@
 "use strict";
 
 const Form = require("./src/Form");
+const ArchiveServer = require("./src/ArchiveServer");
 
 module.exports = {
 	package: "Application System",
@@ -14,7 +15,8 @@ module.exports = {
 		"client-email": "",
 		"private-key": "",
 		"yes": "✅",
-		"no": "❌"
+		"no": "❌",
+		"archive-server-port": "3000"
 	},
 	
 	discord: "src/discord",
@@ -24,9 +26,17 @@ module.exports = {
 		return client.guilds.cache.has(guildID);
 	},
 	setup: async client => {
-		await client.db.async_run("CREATE TABLE IF NOT EXISTS tickets (id TEXT UNIQUE, applicant TEXT, link TEXT, pfp TEXT);");
+		// Database
+		await client.db.async_run("CREATE TABLE IF NOT EXISTS tickets (id TEXT UNIQUE, applicant TEXT);");
+		await client.db.async_run("CREATE TABLE IF NOT EXISTS archived_tickets (id TEXT, name TEXT, round INTEGER, messages JSON NOT NULL );");
 		await client.db.async_run("INSERT or IGNORE INTO settings VALUES (?, ?)", { params: [ "total_applications", "0" ] });
+
+		// Form
 		let form = new Form(client);
 		await form.load();
+
+		// Archive web server
+		let archive = new ArchiveServer(client);
+		archive.init();
 	}
 };
