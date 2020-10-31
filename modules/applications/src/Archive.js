@@ -30,6 +30,7 @@ class Archive {
 			}
 		});
 		this.app.get("/apps/:identifier/", (req, res) => this.getArchive(req, res));
+		this.app.get("/", (req, res) => res.redirect("/apps/"));
 		this.app.use("/", express.static("modules/applications/public/"));
 
 		this.app.listen(this.config["archive-server-port"]);
