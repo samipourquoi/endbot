@@ -1,7 +1,7 @@
 "use strict";
 
 const Form = require("./src/Form");
-const ArchiveServer = require("./src/webserver/ArchiveServer");
+const Archive = require("./src/Archive");
 
 module.exports = {
 	package: "Application System",
@@ -38,7 +38,7 @@ module.exports = {
 		await form.load();
 
 		// Archive web server
-		let archive = new ArchiveServer(client);
+		let archive = new Archive(client);
 		archive.init();
 	}
 };
