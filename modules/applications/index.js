@@ -12,7 +12,9 @@ module.exports = {
 		"voting-role": "",
 		"form-url": "",
 		"client-email": "",
-		"private-key": ""
+		"private-key": "",
+		"yes": "✅",
+		"no": "❌"
 	},
 	
 	discord: "src/discord",
@@ -22,7 +24,7 @@ module.exports = {
 		return client.guilds.cache.has(guildID);
 	},
 	setup: async client => {
-		await client.db.async_run("CREATE TABLE IF NOT EXISTS tickets (id TEXT UNIQUE, applicant TEXT);");
+		await client.db.async_run("CREATE TABLE IF NOT EXISTS tickets (id TEXT UNIQUE, applicant TEXT, link TEXT, pfp TEXT);");
 		await client.db.async_run("INSERT or IGNORE INTO settings VALUES (?, ?)", { params: [ "total_applications", "0" ] });
 		let form = new Form(client);
 		await form.load();

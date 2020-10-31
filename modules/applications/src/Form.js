@@ -38,8 +38,11 @@ class Form {
 	async createTicket(row) {
 		let { user, username } = this.findUser(row);
 		let ticketChannel = await this.createChannel(user, username);
-		await this.generateEmbed(row, ticketChannel, username);
-		await this.client.db.async_run("INSERT INTO tickets VALUES (?, ?)", { params: [ticketChannel.id, username] });
+		let url = await this.generateEmbed(row, ticketChannel, username);
+		await this.client.db.async_run(
+			"INSERT INTO tickets VALUES (?, ?, ?, ?)",
+			{ params: [ ticketChannel.id, username, url, user ? user.user.displayAvatarURL({ format: "png" }) : null ] }
+		);
 	}
 	
 	findUser(row) {
@@ -51,7 +54,6 @@ class Form {
 		this.guild.members.cache.forEach(member => {
 			if ((member.nickname == username || member.user.username == username) && member.user.discriminator == discriminator) {
 				user = member;
-				return;
 			}
 		});
 		return { user: user, username: username };
@@ -73,13 +75,14 @@ class Form {
 		let questions = generate("endtech");
 		row._sheet.headerValues.forEach((question, i) => {
 			if (!row[question] || i == 0) return;
-			if (i < 9) info.addField(question, row[question]);
+			if (i < 9) info.addField(`__${question}__`, row[question]);
 			else questions.addField(`__${question}__`, row[question]);
 		});
 		let pinned = await channel.send(info);
 		await channel.send(questions);
 		await pinned.pin();
-		await this.votingChannel.send(info.setDescription(`Click [here](${pinned.url}) to access the full application`));
+		// await this.votingChannel.send(info.setDescription(`Click [here](${pinned.url}) to access the full application`));
+		return pinned.url;
 	}
 }
 
