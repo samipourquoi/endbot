@@ -18,6 +18,7 @@ class EndBot extends Discord.Client {
 		};
 		this.config = config;
 		this.token = this.config.token;
+		this.clientSecret = this.config["client-secret"];
 		this.prefix = this.config.prefix;
 		this.servers = {};
 		this.bridges = new Map();

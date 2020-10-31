@@ -36,6 +36,7 @@
 		"madge": "^3.9.2"
 	},
 	"dependencies": {
+		"btoa": "^1.2.1",
 		"canvas": "^2.6.1",
 		"discord.js": "^12.2.0",
 		"ejs": "^3.1.5",
@@ -45,6 +46,7 @@
 		"miteru": "^0.6.7",
 		"module-alias": "^2.2.2",
 		"nearest-color": "^0.4.4",
+		"node-fetch": "^2.6.1",
 		"readdirp": "^3.4.0",
 		"sqlite3": "^5.0.0",
 		"text-file-follower": "^0.1.0"

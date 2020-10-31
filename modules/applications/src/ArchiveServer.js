@@ -1,6 +1,9 @@
 "use strict";
 
 const express = require("express");
+const fetch = require("node-fetch");
+const querystring = require("querystring");
+const Discord = require("discord.js");
 
 class ArchiveServer {
 	constructor(client) {
@@ -12,9 +15,64 @@ class ArchiveServer {
 	init() {
 		this.server.set("view engine", "ejs");
 		this.server.set("views","modules/applications/views");
+		this.server.get("/login/", (req, res) => this.getOauth(req, res));
 		this.server.get("/apps/:identifier/", (req, res) => this.getArchive(req, res));
 		this.server.use("/", express.static("modules/applications/public/"));
 		this.server.listen(this.config["archive-server-port"]);
+	}
+
+	async getOauth(req, res) {
+		try {
+			let token = await this.getToken(req.query.code);
+			let id = await this.getUserID(token);
+			let isAuthorized = this.hasAccessToArchive(id);
+			res.send(token);
+
+		} catch {
+			res.status(401).send({
+				status: 401,
+				error: "Can't authorize user"
+			});
+		}
+	}
+
+	async getToken(code) {
+		const tokenURL = "https://discord.com/api/oauth2/token";
+		const queries = querystring.encode({
+			code: code,
+			client_id: this.client.user.id,
+			client_secret: this.client.clientSecret,
+			grant_type: "authorization_code",
+			redirect_uri: "http://86.202.11.17/login",
+			scope: "identify guilds"
+		});
+		const auth = toBase64(`${this.client.user.id}:${this.client.clientSecret}`);
+
+		let response = await fetch(tokenURL, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
+				"Authorization": `Basic ${auth}`,
+			},
+			body: queries
+		});
+
+		return (await response.json()).access_token;
+	}
+
+	async getUserID(token) {
+		let response = await fetch("http://discord.com/api/users/@me", {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
+				"Authorization": `Bearer ${token}`,
+			},
+		});
+		return (await response.json()).id;
+	}
+
+	async hasAccessToArchive(id) {
+
 	}
 
 	async getArchive(req, res) {
@@ -57,6 +115,10 @@ class ArchiveServer {
 		messages = JSON.parse(messages.messages);
 		return messages;
 	}
+}
+
+function toBase64(string) {
+	return Buffer.from(string, "binary").toString("base64");
 }
 
 module.exports = ArchiveServer;

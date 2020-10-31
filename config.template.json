@@ -1,6 +1,7 @@
 {
 	"token": "",
 	"prefix": "!",
+	"client-secret": "CLIENT-SECRET",
 
 	"backup-role": "BACKUP-ROLE",
 	"backup-format": "tar.gz",
