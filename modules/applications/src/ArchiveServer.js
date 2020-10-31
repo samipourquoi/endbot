@@ -29,17 +29,21 @@ class ArchiveServer {
 				{ params: [ identifier ] }
 			);
 
-			// If the person has applied more than once, it will
-			// send a page with the list of links to all of their tickets.
-			// If not, it will redirect to their first (and only) ticket.
+			// If the person has applied more than once and there are no
+			// queries for which round to get, it will send a page with the
+			// list of links to all of their tickets.
+			// If there is a 'round' specified it will get that one.
+			// Otherwise, it will redirect to their first (and only) ticket.
 			if (timestamps.length > 1 && !req.query.round) {
 				res.render("rounds", { name: identifier, tickets: timestamps });
-			} else {
+			} else if (req.query.round) {
 				let messages;
 				let round = req.query.round ? parseInt(req.query.round) : 0;
 				messages = await this.createMessagesList(identifier, round);
 
 				res.render("channel", { messages: messages });
+			} else {
+				res.redirect("?round=0");
 			}
 		} catch {
 			res.status(404).send("404: Unable to find application.");
