@@ -37,14 +37,10 @@ class ArchiveServer {
 			return;
 		}
 
-		// let page = templates.channel.toString();
-		// page = page.replace("<!-- insert messages here -->", messages.join("\n"));
-		// res.send(page);
 		res.render("channel", { messages: messages });
 	}
 
 	async createMessagesList(identifier, round) {
-		let list = [];
 		let messages = await this.client.db.async_get("SELECT messages FROM archived_tickets WHERE name = ? AND round = ?", {
 			params: [ identifier, round ]
 		});
