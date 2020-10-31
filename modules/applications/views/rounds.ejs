@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rounds</title>
+</head>
+<body>
+    <h1>Rounds of <%=name%></h1>
+
+    <ol>
+        <%for (let i = 0; i < tickets.length; i++) {
+        let ticket = tickets[i];%>
+            <a href="?round=<%=i%>">Ticket from <%=ticket.timestamp%></a>
+        <%}%>
+    </ol>
+</body>
+</html>

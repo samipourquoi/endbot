@@ -18,22 +18,32 @@ class ArchiveServer {
 	}
 
 	async getArchive(req, res) {
-		// Sets the `round` query to a number, defaulted to 0
-		req.query.round = parseInt(req.query.round);
-		if (isNaN(req.query.round)) req.query.round = 0;
-
+		// TODO: Make archive request work with either name or ID
 		let identifier = req.params.identifier;
-		let round = req.query.round;
 
-		let messages;
 		try {
-			messages = await this.createMessagesList(identifier, round);
+			// Selects the timestamp of the first message, in each of
+			// the applicant's tickets.
+			let timestamps = await this.client.db.async_all(
+				"SELECT json_extract(messages, \"$[0].timestamp\") AS timestamp FROM archived_tickets WHERE name = ?;",
+				{ params: [ identifier ] }
+			);
+
+			// If the person has applied more than once, it will
+			// send a page with the list of links to all of their tickets.
+			// If not, it will redirect to their first (and only) ticket.
+			if (timestamps.length > 1 && !req.query.round) {
+				res.render("rounds", { name: identifier, tickets: timestamps });
+			} else {
+				let messages;
+				let round = req.query.round ? parseInt(req.query.round) : 0;
+				messages = await this.createMessagesList(identifier, round);
+
+				res.render("channel", { messages: messages });
+			}
 		} catch {
 			res.status(404).send("404: Unable to find application.");
-			return;
 		}
-
-		res.render("channel", { messages: messages });
 	}
 
 	async createMessagesList(identifier, round) {
