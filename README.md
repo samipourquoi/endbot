@@ -1,3 +1,5 @@
+![Test](https://github.com/samipourquoi/endbot/workflows/Test/badge.svg?branch=master)
+![Lint](https://github.com/samipourquoi/endbot/workflows/Linter/badge.svg?branch=master)
 # EndBot
 
 Minecraft linking bot with other general utilities. Made for the technical minecraft server called [EndTech](https://discord.gg/t7UwaDc).
