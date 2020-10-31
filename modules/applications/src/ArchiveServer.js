@@ -1,10 +1,6 @@
 "use strict";
 
-const fs = require("fs");
 const express = require("express");
-// const templates = {
-// 	channel: fs.readFileSync("modules/applications/src/assets/channel.ejs")
-// };
 
 class ArchiveServer {
 	constructor(client) {
