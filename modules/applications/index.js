@@ -8,9 +8,7 @@ module.exports = {
 	config: {
 		"guild-id": "",
 		"category-id": "",
-		"archive-category-id": "",
 		"voting-channel": "",
-		"voting-role": "",
 		"form-url": "",
 		"client-email": "",
 		"private-key": "",

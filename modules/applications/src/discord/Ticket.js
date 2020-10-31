@@ -1,8 +1,7 @@
 "use strict";
 
 const Command = require("@root/src/commands/Command.js");
-const Discord = require("discord.js");
-const { generate } = require("@util/embeds.js");
+const { generate, getFormattedDate } = require("@util/embeds.js");
 
 class Ticket extends Command {
 	constructor(client) {
@@ -44,11 +43,49 @@ class Ticket extends Command {
 		let isTicket = (await this.client.db.async_get("SELECT 1 FROM tickets WHERE id = ?", { params: message.channel.id })) != undefined;
 		if (isTicket) {
 			await this.client.db.async_run("DELETE FROM tickets WHERE id = ?", { params: message.channel.id });
-			await message.channel.setParent(this.config["archive-category-id"]);
-			await message.channel.lockPermissions();
+			// await message.channel.setParent(this.client.moduleConfig["Application System"]["archive-category-id"]);
+			// await message.channel.lockPermissions();
+			let messages = JSON.stringify(await this.getMessageHistory(message.channel));
+			let applicantName = message.channel.name.replace(/(.+)-ticket/, "$1");
+			await this.client.db.async_run(
+				"INSERT INTO archived_tickets VALUES (NULL, ?, (SELECT count() FROM archived_tickets WHERE name = ?), ?);",
+				{ params: [ applicantName, applicantName, messages ] }
+			);
+			await message.channel.delete();
 		} else {
 			throw "This channel is not a ticket";
 		}
+	}
+
+	async getMessageHistory(channel) {
+		const BATCH_SIZE = 50;
+		let history = [];
+		let batch;
+		let beforeMessage = channel.lastMessageID;
+
+		// Fetches batches of messages in a channel, until
+		// it reaches the first message posted in it.
+		do {
+			batch = await channel.messages.fetch({
+				limit: BATCH_SIZE,
+				before: beforeMessage
+			}, false);
+
+			if (batch.size == 0) break;
+			beforeMessage = batch.last().id;
+
+			// TODO: More space efficient storage
+			batch.array().forEach(message => {
+				history.push({
+					user: message.author.username,
+					pfp: message.author.avatarURL({ format: "png" }),
+					timestamp: getFormattedDate(message.createdAt),
+					content: message.content
+				});
+			});
+		} while (batch.size == BATCH_SIZE);
+
+		return history.reverse();
 	}
 }
 
