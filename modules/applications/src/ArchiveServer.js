@@ -4,6 +4,7 @@ const express = require("express");
 const fetch = require("node-fetch");
 const querystring = require("querystring");
 const Discord = require("discord.js");
+const cookieParser = require("cookie-parser");
 
 class ArchiveServer {
 	constructor(client) {
@@ -14,12 +15,32 @@ class ArchiveServer {
 	}
 
 	init() {
+		this.server.use(cookieParser());
 		this.server.set("view engine", "ejs");
 		this.server.set("views","modules/applications/views");
-		this.server.get("/login/", (req, res) => this.getOauth(req, res));
+		this.server.get("/login/", (req, res) => this.onLoginAttempt(req, res));
+		this.server.get("/login/discord", (req, res) => this.getOauth(req, res));
 		this.server.get("/apps/:identifier/", (req, res) => this.getArchive(req, res));
 		this.server.use("/", express.static("modules/applications/public/"));
 		this.server.listen(this.config["archive-server-port"]);
+	}
+
+	async onLoginAttempt(req, res) {
+		// Redirects to `/apps` if already log on
+		if (await this.isLoggedOn(req.cookies.token)) {
+			res.redirect("/apps/");
+		} else {
+			res.redirect(this.config["oauth2-url"]);
+		}
+	}
+
+	async isLoggedOn(token) {
+		// Checks if the token is correct and the session hasn't expired
+		let loggedOn = await this.client.db.async_get(
+			"SELECT * FROM archived_logged_on WHERE token = ? AND expires_in >= ?;",
+			{ params: [ token, Date.now() ] }
+		);
+		return loggedOn != undefined;
 	}
 
 	async getOauth(req, res) {
@@ -52,8 +73,8 @@ class ArchiveServer {
 			client_id: this.client.user.id,
 			client_secret: this.client.clientSecret,
 			grant_type: "authorization_code",
-			redirect_uri: "http://86.202.11.17/login",
-			scope: "identify guilds"
+			redirect_uri: this.config["redirect-uri"],
+			scope: "identify"
 		});
 		const auth = toBase64(`${this.client.user.id}:${this.client.clientSecret}`);
 

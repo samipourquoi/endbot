@@ -15,7 +15,9 @@ module.exports = {
 		"yes": "✅",
 		"no": "❌",
 		"archive-server-port": "3000",
-		"voting-role": ""
+		"voting-role": "",
+		"oauth2-url": "",
+		"redirect-uri": ""
 	},
 	
 	discord: "src/discord",
