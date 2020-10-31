@@ -10,6 +10,7 @@ class ArchiveServer {
 		this.client = client;
 		this.server = express();
 		this.config = this.client.moduleConfig["Application System"];
+		this.guild = this.client.guilds.cache.get(this.config["guild-id"]);
 	}
 
 	init() {
@@ -23,20 +24,28 @@ class ArchiveServer {
 
 	async getOauth(req, res) {
 		try {
-			let token = await this.getToken(req.query.code);
-			let id = await this.getUserID(token);
-			let isAuthorized = this.hasAccessToArchive(id);
-			res.send(token);
-
-		} catch {
+			let { access_token, expires_in } = await this.getInfo(req.query.code);
+			let id = await this.getUserID(access_token);
+			let isAuthorized = await this.hasAccessToArchive(id);
+			if (!isAuthorized) {
+				throw "you do not have the required permissions.";
+			} else {
+				await this.client.db.async_run(
+					"INSERT or REPLACE INTO archived_logged_on VALUES (?, ?)",
+					{ params: [ access_token, Date.now() + expires_in * 1000 ] }
+				);
+				res.cookie("token", access_token);
+				res.redirect("/apps/");
+			}
+		} catch (e) {
 			res.status(401).send({
 				status: 401,
-				error: "Can't authorize user"
+				error: "Can't authorize user: " + e
 			});
 		}
 	}
 
-	async getToken(code) {
+	async getInfo(code) {
 		const tokenURL = "https://discord.com/api/oauth2/token";
 		const queries = querystring.encode({
 			code: code,
@@ -57,7 +66,7 @@ class ArchiveServer {
 			body: queries
 		});
 
-		return (await response.json()).access_token;
+		return await response.json();
 	}
 
 	async getUserID(token) {
@@ -72,7 +81,8 @@ class ArchiveServer {
 	}
 
 	async hasAccessToArchive(id) {
-
+		let member = await this.guild.members.fetch(id);
+		return member.roles.cache.has(this.config["voting-role"]);
 	}
 
 	async getArchive(req, res) {

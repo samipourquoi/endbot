@@ -14,7 +14,8 @@ module.exports = {
 		"private-key": "",
 		"yes": "✅",
 		"no": "❌",
-		"archive-server-port": "3000"
+		"archive-server-port": "3000",
+		"voting-role": ""
 	},
 	
 	discord: "src/discord",
@@ -27,6 +28,7 @@ module.exports = {
 		// Database
 		await client.db.async_run("CREATE TABLE IF NOT EXISTS tickets (id TEXT UNIQUE, applicant TEXT);");
 		await client.db.async_run("CREATE TABLE IF NOT EXISTS archived_tickets (id TEXT, name TEXT, round INTEGER, messages JSON NOT NULL );");
+		await client.db.async_run("CREATE TABLE IF NOT EXISTS archived_logged_on (token TEXT UNIQUE, expires_in INT)");
 		await client.db.async_run("INSERT or IGNORE INTO settings VALUES (?, ?)", { params: [ "total_applications", "0" ] });
 
 		// Form
