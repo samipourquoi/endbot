@@ -18,11 +18,28 @@ class ArchiveServer {
 		this.server.use(cookieParser());
 		this.server.set("view engine", "ejs");
 		this.server.set("views","modules/applications/views");
+		this.server.get("/disconnect", (req, res) => this.onDisconnectAttempt(req, res));
 		this.server.get("/login/", (req, res) => this.onLoginAttempt(req, res));
-		this.server.get("/login/discord", (req, res) => this.getOauth(req, res));
+		this.server.get("/login/discord/", (req, res) => this.getOauth(req, res));
 		this.server.get("/apps/:identifier/", (req, res) => this.getArchive(req, res));
+		this.server.get("/apps/", async (req, res, next) => {
+			if (!await this.isLoggedOn(req.cookies.token)) {
+				res.redirect("/login/");
+			} else {
+				next();
+			}
+		});
 		this.server.use("/", express.static("modules/applications/public/"));
 		this.server.listen(this.config["archive-server-port"]);
+	}
+
+	async onDisconnectAttempt(req, res) {
+		await this.client.db.async_run(
+			"DELETE FROM archived_logged_on WHERE token = ?",
+			{ params: req.cookies.token }
+		);
+		res.clearCookie("token");
+		res.redirect("/login/");
 	}
 
 	async onLoginAttempt(req, res) {
@@ -109,6 +126,10 @@ class ArchiveServer {
 	async getArchive(req, res) {
 		// TODO: Make archive request work with either name or ID
 		let identifier = req.params.identifier;
+		if (!await this.isLoggedOn(req.cookies.token)) {
+			res.redirect("/login/");
+			return;
+		}
 
 		try {
 			// Selects the timestamp of the first message, in each of
