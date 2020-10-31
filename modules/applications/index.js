@@ -1,7 +1,7 @@
 "use strict";
 
 const Form = require("./src/Form");
-const ArchiveServer = require("./src/ArchiveServer");
+const ArchiveServer = require("./src/webserver/ArchiveServer");
 
 module.exports = {
 	package: "Application System",

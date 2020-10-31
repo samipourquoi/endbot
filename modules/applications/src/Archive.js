@@ -3,34 +3,36 @@
 const express = require("express");
 const fetch = require("node-fetch");
 const querystring = require("querystring");
-const Discord = require("discord.js");
 const cookieParser = require("cookie-parser");
 
-class ArchiveServer {
+class Archive {
 	constructor(client) {
 		this.client = client;
-		this.server = express();
+		this.app = express();
 		this.config = this.client.moduleConfig["Application System"];
 		this.guild = this.client.guilds.cache.get(this.config["guild-id"]);
 	}
 
 	init() {
-		this.server.use(cookieParser());
-		this.server.set("view engine", "ejs");
-		this.server.set("views","modules/applications/views");
-		this.server.get("/disconnect", (req, res) => this.onDisconnectAttempt(req, res));
-		this.server.get("/login/", (req, res) => this.onLoginAttempt(req, res));
-		this.server.get("/login/discord/", (req, res) => this.getOauth(req, res));
-		this.server.get("/apps/*", async (req, res, next) => {
+		this.app.use(cookieParser());
+		this.app.set("view engine", "ejs");
+		this.app.set("views","modules/applications/views");
+
+		// Routes
+		this.app.get("/login/", (req, res) => this.onLoginAttempt(req, res));
+		this.app.get("/login/discord/", (req, res) => this.getOauth(req, res));
+		this.app.get("/disconnect", (req, res) => this.onDisconnectAttempt(req, res));
+		this.app.get("/apps/*", async (req, res, next) => {
 			if (!await this.isLoggedOn(req.cookies.token)) {
 				res.redirect("/login/");
 			} else {
 				next();
 			}
 		});
-		this.server.get("/apps/:identifier/", (req, res) => this.getArchive(req, res));
-		this.server.use("/", express.static("modules/applications/public/"));
-		this.server.listen(this.config["archive-server-port"]);
+		this.app.get("/apps/:identifier/", (req, res) => this.getArchive(req, res));
+		this.app.use("/", express.static("modules/applications/public/"));
+
+		this.app.listen(this.config["archive-server-port"]);
 	}
 
 	async onDisconnectAttempt(req, res) {
@@ -169,4 +171,4 @@ function toBase64(string) {
 	return Buffer.from(string, "binary").toString("base64");
 }
 
-module.exports = ArchiveServer;
+module.exports = Archive;
