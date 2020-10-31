@@ -2,9 +2,9 @@
 
 const fs = require("fs");
 const express = require("express");
-const templates = {
-	channel: fs.readFileSync("modules/applications/src/assets/channel.html")
-};
+// const templates = {
+// 	channel: fs.readFileSync("modules/applications/src/assets/channel.ejs")
+// };
 
 class ArchiveServer {
 	constructor(client) {
@@ -14,10 +14,10 @@ class ArchiveServer {
 	}
 
 	init() {
+		this.server.set("view engine", "ejs");
+		this.server.set("views","modules/applications/views");
 		this.server.get("/apps/:identifier/", (req, res) => this.getArchive(req, res));
-
 		this.server.use("/", express.static("modules/applications/public/"));
-
 		this.server.listen(this.config["archive-server-port"]);
 	}
 
@@ -37,9 +37,10 @@ class ArchiveServer {
 			return;
 		}
 
-		let page = templates.channel.toString();
-		page = page.replace("<!-- insert messages here -->", messages.join("\n"));
-		res.send(page);
+		// let page = templates.channel.toString();
+		// page = page.replace("<!-- insert messages here -->", messages.join("\n"));
+		// res.send(page);
+		res.render("channel", { messages: messages });
 	}
 
 	async createMessagesList(identifier, round) {
@@ -48,20 +49,7 @@ class ArchiveServer {
 			params: [ identifier, round ]
 		});
 		messages = JSON.parse(messages.messages);
-
-		for (let message of messages) {
-			list.push(`\
-			<li>\
-				<div class="message">\
-					<span class="name">${message.user}</span>\
-					<span class="timestamp">${message.timestamp}</span>\
-					<span class="content">${message.content}</span>\
-				</div>\
-			</li>\
-			`.replace(/\t/g, ""));
-		}
-
-		return list;
+		return messages;
 	}
 }
 

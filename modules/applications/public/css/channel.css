@@ -1,0 +1,10 @@
+#messages {
+	list-style: none;
+	font-size: 20px;
+}
+
+/* Break line after timestamp */
+.timestamp:after {
+	content: '\A';
+	white-space: pre;
+}

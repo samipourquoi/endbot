@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Application Archive</title>
+	<link rel="stylesheet" href="/css/channel.css">
+</head>
+<body>
+	<ol id="messages">
+		<%for (let message of messages) {%>
+			<li class="message">
+				<span class="name"><%=message.user%></span>
+				<span class="timestamp"><%=message.timestamp%></span>
+				<span class="content"><%=message.content%></span>
+			</li>
+		<%}%>
+	</ol>
+</body>
+</html>
