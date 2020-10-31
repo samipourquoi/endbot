@@ -2,7 +2,9 @@
 
 const fs = require("fs");
 const express = require("express");
-const template = fs.readFileSync("modules/applications/src/assets/channel.html");
+const templates = {
+	channel: fs.readFileSync("modules/applications/src/assets/channel.html")
+};
 
 class ArchiveServer {
 	constructor(client) {
@@ -13,6 +15,8 @@ class ArchiveServer {
 
 	init() {
 		this.server.get("/apps/:identifier/", (req, res) => this.getArchive(req, res));
+
+		this.server.use("/", express.static("modules/applications/public/"));
 
 		this.server.listen(this.config["archive-server-port"]);
 	}
@@ -33,7 +37,7 @@ class ArchiveServer {
 			return;
 		}
 
-		let page = template.toString();
+		let page = templates.channel.toString();
 		page = page.replace("<!-- insert messages here -->", messages.join("\n"));
 		res.send(page);
 	}
