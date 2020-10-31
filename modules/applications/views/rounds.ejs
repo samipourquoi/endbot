@@ -9,8 +9,8 @@
 
     <ol>
         <%for (let i = 0; i < tickets.length; i++) {
-        let ticket = tickets[i];%>
-            <a href="?round=<%=i%>">Ticket from <%=ticket.timestamp%></a>
+            let ticket = tickets[i];%>
+            <li><a href="?round=<%=i%>">Ticket from <%=ticket.timestamp%></a></li>
         <%}%>
     </ol>
 </body>
