@@ -33,6 +33,20 @@ module.exports = {
 		await client.db.async_run("CREATE TABLE IF NOT EXISTS archived_logged_on (token TEXT UNIQUE, expires_in INT, pfp TEXT)");
 		await client.db.async_run("INSERT or IGNORE INTO settings VALUES (?, ?)", { params: [ "total_applications", "0" ] });
 
+		await client.db.async_run(`
+			CREATE TABLE IF NOT EXISTS apps (
+				channel_id TEXT UNIQUE,
+				user_id TEXT,
+				username TEXT,
+				discriminator TEXT,
+				avatar TEXT,
+				link TEXT,
+				date DATE,
+				status TEXT,
+				messages JSON
+			);
+		`);
+
 		// Form
 		let form = new Form(client);
 		await form.load();
