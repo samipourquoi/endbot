@@ -69,24 +69,18 @@ nav header {
 	border: none;
 	font-weight: 600;
 	font-size: 0.95em;
-	/*position: absolute;*/
-	/*top: 26px;*/
-	/*right: 66px;*/
-	/*margin-top: auto;*/
-	/*margin-left: auto;*/
-	/*height: 100%;*/
 	outline: none;
 	color: #d43232;
 	cursor: pointer;
 	transition: all 0.2s ease 0s;
 }
 
-#sign-out:hover {
-	color: #b92e2e;
+#sign-out a {
+	all: inherit;
 }
 
-#sign-out a {
-	all: unset;
+#sign-out:hover {
+	color: #b92e2e;
 }
 
 #filters {
@@ -144,7 +138,7 @@ nav header {
 }
 
 li {
-	all: unset; /* Would break spacing on Safari otherwise */
+	display: inline;
 }
 
 .user {

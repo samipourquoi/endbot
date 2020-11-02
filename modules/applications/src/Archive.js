@@ -4,6 +4,7 @@ const express = require("express");
 const fetch = require("node-fetch");
 const querystring = require("querystring");
 const cookieParser = require("cookie-parser");
+const { getFormattedDate } = require("@util/embeds");
 
 class Archive {
 	constructor(client) {
@@ -136,7 +137,7 @@ class Archive {
 			// Selects the timestamp of the first message, in each of
 			// the applicant's tickets.
 			let timestamps = await this.client.db.async_all(
-				"SELECT json_extract(messages, \"$[0].timestamp\") AS timestamp FROM archived_tickets WHERE name = ?;",
+				"SELECT strftime('%d/%m/%Y', date/1000, 'unixepoch') FROM apps WHERE username = ?",
 				{ params: [ identifier ] }
 			);
 
@@ -170,37 +171,24 @@ class Archive {
 	}
 
 	async getApplicants() {
-		let pending = [];
-		for (let ticket of await this.client.db.async_all("SELECT * FROM tickets;")) {
-			pending.push({
-				status: "pending",
-				link: "#", // Makes the link do nothing
-				pfp: ticket.pfp,
-				name: ticket.applicant,
-				discriminator: ticket.discriminator,
-				date: ticket.date,
-				round: ticket.round
-			});
-		}
-
 		let archived = [];
-		for (let ticket of await this.client.db.async_all("SELECT * FROM archived_tickets;")) {
+		for (let ticket of await this.client.db.async_all("SELECT * FROM apps;")) {
 			archived.push({
 				status: ticket.status,
-				link: `${ticket.name}?round=${ticket.round}`,
-				pfp: ticket.pfp,
-				name: ticket.name,
+				link: `${ticket.username}?round=${ticket.round}`,
+				pfp: ticket.avatar || "/assets/default-avatar.png",
+				name: ticket.username,
 				discriminator: ticket.discriminator,
-				date: ticket.date,
+				date: getFormattedDate(ticket.date),
 				round: ticket.round
 			});
 		}
 
-		return [ ...pending, ...archived ];
+		return archived.reverse();
 	}
 
 	async createMessagesList(identifier, round) {
-		let messages = await this.client.db.async_get("SELECT messages FROM archived_tickets WHERE name = ? AND round = ?", {
+		let messages = await this.client.db.async_get("SELECT messages FROM apps WHERE username = ? AND round = ?", {
 			params: [ identifier, round ]
 		});
 		messages = JSON.parse(messages.messages);

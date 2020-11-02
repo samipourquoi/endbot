@@ -54,6 +54,7 @@ function generate(color) {
 }
 
 function getFormattedDate(date) {
+	date = new Date(date);
 	let year = date.getFullYear();
 
 	let month = (1 + date.getMonth()).toString();
@@ -62,7 +63,7 @@ function getFormattedDate(date) {
 	let day = date.getDate().toString();
 	day = day.length > 1 ? day : "0" + day;
 
-	return month + "/" + day + "/" + year;
+	return day + "/" + month + "/" + year;
 }
 
 module.exports = {

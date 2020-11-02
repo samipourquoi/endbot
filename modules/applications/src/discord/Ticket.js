@@ -28,7 +28,7 @@ class Ticket extends Command {
 	}
 
 	async vote(message, args) {
-		let application = await this.client.db.async_get("SELECT * FROM tickets WHERE id = ?", { params: message.channel.id });
+		let application = await this.client.db.async_get("SELECT * FROM apps WHERE channel_id = ?", { params: message.channel.id });
 		if (!application) throw "This channel is not a ticket";
 		let embed = generate("endtech")
 			.setAuthor(application.applicant, application.pfp)
@@ -40,16 +40,13 @@ class Ticket extends Command {
 	}
 	
 	async close(message, args) {
-		let isTicket = (await this.client.db.async_get("SELECT 1 FROM tickets WHERE id = ?", { params: message.channel.id })) != undefined;
+		let isTicket = (await this.client.db.async_get("SELECT 1 FROM apps WHERE channel_id = ?", { params: message.channel.id })) != undefined;
 		if (isTicket) {
-			await this.client.db.async_run("DELETE FROM tickets WHERE id = ?", { params: message.channel.id });
-			// await message.channel.setParent(this.client.moduleConfig["Application System"]["archive-category-id"]);
-			// await message.channel.lockPermissions();
 			let messages = JSON.stringify(await this.getMessageHistory(message.channel));
 			let applicantName = message.channel.name.replace(/(.+)-ticket/, "$1");
 			await this.client.db.async_run(
-				"INSERT INTO archived_tickets VALUES (NULL, ?, (SELECT count() FROM archived_tickets WHERE name = ?), ?);",
-				{ params: [ applicantName, applicantName, messages ] }
+				"UPDATE apps SET messages = ? WHERE username = ?",
+				{ params: [ messages, applicantName ] }
 			);
 			await message.channel.delete();
 		} else {

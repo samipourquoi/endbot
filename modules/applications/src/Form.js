@@ -36,12 +36,24 @@ class Form {
 	}
 	
 	async createTicket(row) {
-		let { user, username } = this.findUser(row);
+		let { user, username, discriminator } = this.findUser(row);
 		let ticketChannel = await this.createChannel(user, username);
 		let url = await this.generateEmbed(row, ticketChannel, username);
+
 		await this.client.db.async_run(
-			"INSERT INTO tickets VALUES (?, ?, ?, ?, ?)",
-			{ params: [ ticketChannel.id, username, url, user ? user.user.displayAvatarURL({ format: "png" }) : null ] }
+			"INSERT INTO apps VALUES (?, ?, ?, ?, ?, ?, ?, ?, (SELECT count() FROM apps WHERE username = ?), ?)",
+			{ params: [
+				ticketChannel.id,
+				user ? user.user.id : null,
+				username,
+				discriminator,
+				user ? user.user.displayAvatarURL({ format: "png" }) : null,
+				url,
+				Date.now(),
+				"pending",
+				username, // duplicate
+				[]
+			]}
 		);
 	}
 	
@@ -56,7 +68,7 @@ class Form {
 				user = member;
 			}
 		});
-		return { user: user, username: username };
+		return { user: user, username: username, discriminator: discriminator };
 	}
 	
 	async createChannel(user, username) {
@@ -66,7 +78,7 @@ class Form {
 		});
 		if (user) await channel.createOverwrite(user, { "VIEW_CHANNEL": true });
 		else await channel.send(generate("warn").setTitle(`Couldn't find the user ${username}`));
-		await this.client.db.async_run("UPDATE settings SET value = value + 1 WHERE key = \"total_applications\"");
+		await this.client.db.async_run("UPDATE settings SET value = value + 1 WHERE key = 'total_applications'");
 		return channel;
 	}
 	
