@@ -41,6 +41,12 @@
 			"files": "*.yml",
 			"rules": {
 			}
+		},
+		{
+			"files": "modules/applications/public/**",
+			"env": {
+				"browser": true
+			}
 		}
 	]
 }

@@ -28,9 +28,9 @@ module.exports = {
 	},
 	setup: async client => {
 		// Database
-		await client.db.async_run("CREATE TABLE IF NOT EXISTS tickets (id TEXT UNIQUE, applicant TEXT);");
-		await client.db.async_run("CREATE TABLE IF NOT EXISTS archived_tickets (id TEXT, name TEXT, round INTEGER, messages JSON NOT NULL );");
-		await client.db.async_run("CREATE TABLE IF NOT EXISTS archived_logged_on (token TEXT UNIQUE, expires_in INT)");
+		await client.db.async_run("CREATE TABLE IF NOT EXISTS tickets (id TEXT UNIQUE, applicant TEXT, link TEXT, pfp TEXT, discriminator INT, date TEXT);");
+		await client.db.async_run("CREATE TABLE IF NOT EXISTS archived_tickets (id TEXT, name TEXT, round INTEGER, messages JSON NOT NULL, status TEXT, pfp TEXT DEFAULT '/assets/default-avatar.png', discriminator INT, date TEXT);");
+		await client.db.async_run("CREATE TABLE IF NOT EXISTS archived_logged_on (token TEXT UNIQUE, expires_in INT, pfp TEXT)");
 		await client.db.async_run("INSERT or IGNORE INTO settings VALUES (?, ?)", { params: [ "total_applications", "0" ] });
 
 		// Form

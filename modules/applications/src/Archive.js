@@ -30,6 +30,7 @@ class Archive {
 			}
 		});
 		this.app.get("/apps/:identifier/", (req, res) => this.getArchive(req, res));
+		this.app.get("/apps/", (req, res) => this.getHomepage(req, res));
 		this.app.get("/", (req, res) => res.redirect("/apps/"));
 		this.app.use("/", express.static("modules/applications/public/"));
 
@@ -66,14 +67,15 @@ class Archive {
 	async getOauth(req, res) {
 		try {
 			let { access_token, expires_in } = await this.getInfo(req.query.code);
-			let id = await this.getUserID(access_token);
+			let { id, avatar } = await this.getUserInfo(access_token);
 			let isAuthorized = await this.hasAccessToArchive(id);
 			if (!isAuthorized) {
 				throw "you do not have the required permissions.";
 			} else {
 				await this.client.db.async_run(
-					"INSERT or REPLACE INTO archived_logged_on VALUES (?, ?)",
-					{ params: [ access_token, Date.now() + expires_in * 1000 ] }
+					"INSERT or REPLACE INTO archived_logged_on VALUES (?, ?, ?)", {
+						params: [ access_token, Date.now() + expires_in * 1000, `https://cdn.discordapp.com/avatars/${id}/${avatar}.png` ]
+					}
 				);
 				res.cookie("token", access_token);
 				res.redirect("/apps/");
@@ -110,7 +112,7 @@ class Archive {
 		return await response.json();
 	}
 
-	async getUserID(token) {
+	async getUserInfo(token) {
 		let response = await fetch("http://discord.com/api/users/@me", {
 			method: "GET",
 			headers: {
@@ -118,7 +120,7 @@ class Archive {
 				"Authorization": `Bearer ${token}`,
 			},
 		});
-		return (await response.json()).id;
+		return await response.json();
 	}
 
 	async hasAccessToArchive(id) {
@@ -157,6 +159,44 @@ class Archive {
 		} catch {
 			res.status(404).send("404: Unable to find application.");
 		}
+	}
+
+	async getHomepage(req, res) {
+		let { pfp } = await this.client.db.async_get("SELECT pfp FROM archived_logged_on WHERE token = ?", { params: [ req.cookies.token ] });
+		res.render("home", {
+			userpfp: pfp,
+			applications: await this.getApplicants()
+		});
+	}
+
+	async getApplicants() {
+		let pending = [];
+		for (let ticket of await this.client.db.async_all("SELECT * FROM tickets;")) {
+			pending.push({
+				status: "pending",
+				link: "#", // Makes the link do nothing
+				pfp: ticket.pfp,
+				name: ticket.applicant,
+				discriminator: ticket.discriminator,
+				date: ticket.date,
+				round: ticket.round
+			});
+		}
+
+		let archived = [];
+		for (let ticket of await this.client.db.async_all("SELECT * FROM archived_tickets;")) {
+			archived.push({
+				status: ticket.status,
+				link: `${ticket.name}?round=${ticket.round}`,
+				pfp: ticket.pfp,
+				name: ticket.name,
+				discriminator: ticket.discriminator,
+				date: ticket.date,
+				round: ticket.round
+			});
+		}
+
+		return [ ...pending, ...archived ];
 	}
 
 	async createMessagesList(identifier, round) {

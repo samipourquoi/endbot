@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/home.css">
+    <title>EndTech Application Archive</title>
+</head>
+<body>
+<main>
+    <nav>
+        <header>
+            <a href="https://endte.ch/">
+                <img id="logo" src="/assets/logo.png" alt="EndTech Logo" width="60px" height="60px">
+            </a>
+            <h3>Endtech Application Archive</h3>
+        </header>
+
+        <div id="profile">
+            <button id="sign-out"><a href="/disconnect/">Sign Out</a></button>
+            <img id="logged-user-profile-pic"
+                 src="<%=userpfp%>"
+                 alt="Profile Picture" width="45px" height="45px">
+        </div>
+    </nav>
+    <section id="filters">
+        <form id="filter-form">
+            <label for="filter-options">Filters</label>
+            <select name="filter-options" id="filter-options">
+                <option value="none">None</option>
+                <option value="accepted">Accepted</option>
+                <option value="declined">Declined</option>
+                <option value="pending">Pending</option>
+            </select>
+        </form>
+        <span id="search-form">
+          <label for="search-box">Search</label>
+          <input type="text" name="search-box" id="search-box">
+        </span>
+    </section>
+    <section id="applications">
+        <ul id="applications">
+            <%for (let application of applications) {%>
+            <li class="example-application <%=application.status%>">
+                <a class="user" href="<%=application.link%>">
+                    <img class="user-profile-pic"
+                         src="<%=application.pfp%>"
+                         width="40px" height="40px">
+                    <h3 class="username"><%=application.name%>#<%=application.discriminator%></h3>
+                    <span>-</span>
+                    <h4><%=application.status%></h4>
+                    <p class="round"><%=application.round > 0 ? "#" + (application.round + 1) : ""%></p>
+                    <p class="date"><%=application.date%></p>
+                </a>
+            </li>
+            <%}%>
+        </ul>
+    </section>
+</main>
+<script src="/scripts/home.js"></script>
+</body>
+</html>

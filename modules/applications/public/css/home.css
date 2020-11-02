@@ -1,0 +1,207 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font-family: 'Roboto', sans-serif;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+	background-color: #36393f;
+}
+
+nav {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	padding: 22px 6%;
+	background-color: #202225;
+	position: relative;
+}
+
+#logo {
+	display: flex;
+	margin-right: 20px;
+	cursor: pointer;
+}
+
+nav header {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	margin-right: auto;
+	color: #a832a6;
+	text-decoration: none;
+	font-weight: bolder;
+	font-size: xx-large;
+}
+
+#logged-user-profile-pic {
+	margin: 10px;
+	border-radius: 50%;
+	/*position: absolute;*/
+	/*top: 15px;*/
+	/*right: 15px;*/
+	cursor: pointer;
+	/*margin-top: auto;*/
+	/*margin-right: auto;*/
+}
+
+#logged-user-profile-pic:hover {
+	box-shadow: 0 5px 5px #1d1d1d;
+}
+
+#logged-user-profile-pic:active {
+	transform: translateY(2px);
+}
+
+#profile {
+	display: flex;
+	align-content: center;
+}
+
+#sign-out {
+	background-color: #202225;
+	border: none;
+	font-weight: 600;
+	font-size: 0.95em;
+	/*position: absolute;*/
+	/*top: 26px;*/
+	/*right: 66px;*/
+	/*margin-top: auto;*/
+	/*margin-left: auto;*/
+	/*height: 100%;*/
+	outline: none;
+	color: #d43232;
+	cursor: pointer;
+	transition: all 0.2s ease 0s;
+}
+
+#sign-out:hover {
+	color: #b92e2e;
+}
+
+#sign-out a {
+	all: unset;
+}
+
+#filters {
+	margin: 20px 6%;
+	color: #2f3136;
+	font-weight: 600;
+	border: #7d8085 solid 1px;
+	padding: 14px 14px 14px 14px;
+	border-radius: 5px;
+	background-color: #6f747a;
+	font-size: 1.3em;
+}
+
+#filters form {
+	display: inline;
+}
+
+#filter-form {
+	margin-left: 26px;
+}
+
+#filters select {
+	background-color: #dbdbdb;
+	color: #202225;
+	outline: none;
+	border-radius: 5px;
+	height: 26px;
+	position: relative;
+	top: -1px;
+	transition: all 0.2s ease 0s;
+	cursor: pointer;
+}
+
+#filters select:hover {
+	background-color: #c7c7c7;
+}
+
+#search-form {
+	margin-left: 32px;
+}
+
+#search-box {
+	outline: none;
+	width: 220px;
+	height: 22px;
+	background-color: #dbdbdb;
+	border-style: solid;
+	border-radius: 5px;
+	transition: all 0.2s ease 0s;
+	padding: 2px;
+}
+
+#search-box:hover {
+	background-color: #c7c7c7;
+}
+
+li {
+	all: unset; /* Would break spacing on Safari otherwise */
+}
+
+.user {
+	display: flex;
+	border: rgba(100, 100, 100, 0.7) 1px solid;
+	padding: 15px;
+	align-items: center;
+	margin: 20px 6%;
+	color: #c7c7c7;
+	background-color: #2f3136;
+	border-radius: 5px;
+	text-decoration: none;
+	transition: all 0.2s ease 0s;
+}
+
+.user:hover {
+	background-color: #2a2c31;
+}
+
+.user-profile-pic {
+	border-radius: 50%;
+	margin-right: 10px;
+}
+
+.user span {
+	margin: 0 6px 0 5px;
+	font-size: 1.8em;
+	color: #1d1f22;
+}
+
+h4 {
+	text-transform: capitalize;
+}
+
+.accepted h4 {
+	/* temporary, will be in js */
+	color: #027a30;
+}
+
+.declined h4 {
+	/* temporary, will be in js */
+	color: #ff3333;
+}
+
+.pending h4 {
+	/* temporary, will be in js */
+	color: #FFCC00;
+}
+
+.date {
+	margin: 0 6px 0 5px;
+	font-weight: 600;
+	color: #c7c7c7;
+}
+
+.round {
+	margin-left: auto;
+	font-weight: 600;
+	color: #1d1f22;
+}

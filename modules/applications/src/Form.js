@@ -40,7 +40,7 @@ class Form {
 		let ticketChannel = await this.createChannel(user, username);
 		let url = await this.generateEmbed(row, ticketChannel, username);
 		await this.client.db.async_run(
-			"INSERT INTO tickets VALUES (?, ?, ?, ?)",
+			"INSERT INTO tickets VALUES (?, ?, ?, ?, ?)",
 			{ params: [ ticketChannel.id, username, url, user ? user.user.displayAvatarURL({ format: "png" }) : null ] }
 		);
 	}
