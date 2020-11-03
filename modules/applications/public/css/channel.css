@@ -19,37 +19,47 @@ html {
 
 .message {
 	display: flex;
-	margin: 20px 0;
+	margin: 28px 0;
 }
 
 .author-avatar {
 	align-self: flex-start;
-	clip-path: circle(22px);
+	clip-path: circle(23px);
+}
+
+.author-avatar:hover {
+	cursor: pointer;
+}
+
+.author-avatar:active {
+	transform: translateY(2px);
 }
 
 .data {
-	margin-left: 10px;
+	margin-left: 12px;
 }
 
 .name {
 	color: #FFF;
 }
 
+.name:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
 .content {
-	line-height: 32px;
-	font-size: 20px;
+	line-height: 34px;
 	height: 100%;
 	color: #DCDDDE;
+}
+
+#messages img {
+	max-width: 500%;
 }
 
 .timestamp {
 	font-size: 17px;
 	margin-left: 2px;
 	color: #B9BBBE;
-}
-
-/* Break line after timestamp */
-.timestamp:after {
-	content: "\A";
-	white-space: pre;
 }

@@ -11,13 +11,17 @@
 	<ol id="messages">
 		<% for (let i = 0; i < messages.length; null) { %>
 			<li class="message">
-				<img class="author-avatar" src="/assets/default-avatar.png" height="45">
+				<img class="author-avatar" src="/assets/default-avatar.png" height="46">
 				<div class="data">
 					<span class="name"><%= messages[i].user %></span>
-					<span class="timestamp"><%= messages[i].timestamp %></span>
+					<span class="timestamp"><%= messages[i].timestamp %></span><br>
 					<% do { %>
 						<span class="content"><%= messages[i].content %></span><br>
-						<% if (++i == messages.length) break;
+						<% if (messages[i].image) {%>
+							<img class=content-image" src="<%= messages[i].image %>"
+								 alt="image from user <%= messages[i]. user%>"><br>
+						<% }
+						if (++i == messages.length) break;
 					} while (messages[i-1].user == messages[i].user); %>
 				</div>
 			</li>
