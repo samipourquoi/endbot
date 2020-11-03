@@ -48,12 +48,12 @@ module.exports = {
 			);
 		`);
 
-		// Form
-		let form = new Form(client);
-		await form.load();
-
 		// Archive web server
 		let archive = new Archive(client);
 		archive.init();
+
+		// Form
+		let form = new Form(client);
+		await form.load();
 	}
 };
