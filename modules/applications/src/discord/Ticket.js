@@ -18,8 +18,23 @@ class Ticket extends Command {
 	async run(message, args) {		
 		try {
 			switch (args[0]) {
-			case "close": await this.close(message, args.slice(1)); break;
-			case "vote": await this.vote(message, args.slice(1)); break;
+			case "declined":
+			case "decline":
+			case "deny":
+			case "no":
+				await this.close(message, args.slice(1), "declined");
+				break;
+			case "accepted":
+			case "accept":
+			case "yes":
+				await this.close(message, args.slice(1), "accepted");
+				break;
+			case "close": // for legacy reasons
+				await message.channel.send("it's `ticket <accept|deny>` you babunga");
+				break;
+			case "vote":
+				await this.vote(message, args.slice(1));
+				break;
 			}
 		} catch (e) {
 			let errorEmbed = generate("error").setTitle(e);
@@ -39,14 +54,14 @@ class Ticket extends Command {
 		await votable.react(this.config["no"]);
 	}
 	
-	async close(message, args) {
+	async close(message, args, status) {
 		let isTicket = (await this.client.db.async_get("SELECT 1 FROM apps WHERE channel_id = ?", { params: message.channel.id })) != undefined;
 		if (isTicket) {
 			let messages = JSON.stringify(await this.getMessageHistory(message.channel));
 			let applicantName = message.channel.name.replace(/(.+)-ticket/, "$1");
 			await this.client.db.async_run(
-				"UPDATE apps SET messages = ? WHERE username = ?",
-				{ params: [ messages, applicantName ] }
+				"UPDATE apps SET messages = ?, status = ? WHERE username = ?",
+				{ params: [ messages, status, applicantName ] }
 			);
 			await message.channel.delete();
 		} else {
