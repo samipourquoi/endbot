@@ -9,21 +9,22 @@
 </head>
 <body>
 <main>
-    <nav>
-        <header>
-            <a href="https://endte.ch/">
-                <img id="logo" src="/assets/logo.png" alt="EndTech Logo" width="60px" height="60px">
-            </a>
-            <h3>Endtech Application Archive</h3>
-        </header>
+<!--    <nav>-->
+<!--        <header>-->
+<!--            <a href="https://endte.ch/">-->
+<!--                <img id="logo" src="/assets/logo.png" alt="EndTech Logo" width="60px" height="60px">-->
+<!--            </a>-->
+<!--            <h3>Endtech Application Archive</h3>-->
+<!--        </header>-->
 
-        <div id="profile">
-            <button id="sign-out"><a href="/disconnect/">Sign Out</a></button>
-            <img id="logged-user-profile-pic"
-                 src="<%=userpfp%>"
-                 alt="Profile Picture" width="45px" height="45px">
-        </div>
-    </nav>
+<!--        <div id="profile">-->
+<!--            <button id="sign-out"><a href="/disconnect/">Sign Out</a></button>-->
+<!--            <img id="logged-user-profile-pic"-->
+<!--                 src="<%=userpfp%>"-->
+<!--                 alt="Profile Picture" width="45px" height="45px">-->
+<!--        </div>-->
+<!--    </nav>-->
+    <%- include("headers/profile", { userpfp: userpfp }); %>
     <section id="filters">
         <form id="filter-form">
             <label for="filter-options">Filters</label>
