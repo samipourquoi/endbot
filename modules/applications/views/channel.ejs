@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Application Archive</title>
+	<link rel="stylesheet" href="/fonts/whitney.css">
 	<link rel="stylesheet" href="/css/channel.css">
 </head>
 <body>
@@ -10,9 +11,12 @@
 	<ol id="messages">
 		<%for (let message of messages) {%>
 			<li class="message">
-				<span class="name"><%=message.user%></span>
-				<span class="timestamp"><%=message.timestamp%></span>
-				<span class="content"><%=message.content%></span>
+				<img class="author-avatar" src="/assets/default-avatar.png" height="45">
+				<div class="data">
+					<span class="name"><%=message.user%></span>
+					<span class="timestamp"><%=message.timestamp%></span>
+					<span class="content"><%=message.content%></span>
+				</div>
 			</li>
 		<%}%>
 	</ol>

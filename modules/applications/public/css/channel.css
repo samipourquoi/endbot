@@ -4,13 +4,51 @@
 	padding: 0;
 }
 
+html {
+	height: 100%;
+	background-color: #36393F;
+}
+
 #messages {
+	font-family: Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
+	font-size: 22px;
+	margin-top: 30px;
+	margin-left: 6%; /* Or 50px */
 	list-style: none;
+}
+
+.message {
+	display: flex;
+	margin: 20px 0;
+}
+
+.author-avatar {
+	align-self: center;
+	clip-path: circle(22px);
+}
+
+.data {
+	margin-left: 10px;
+}
+
+.name {
+	color: #FFF;
+}
+
+.content {
 	font-size: 20px;
+	height: 100%;
+	color: #DCDDDE;
+}
+
+.timestamp {
+	font-size: 17px;
+	margin-left: 2px;
+	color: #B9BBBE;
 }
 
 /* Break line after timestamp */
 .timestamp:after {
-	content: '\A';
+	content: "\A";
 	white-space: pre;
 }
