@@ -88,6 +88,10 @@ li {
 	margin-right: 10px;
 }
 
+.user:active .user-profile-pic {
+	transform: translateY(2px);
+}
+
 .user span {
 	margin: 0 6px 0 5px;
 	font-size: 1.8em;

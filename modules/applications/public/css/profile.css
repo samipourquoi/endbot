@@ -17,6 +17,10 @@ nav {
 	cursor: pointer;
 }
 
+#logo:active {
+	transform: translateY(2px);
+}
+
 nav header {
 	display: flex;
 	justify-content: flex-end;

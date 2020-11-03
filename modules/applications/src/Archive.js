@@ -176,7 +176,7 @@ class Archive {
 		for (let ticket of await this.client.db.async_all("SELECT * FROM apps;")) {
 			archived.push({
 				status: ticket.status,
-				link: `${ticket.username}?round=${ticket.round}`,
+				link: `/apps/${ticket.username}?round=${ticket.round}`,
 				pfp: ticket.avatar || "/assets/default-avatar.png",
 				name: ticket.username,
 				discriminator: ticket.discriminator,
