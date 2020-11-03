@@ -24,7 +24,7 @@ html {
 
 .author-avatar {
 	align-self: flex-start;
-	clip-path: circle(23px);
+	clip-path: circle(25px);
 }
 
 .author-avatar:hover {
@@ -56,6 +56,7 @@ html {
 
 #messages img {
 	max-width: 500%;
+	border-radius: 6px;
 }
 
 .timestamp {
