@@ -16,10 +16,12 @@
 					<span class="name"><%= messages[i].user %></span>
 					<span class="timestamp"><%= messages[i].timestamp %></span><br>
 					<% do { %>
-						<span class="content"><%= messages[i].content %></span><br>
-						<% if (messages[i].image) {%>
-							<img class=content-image" src="<%= messages[i].image %>"
-								 alt="image from user <%= messages[i]. user%>"><br>
+						<% if (messages[i].content) { %>
+							<span class="content"><%= messages[i].content %></span><br>
+						<% }
+						if (messages[i].image) for (let image of messages[i].image) { %>
+							<img class=content-image" src="<%= image %>"
+								 alt="image from user <%= messages[i].user %>"><br>
 						<% }
 						if (++i == messages.length) break;
 					} while (messages[i-1].user == messages[i].user); %>

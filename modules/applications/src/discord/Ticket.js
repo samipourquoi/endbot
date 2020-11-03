@@ -92,7 +92,9 @@ class Ticket extends Command {
 					user: message.author.username,
 					pfp: message.author.avatarURL({ format: "png" }),
 					timestamp: getFormattedDate(message.createdAt),
-					content: message.content
+					content: message.content,
+					embed: message.embeds.length > 0 ? message.embeds[0].toJSON() : null,
+					image: message.attachments.map(value => value.url)
 				});
 			});
 		} while (batch.size == BATCH_SIZE);
