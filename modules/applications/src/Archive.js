@@ -35,7 +35,9 @@ class Archive {
 		this.app.get("/", (req, res) => res.redirect("/apps/"));
 		this.app.use("/", express.static("modules/applications/public/"));
 
-		this.app.listen(this.config["archive-server-port"]);
+		this.app.listen(this.config["archive-server-port"], () => {
+			console.log("Archive server listening on port " + this.config["archive-server-port"]);
+		});
 	}
 
 	async onDisconnectAttempt(req, res) {
