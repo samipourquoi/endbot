@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="/css/channel.css">
 </head>
 <body>
+	<%- include("headers/profile", { userpfp: userpfp }); %>
 	<ol id="messages">
 		<%for (let message of messages) {%>
 			<li class="message">

@@ -140,6 +140,7 @@ class Archive {
 				"SELECT strftime('%d/%m/%Y', date/1000, 'unixepoch') FROM apps WHERE username = ?",
 				{ params: [ identifier ] }
 			);
+			let user = await this.client.db.async_get("SELECT * FROM archived_logged_on WHERE token = ?", { params: [ req.cookies.token ] });
 
 			// If the person has applied more than once and there are no
 			// queries for which round to get, it will send a page with the
@@ -153,7 +154,7 @@ class Archive {
 				let round = req.query.round ? parseInt(req.query.round) : 0;
 				messages = await this.createMessagesList(identifier, round);
 
-				res.render("channel", { messages: messages });
+				res.render("channel", { messages: messages, userpfp: user.pfp });
 			} else {
 				res.redirect("?round=0");
 			}
