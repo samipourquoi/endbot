@@ -44,7 +44,8 @@ module.exports = {
 				date DATE,
 				status TEXT,
 				round INT,
-				messages JSON
+				messages JSON,
+				answers JSON
 			);
 		`);
 

@@ -41,7 +41,7 @@ class Form {
 		let url = await this.generateEmbed(row, ticketChannel, username);
 
 		await this.client.db.async_run(
-			"INSERT INTO apps VALUES (?, ?, ?, ?, ?, ?, ?, ?, (SELECT count() FROM apps WHERE username = ?), ?)",
+			"INSERT INTO apps VALUES (?, ?, ?, ?, ?, ?, ?, ?, (SELECT count() FROM apps WHERE username = ?), ?, ?)",
 			{ params: [
 				ticketChannel.id,
 				user ? user.user.id : null,
@@ -52,6 +52,7 @@ class Form {
 				Date.now(),
 				"pending",
 				username, // duplicate
+				[],
 				[]
 			]}
 		);
