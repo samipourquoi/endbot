@@ -9,13 +9,16 @@
 <body>
 	<%- include("headers/profile", { userpfp: userpfp }); %>
 	<ol id="messages">
-		<%for (let message of messages) {%>
+		<% for (let i = 0; i < messages.length; null) { %>
 			<li class="message">
 				<img class="author-avatar" src="/assets/default-avatar.png" height="45">
 				<div class="data">
-					<span class="name"><%=message.user%></span>
-					<span class="timestamp"><%=message.timestamp%></span>
-					<span class="content"><%=message.content%></span>
+					<span class="name"><%= messages[i].user %></span>
+					<span class="timestamp"><%= messages[i].timestamp %></span>
+					<% do { %>
+						<span class="content"><%= messages[i].content %></span><br>
+						<% if (++i == messages.length) break;
+					} while (messages[i-1].user == messages[i].user); %>
 				</div>
 			</li>
 		<%}%>

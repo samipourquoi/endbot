@@ -23,7 +23,7 @@ html {
 }
 
 .author-avatar {
-	align-self: center;
+	align-self: flex-start;
 	clip-path: circle(22px);
 }
 
@@ -36,6 +36,7 @@ html {
 }
 
 .content {
+	line-height: 32px;
 	font-size: 20px;
 	height: 100%;
 	color: #DCDDDE;
