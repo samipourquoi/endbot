@@ -55,13 +55,19 @@ class Ticket extends Command {
 	}
 	
 	async close(message, args, status) {
-		let isTicket = (await this.client.db.async_get("SELECT 1 FROM apps WHERE channel_id = ?", { params: message.channel.id })) != undefined;
+		let isTicket = (await this.client.db.async_get(
+			"SELECT * FROM apps WHERE channel_id = ?;",
+			{ params: [ message.channel.id ] })
+		) != undefined;
+
+		console.log(isTicket);
+
 		if (isTicket) {
 			let messages = JSON.stringify(await this.getMessageHistory(message.channel));
 			let applicantName = message.channel.name.replace(/(.+)-ticket/, "$1");
 			await this.client.db.async_run(
-				"UPDATE apps SET messages = ?, status = ? WHERE username = ?",
-				{ params: [ messages, status, applicantName ] }
+				"UPDATE apps SET messages = ?, status = ? WHERE username = ? OR channel_id = ?",
+				{ params: [ messages, status, applicantName, message.channel.id ] }
 			);
 			await message.channel.delete();
 		} else {
