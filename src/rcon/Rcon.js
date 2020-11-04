@@ -9,56 +9,56 @@ const Preset = require("../commands/server/Preset");
  * Class representing a single instance of an Rcon, and more generally a server.
  */
 class Rcon {
-	constructor({ host, port, password, name }, client) {
+	constructor({ host, port, password, name, channel }, client) {
 		this.host = host;
 		this.port = port;
 		this.password = password;
 		this.name = name;
 		this.timeout = 8000;
-
 		this.client = client;
-
 		/** @see src/commands/server/Preset.js */
 		this.preset = {
 			enabled: false,
 			objectives: [],
 			i: 0
 		};
-
 		this.queue = [];
 		this.draining = false;
-
 		this.packets = new Map();
+		this.channel = channel;
+		this.connect();
+	}
 
-		let connect = () => {
-			console.log(`Connecting to ${this.name} Rcon...`);
-			this.connection = net.createConnection({
-				host: this.host,
-				port: this.port
-			}, () => {
-				this.authenticate().then(() => {
-					this.connection.on("data", data => {
-						data = Packet.read(data);
-						let resolve = this.packets.get(data.id);
-						if (resolve != undefined) {
-							this.packets.delete(data.id);
-							resolve(data);
-						}
-						this.nextDrain();
-					});
-				}).catch(console.error);
-			});
-		};
-
-		connect();
+	connect() {
+		console.log(`Connecting to ${this.name} Rcon...`);
+		this.connection = net.createConnection({
+			host: this.host,
+			port: this.port
+		}, () => {
+			this.authenticate().then(() => {
+				this.connection.on("data", data => {
+					data = Packet.read(data);
+					let resolve = this.packets.get(data.id);
+					if (resolve != undefined) {
+						this.packets.delete(data.id);
+						resolve(data);
+					}
+					this.nextDrain();
+				});
+			}).catch(console.error);
+		});
 
 		this.connection.on("error", e => {
 			console.error(`Couldn't connect to ${this.name} Rcon. Retrying in 5 seconds.`);
 			if (this.client.flags.debug) console.error(e);
-			setTimeout(connect, 5*1000);
+			setTimeout(() => this.connect(), 5*1000);
 		});
-		
-		this.connection.on("auth", e => {
+
+		this.connection.once("auth", () => {
+			console.log("Connected to " + this.name);
+			this.connected = true;
+			this.sendMessage("Hello World!", { author: "EndBot", color: "dark_purple"});
+			this.channel.send(`Connected to ${this.name}!`);
 			Preset.loop(this);
 		});
 	}
@@ -86,10 +86,18 @@ class Rcon {
 	 * @see sendCommand
 	 */
 	nextDrain() {
-		if (this.queue.length > 0) {
+		if (this.queue.length > 0 && this.connected) {
 			this.draining = true;
 			let packet = this.queue.shift();
-			this.connection.write(packet.buffer);
+
+			try {
+				this.connection.write(packet.buffer);
+			} catch {
+				console.warn("RCON connection to " + this.name + " ended");
+				this.connected = false;
+				this.draining = false;
+				this.connect();
+			}
 		} else {
 			this.draining = false;
 		}

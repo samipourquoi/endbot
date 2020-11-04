@@ -117,7 +117,7 @@ class Preset extends ServerCommand {
 	 */
 	static async loop(rcon) {
 		// eslint-disable-next-line
-		while (true) {
+		while (rcon.connected) {
 			await new Promise(resolve => setTimeout(resolve, delay*1000));
 			let preset = rcon.preset;
 			if (preset.enabled) {

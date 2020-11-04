@@ -5,6 +5,7 @@ const Database = require("./misc/Database");
 const Ini = require("ini");
 const fs = require("fs");
 const readdirp = require("readdirp");
+const { error } = require("@util/embeds");
 
 const Rcon = require("./rcon/Rcon");
 const Bridge = require("./rcon/Bridge");
@@ -104,12 +105,9 @@ class EndBot extends Discord.Client {
 				host: server.host,
 				port: server["rcon-port"],
 				password: server["rcon-password"],
-				name: server.name
+				name: server.name,
+				channel: channel
 			}, this);
-			rcon.connection.on("auth", () => {
-				this.servers[server.name].sendMessage("Hello World!", { author: "EndBot", color: "dark_purple"});
-				channel.send(`Connected to ${rcon.name}!`);
-			});
 
 			// Setup bridge channels
 			this.bridges.set(channel.id, new Bridge(channel, rcon, server["log-path"], this));
@@ -123,16 +121,20 @@ class EndBot extends Discord.Client {
 	}
 
 	filterDiscord(message) {
-		if (message.author.bot && !this.isMock) return;
+		try {
+			if (message.author.bot && !this.isMock) return;
 
-		if (this.bridges.has(message.channel.id)) {
-			this.bridges.get(message.channel.id).toMinecraft(message);
+			if (this.bridges.has(message.channel.id)) {
+				this.bridges.get(message.channel.id).toMinecraft(message);
+			}
+
+			if (message.content.charAt(0) !== this.prefix) return;
+
+			let command = message.content.substring(1).split(" ");
+			return this.parseDiscordCommand(message, command[0], command.slice(1));
+		} catch (e) {
+			message.channel.send(error("unexpected").setDescription(e));
 		}
-
-		if (message.content.charAt(0) !== this.prefix) return;
-
-		let command = message.content.substring(1).split(" ");
-		return this.parseDiscordCommand(message, command[0], command.slice(1));
 	}
 
 	filterServer(rcon, message) {
