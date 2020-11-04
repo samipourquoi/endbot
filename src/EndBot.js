@@ -5,7 +5,7 @@ const Database = require("./misc/Database");
 const Ini = require("ini");
 const fs = require("fs");
 const readdirp = require("readdirp");
-const { error } = require("@util/embeds");
+const { error } = require("misc/embeds");
 
 const Rcon = require("./rcon/Rcon");
 const Bridge = require("./rcon/Bridge");
