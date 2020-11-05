@@ -19,9 +19,17 @@
 						<% if (messages[i].content) { %>
 							<span class="content"><%= messages[i].content %></span><br>
 						<% }
-						if (messages[i].image) for (let image of messages[i].image) { %>
-							<img class=content-image" src="<%= image %>"
-								 alt="image from user <%= messages[i].user %>"><br>
+						if (messages[i].image) for (let image of messages[i].image) {
+							if (image.endsWith(".mp4")) { %>
+								<video controls>
+									<source src="<%= image %>" type="video/mp4">
+									video from user <%= messages[i].user %>
+								</video>
+							<% } else { %>
+								<img class=content-image" src="<%= image %>"
+									 alt="image from user <%= messages[i].user %>">
+							<% } %>
+							<br>
 						<% }
 						if (++i == messages.length) break;
 					} while (messages[i-1].user == messages[i].user); %>

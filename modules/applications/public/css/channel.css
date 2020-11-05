@@ -54,7 +54,7 @@ html {
 	color: #DCDDDE;
 }
 
-#messages img {
+#messages img,video {
 	max-width: 500px;
 	border-radius: 6px;
 }
