@@ -41,6 +41,7 @@ In the `server.properties` of your server(s), **change these properties**:
 **Copy `config.template.json` to `config.json` in the root directory.**
 Fill in the fields:
 - `token` Token of your discord bot
+- `client-secret` Client secret of your discord application
 - `prefix` Prefix of the bot. Defaulted to `!`. Feel free to change it to whatever single character you want.
 - `backup-role` ID of the role allowed to use the [`backup`](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md#backup)
 command.
