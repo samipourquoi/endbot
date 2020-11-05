@@ -27,20 +27,20 @@
     </section>
     <section id="applications">
         <ul id="applications">
-            <%for (let application of applications) {%>
-            <li class="example-application <%=application.status%>">
-                <a class="user" href="<%=application.link%>">
-                    <img class="user-profile-pic"
-                         src="<%=application.pfp%>"
-                         width="40px" height="40px">
-                    <h3 class="username"><%=application.name%>#<%=application.discriminator%></h3>
-                    <span>-</span>
-                    <h4><%=application.status%></h4>
-                    <p class="round"><%=application.round > 0 ? "#" + (application.round + 1) : ""%></p>
-                    <p class="date"><%=application.date%></p>
-                </a>
-            </li>
-            <%}%>
+            <% for (let application of applications) { -%>
+                <li class="example-application <%= application.status %>">
+                    <a class="user" href="<%= application.link %>">
+                        <img class="user-profile-pic"
+                             src="<%= application.pfp %>"
+                             width="40px" height="40px">
+                        <h3 class="username"><%= application.name %>#<%= application.discriminator %></h3>
+                        <span>-</span>
+                        <h4><%= application.status %></h4>
+                        <p class="round"><%= application.round > 0 ? "#" + (application.round + 1) : "" %></p>
+                        <p class="date"><%= application.date %></p>
+                    </a>
+                </li>
+            <% } -%>
         </ul>
     </section>
 </main>

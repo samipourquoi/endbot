@@ -18,6 +18,7 @@ class Archive {
 		this.app.use(cookieParser());
 		this.app.set("view engine", "ejs");
 		this.app.set("views","modules/applications/views");
+		this.app.locals.rmWhitespace = true;
 
 		// Routes
 		this.app.get("/login/", (req, res) => this.onLoginAttempt(req, res));
