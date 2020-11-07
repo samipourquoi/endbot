@@ -54,18 +54,23 @@ nav header {
 #sign-out {
 	background-color: #202225;
 	border: none;
-	font-weight: 600;
-	font-size: 0.95em;
 	outline: none;
-	color: #d43232;
-	cursor: pointer;
-	transition: all 0.2s ease 0s;
 }
 
 #sign-out a {
-	all: inherit;
+	background-color: #36393f;
+	border: #161618 1.95px solid;
+	border-radius: 16px;
+	font-weight: 600;
+	font-size: 1.1em;
+	outline: none;
+	color: #cf3232;
+	cursor: pointer;
+	transition: all 0.2s ease 0s;
+	text-decoration: none;
+	padding: 6.5px;
 }
 
 #sign-out:hover {
-	color: #b92e2e;
+	color: #b42e2e;
 }
