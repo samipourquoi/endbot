@@ -11,7 +11,7 @@ html {
 
 #messages {
 	font-family: Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
-	font-size: 22px;
+	font-size: 16px;
 	margin-top: 30px;
 	margin-left: 6%; /* Or 50px */
 	list-style: none;
@@ -19,12 +19,17 @@ html {
 
 .message {
 	display: flex;
-	margin: 28px 0;
+	margin: 24px 0;
+	padding: 4px;
+}
+
+.message:hover {
+	background-color: #32343a;
 }
 
 .author-avatar {
 	align-self: flex-start;
-	clip-path: circle(25px);
+	clip-path: circle(17.5px);
 }
 
 .author-avatar:hover {
@@ -32,7 +37,7 @@ html {
 }
 
 .author-avatar:active {
-	transform: translateY(2px);
+	transform: translateY(1px);
 }
 
 .data {
@@ -49,18 +54,18 @@ html {
 }
 
 .content {
-	line-height: 34px;
+	line-height: 24px;
 	height: 100%;
 	color: #DCDDDE;
 }
 
 #messages img,video {
-	max-width: 500px;
+	max-width: 400px;
 	border-radius: 6px;
 }
 
 .timestamp {
-	font-size: 17px;
+	font-size: 12px;
 	margin-left: 2px;
 	color: #B9BBBE;
 }

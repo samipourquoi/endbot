@@ -11,7 +11,7 @@
 	<ol id="messages">
 		<% for (let i = 0; i < messages.length; null) { -%>
 			<li class="message">
-				<img class="author-avatar" src="<%= messages[i].pfp || "/assets/default-avatar.png" -%>" height="50">
+				<img class="author-avatar" src="<%= messages[i].pfp || "/assets/default-avatar.png" -%>" height="35">
 				<div class="data">
 					<span class="name"><%= messages[i].user -%></span>
 					<span class="timestamp"><%= messages[i].timestamp -%></span><br>
