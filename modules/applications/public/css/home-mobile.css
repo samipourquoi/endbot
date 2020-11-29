@@ -1,0 +1,9 @@
+#search-box {
+  width: 160px;
+}
+
+@media only screen and (max-width: 600px) {
+  .dash, .application-status, #search-form, #search-box {
+    display: none;
+  }
+}

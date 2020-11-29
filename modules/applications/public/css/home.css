@@ -5,7 +5,9 @@
 }
 
 body {
-	background-color: #36393f;
+	background-image: linear-gradient(rgba(63, 65, 77, 0.7), rgba(63, 65, 77, 0.7)), url(../assets/2020-10-13_18.png);
+	background-size: 100%;
+	background-attachment: fixed;
 }
 
 #filters {
@@ -14,7 +16,7 @@ body {
 	font-weight: 600;
 	border: #7d8085 solid 1px;
 	padding: 14px 14px 14px 14px;
-	border-radius: 5px;
+	border-radius: 6px;
 	background-color: #6f747a;
 	font-size: 1.3em;
 }
@@ -73,9 +75,9 @@ li {
 	padding: 15px;
 	align-items: center;
 	margin: 20px 6%;
-	color: #c7c7c7;
+	color: #c4c4c4;
 	background-color: #2f3136;
-	border-radius: 5px;
+	border-radius: 6px;
 	text-decoration: none;
 	transition: all 0.2s ease 0s;
 }

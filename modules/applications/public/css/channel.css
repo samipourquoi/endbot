@@ -13,14 +13,13 @@ html {
 	font-family: Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
 	font-size: 16px;
 	margin-top: 30px;
-	margin-left: 6%; /* Or 50px */
 	list-style: none;
 }
 
 .message {
 	display: flex;
-	margin: 24px 0;
 	padding: 4px;
+	padding-left: 6.2%;
 }
 
 .message:hover {

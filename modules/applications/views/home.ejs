@@ -4,12 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/css/home.css">
+    <link href="/css/home-mobile.css" media="only screen and (max-width: 800px)" rel="stylesheet" type="text/css">
     <title>EndTech Application Archive</title>
 </head>
 <body>
-<main>
     <%- include("headers/profile", { userpfp: userpfp }); %>
 
+<main>
     <section id="filters">
         <form id="filter-form">
             <label for="filter-options">Filters</label>
@@ -34,8 +35,8 @@
                              src="<%= application.pfp %>"
                              width="40px" height="40px">
                         <h3 class="username"><%= application.name %>#<%= application.discriminator %></h3>
-                        <span>-</span>
-                        <h4><%= application.status %></h4>
+                        <span class="dash">-</span>
+                        <h4 class="application-status"><%= application.status %></h4>
                         <p class="round"><%= application.round > 0 ? "#" + (application.round + 1) : "" %></p>
                         <p class="date"><%= application.date %></p>
                     </a>
