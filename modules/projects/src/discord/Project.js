@@ -24,7 +24,7 @@ class Project extends Command {
 				await this.addMember(message, args[2]);
 				break;
 			case "list":
-				//await this.listMembers(message);
+				await this.listMembers(message);
 			}
 		} catch (e) {
 			console.log(e);
@@ -97,6 +97,20 @@ class Project extends Command {
 		}
 	}
 
+	async listMembers(message) {
+		if (await this.isProject(message.channel.id)) {
+			let memberIDS = await this.client.db.async_get("SELECT members FROM projects WHERE channel_id = ?", {params: message.channel.id});
+			memberIDS = memberIDS["members"].toString().split(",");
+			let members = [];
+
+			for (let i = 0; i < memberIDS.length; i++) {
+				let member = message.guild.members.cache.get(memberIDS[i]);
+				members.push(member.user.username);
+			}
+
+			await message.channel.send(`The members of this project are:\n ${members.join("\n")}`);
+		}
+	}
 
 	async isProject(channel_id) {
 		let project = await this.client.db.async_get("SELECT * FROM projects WHERE channel_id = ?", {params: channel_id});
