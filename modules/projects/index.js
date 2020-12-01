@@ -13,7 +13,7 @@ module.exports = {
 			CREATE TABLE IF NOT EXISTS projects (
 				name TEXT,
 				type TEXT,
-				description TEXT,
+				reports TEXT,
 				channel_id TEXT UNIQUE,
 				leaders TEXT,
 				members TEXT,
