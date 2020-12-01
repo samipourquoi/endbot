@@ -25,6 +25,12 @@ class Project extends Command {
 				break;
 			case "list":
 				await this.listMembers(message);
+				break;
+			case "update":
+				await this.update(message, args[1]);
+				break;
+			case "status":
+				await this.status(message);
 			}
 		} catch (e) {
 			console.log(e);
@@ -97,7 +103,7 @@ class Project extends Command {
 		}
 	}
 
-	async listMembers(message) {
+	async listMembers(message, type) {
 		if (await this.isProject(message.channel.id)) {
 			let memberIDS = await this.client.db.async_get("SELECT members FROM projects WHERE channel_id = ?", {params: message.channel.id});
 			memberIDS = memberIDS["members"].toString().split(",");
@@ -112,9 +118,34 @@ class Project extends Command {
 		}
 	}
 
+	async update(message, type) {
+		if (await this.isProject(message.channel.id) && (await this.isMember(message.channel.id, message.author))) {
+			if (type !== undefined) {
+				await this.client.db.async_run("UPDATE projects SET type = ? WHERE channel_id = ?", {params: [type.replace("--", ""), message.channel.id]});
+			}
+
+			await message.channel.send("Please give a progress report");
+			const collector = message.channel.createMessageCollector(m => m.author === message.author && m.channel === message.channel);
+
+			collector.once("collect", async m => {
+				let status = await this.client.db.async_get("SELECT reports FROM projects WHERE channel_id = ?", {params: message.channel.id});
+
+				status = status["reports"] + `#|#${m.content}`;
+				await this.client.db.async_run("UPDATE projects SET reports = ? WHERE channel_id = ?", {params: [status, message.channel.id]});
+				await message.channel.send("Your report has been added");
+
+			});
+		}
+	}
+
 	async isProject(channel_id) {
 		let project = await this.client.db.async_get("SELECT * FROM projects WHERE channel_id = ?", {params: channel_id});
 		return (project !== undefined);
+	}
+
+	async isMember(channel_id, member) {
+		let members = await this.client.db.async_get("SELECT members FROM projects WHERE channel_id =?", {params: channel_id});
+		return (members["members"].toString().includes(member.id));
 	}
 
 	async isLeader(channel_id, member) {
