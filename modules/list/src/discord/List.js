@@ -26,7 +26,6 @@ class List extends Command {
 		let roles = {};
     
 		let selectedRole;
-		let titleMsg = `People with ${role}:`;
 
 		message.guild.roles.cache.forEach((role) => {
 			if (!(role.name === "@everyone")) {
@@ -44,9 +43,6 @@ class List extends Command {
 				}
 			}
 		};
-    
-		console.log(roles);
-		console.log(role);
 
 		if (role === "" || role === "everyone") {
 			// selectedRole = roles.everyone;
@@ -62,6 +58,9 @@ class List extends Command {
 		}
 
 		let membersWithRole = message.guild.roles.cache.get(selectedRole).members.map(m => m.user.tag);
+
+		const roleCount = membersWithRole.length;
+		const titleMsg = `There are ${roleCount} people with ${role}:`;
 
 		if (String(membersWithRole) === "") {
 			message.channel.send("There are no people with this role");
