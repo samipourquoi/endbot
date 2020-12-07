@@ -5,7 +5,8 @@ module.exports = {
 	discord: "src/discord",
 	server: "src/server",
 	config: {
-		"category-id": "783019338814324787"
+		"category-id": "783019338814324787",
+		"web-port": 8000
 	},
 
 	setup: async client => {
@@ -14,7 +15,7 @@ module.exports = {
 				name TEXT,
 				type TEXT,
 				reports TEXT,
-				channel_id TEXT UNIQUE,
+				channel_id TEXT,
 				leaders TEXT,
 				members TEXT,
 				coords TEXT,
@@ -22,5 +23,7 @@ module.exports = {
 				mat_list TEXT
 			);
 		`);
-	}
+	},
+
+
 };

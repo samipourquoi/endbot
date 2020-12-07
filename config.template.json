@@ -8,6 +8,13 @@
 
 	"op-role": "OP-ROLE",
 
+  	"database_config": {
+	  "host": "",
+	  "user": "",
+	  "password": "",
+	  "database": ""
+	},
+
 	"servers": [
 		{
 			"name": "Server",
