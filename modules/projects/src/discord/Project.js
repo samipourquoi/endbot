@@ -2,6 +2,7 @@
 
 const Command = require("@root/src/commands/Command.js");
 const {generate} = require("@util/embeds.js");
+const https = require("https");
 
 class Project extends Command {
 	constructor(client) {
@@ -46,6 +47,9 @@ class Project extends Command {
 				break;
 			case "schematic":
 				await this.schematic(message, args[1]);
+				break;
+			case "materials":
+				await this.matList(message, args[1]);
 				break;
 			}
 		} catch (e) {
@@ -110,7 +114,7 @@ class Project extends Command {
 					leaders.push(member.id);
 					await this.client.db.async_run("UPDATE projects SET leaders = ? WHERE channel_id = ?", {params: [JSON.stringify(leaders), message.channel.id]});
 					await message.channel.send(generate("result").setTitle(`Added ${member.user.username} as a leader to this project`));
-					await message.channel.setTopic(leaders.join(","));
+					await message.channel.setTopic(message.channel.topic + `, ${member.user.username}`);
 
 				} else {
 					throw "They are already a leader";
@@ -199,6 +203,67 @@ class Project extends Command {
 				await message.channel.send(schematicEmbed);
 			}
 		}
+	}
+
+	async matList(message, flag) {
+		if (await this.isProject(message.channel.id)) {
+			let { mat_list } = await this.client.db.async_get("SELECT mat_list FROM projects WHERE channel_id = ?", {params: message.channel.id});
+			let matList = JSON.parse(mat_list);
+
+			if (flag === "--add" && await this.isMember(message.channel.id, message.author)) {
+				await message.channel.send("Please upload a text file of the material list");
+
+				const filter = m => {
+					return m.author === message.author && m.channel === message.channel && m.attachments.size > 0;
+				};
+
+				let matListMessage = await this.messageCollector(message, 90000, filter);
+				let matListURL = matListMessage.attachments.first();
+
+				let data = "";
+
+				const getMats = (url) => {
+					return new Promise((resolve) => {
+						https.get(url, res => {
+							res.on("data", chunk => {
+								data += chunk;
+							});
+
+							res.on("end", () => {
+								resolve(data);
+							});
+						});
+					});
+				};
+
+				let mats = await getMats(matListURL.url);
+				mats = mats.split("\n").slice(5, -4).map(r => r.substring(2, r.length -2).split("|").map(c => c.trim())).map(e => e.slice(0, -2)).map(m => m.join("-"));
+
+				if (mats.map(m => m.length).reduce((a,b) => a +b, 0) < 1024) {
+					matListURL.content = mats;
+				} else matListURL.content = ["Too large to display"];
+
+				if (matListURL.attachment.endsWith(".txt")) {
+					matList.push(matListURL);
+					await this.client.db.async_run("UPDATE projects SET mat_list = ? WHERE channel_id = ?", {params: [JSON.stringify(matList), message.channel.id]});
+				} else throw "A text file please";
+
+			} else if (matList.length < 1) {
+				throw "This project currently has no associated material lists, you can add one by using the --add flag";
+			} else {
+				let matListEmbed = generate("endtech")
+					.setTitle("Materials List");
+
+				for (let i = 0; i < matList.length; i++) {
+					let currentMatList = matList[i];
+					console.log(currentMatList);
+					matListEmbed.addField(currentMatList.name.replace(".txt", ""),
+						`**[Download Link](${currentMatList.url})**\n Materials:\n ${currentMatList.content.join("\n")}`);
+				}
+				await message.channel.send(matListEmbed);
+			}
+		}
+
 	}
 
 	valid_coords(points) {
