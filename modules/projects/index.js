@@ -1,5 +1,7 @@
 "use strict";
 
+const Webpage = require("./src/Webpage");
+
 module.exports = {
 	package: "Projects System",
 	discord: "src/discord",
@@ -24,6 +26,10 @@ module.exports = {
 				digCoords TEXT
 			);
 		`);
+
+		let webpage = new Webpage(client);
+		webpage.init();
+
 	},
 
 
