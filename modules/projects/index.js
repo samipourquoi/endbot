@@ -20,7 +20,8 @@ module.exports = {
 				members TEXT,
 				coords TEXT,
 				schematic TEXT,
-				mat_list TEXT
+				matList TEXT,
+				digCoords TEXT
 			);
 		`);
 	},
