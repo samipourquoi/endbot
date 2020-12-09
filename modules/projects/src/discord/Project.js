@@ -1,7 +1,7 @@
 "use strict";
 
 const Command = require("@root/src/commands/Command.js");
-const {generate} = require("@util/embeds.js");
+const { generate } = require("@util/embeds.js");
 const https = require("https");
 
 class Project extends Command {
@@ -30,11 +30,8 @@ class Project extends Command {
 				}
 				await this.init(message, args[1], args[2]);
 				break;
-			case "add":
-				await this.addMember(message, args[2]);
-				break;
-			case "list":
-				await this.listMembers(message);
+			case "members":
+				await this.members(message, args[1], args[3]);
 				break;
 			case "update":
 				if (!this.projectTypes.includes(args[1]) && args[1] !== undefined) {
@@ -50,6 +47,9 @@ class Project extends Command {
 				break;
 			case "materials":
 				await this.matList(message, args[1]);
+				break;
+			case "dig":
+				await this.dig(message, args[1]);
 				break;
 			}
 		} catch (e) {
@@ -84,59 +84,55 @@ class Project extends Command {
 		let memberID = JSON.stringify([message.author.id]);
 
 		await this.client.db.async_run(
-			"INSERT INTO projects VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			"INSERT INTO projects VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 			{
 				params: [
-					name, flag.replace("--", ""), description, projectChannel.id, memberID, memberID, coords.content, "[]", "[]"
+					name, flag.replace("--", ""), description, projectChannel.id, memberID, memberID, coords.content, "[]", "[]", "[]"
 				]
 			});
+
+		await message.channel.send(generate("result").setAuthor(`${name} has been created!`));
+		let projectDescription = await projectChannel.send(generate("endtech").setTitle(`${name}`)
+			.setDescription(JSON.parse(description)[0]));
+		await projectDescription.pin();
 	}
 
-	async addMember(message, flag) {
-		if (await this.isProject(message.channel.id) && await this.isLeader(message.channel.id, message.author)) {
-			let member = message.guild.member(message.mentions.users.first());
+	async members(message, flag, leaderFlag) {
+		if (await this.isProject(message.channel.id)) {
 			let { members } = await this.client.db.async_get("SELECT members FROM projects WHERE channel_id = ?", {params: message.channel.id});
 			members = JSON.parse(members);
 
-			if (!members.includes(member.id)) {
-				members.push(member.id);
-				await this.client.db.async_run("UPDATE projects SET members = ? WHERE channel_id = ?", {params: [JSON.stringify(members), message.channel.id]});
-				await message.channel.send(generate("result").setTitle(`Added ${member.user.username} to this project`));
-			} else if (flag === undefined) {
-				throw "They are already a member";
-			}
+			if (flag === undefined) {
+				let memberNames = [];
 
-			if (flag === "--leader") {
-				let { leaders } = await this.client.db.async_get("SELECT leaders FROM projects WHERE channel_id = ?", {params: message.channel.id});
-				leaders = JSON.parse(leaders);
-
-				if (!leaders.includes(member.id)) {
-					leaders.push(member.id);
-					await this.client.db.async_run("UPDATE projects SET leaders = ? WHERE channel_id = ?", {params: [JSON.stringify(leaders), message.channel.id]});
-					await message.channel.send(generate("result").setTitle(`Added ${member.user.username} as a leader to this project`));
-					await message.channel.setTopic(message.channel.topic + `, ${member.user.username}`);
-
-				} else {
-					throw "They are already a leader";
+				for (let i = 0; i < members.length; i++) {
+					let member = message.guild.members.cache.get(members[i]);
+					memberNames.push(member.user.username);
 				}
-			} else if (flag !== undefined) {
-				throw "Invalid Usage";
+
+				await message.channel.send(generate("result").setTitle("The members of this project are").setDescription(memberNames.join("\n")));
+
+			} else if (flag === "--add" && await this.isLeader(message.channel.id, message.author)) {
+				let member = message.guild.member(message.mentions.users.first());
+
+				if (!members.includes(member.id) && leaderFlag === undefined) {
+					members.push(member.id);
+					await this.client.db.async_run("UPDATE projects SET members = ? WHERE channel_id = ?", {params: [JSON.stringify(members), message.channel.id]});
+					await message.channel.send(generate("result").setTitle(`Added ${member.user.username} to this project`));
+				} else if (members.includes(member.id)) throw "They are already a members";
+
+				if (leaderFlag === "--leader") {
+					let { leaders } = await this.client.db.async_get("SELECT leaders FROM projects WHERE channel_id = ?", {params: message.channel.id});
+					leaders = JSON.parse(leaders);
+
+					if (!leaders.includes(member.id)) {
+						leaders.push(member.id);
+						await this.client.db.async_run("UPDATE projects SET leaders = ? WHERE channel_id = ?", {params: [JSON.stringify(leaders), message.channel.id]});
+						await message.channel.send(generate("result").setTitle(`Added ${member.user.username} as a leader to this project`));
+						await message.channel.setTopic(message.channel.topic + `, ${member.user.username}`);
+					} else throw "They are already a leader";
+				}
 			}
-		}
-	}
-
-	async listMembers(message) {
-		if (await this.isProject(message.channel.id)) {
-			let {members} = await this.client.db.async_get("SELECT members FROM projects WHERE channel_id = ?", {params: message.channel.id});
-			members = JSON.parse(members);
-			let memberNames = [];
-
-			for (let i = 0; i < members.length; i++) {
-				let member = message.guild.members.cache.get(members[i]);
-				memberNames.push(member.user.username);
-			}
-
-			await message.channel.send(`The members of this project are:\n ${memberNames.join("\n")}`);
 		}
 	}
 
@@ -163,8 +159,65 @@ class Project extends Command {
 			reports = JSON.parse(reports);
 			let latestReport = reports[reports.length - 1];
 
-			await message.channel.send(`Type: ${type}`);
-			await message.channel.send(`**Latest Report:** ${latestReport}`);
+			let isDig = false;
+			let { digCoords } = await this.client.db.async_get("SELECT digCoords FROM projects WHERE channel_id = ?", {params: message.channel.id});
+			digCoords = JSON.parse(digCoords);
+			if (digCoords.length > 0) isDig = true;
+
+			let statusEmbed = generate("endtech").setTitle(`Project Status | Type: ${type}`)
+				.setDescription(latestReport);
+
+			if (isDig) {
+				let rcon = this.client.bridges.get(this.client.config.servers[0]["bridge-channel"]).rcon;
+				let yLevels = [];
+				let count = {};
+
+				while (yLevels.length < 5) {
+					let points = this.getDigRandomCoords(digCoords);
+					let data = await rcon.sendCommand(`/script run top('surface',${points[0]}, 0, ${points[1]})`);
+					yLevels.push(data.body.split(" ")[2]);
+				}
+
+				for (let i=0; i < yLevels.length; i++) {
+					if (!count[yLevels[i]]) count[yLevels[i]] = 0;
+					count[yLevels[i]] += 1;
+				}
+
+				let currentYLevel = Object.keys(count).reduce((a, b) => count[a] > count[b] ? a:b);
+				statusEmbed.addField("Current Dig Layer", currentYLevel);
+			}
+			await message.channel.send(statusEmbed);
+		}
+	}
+
+	async dig(message, flag) {
+		if (await this.isProject(message.channel.id) && this.isMember(message.channel.id, message.author)) {
+			let { digCoords } = await this.client.db.async_get("SELECT digCoords FROM projects WHERE channel_id = ?", {params: message.channel.id});
+			if (JSON.parse(digCoords).length > 0 && flag === undefined) throw "There is already a dig happening for this project";
+
+			if (flag === "--alter" || flag === undefined) {
+				await message.channel.send(generate("endtech").setTitle("Please enter the points of all the vertices of the dig [x,z], [x,z] (In order)"));
+				let digCoordsMessage = await this.messageCollector(message, 60000);
+
+				const validDigCoords = (coords) => {
+					try {
+						coords = JSON.parse(`[ ${coords} ]`);
+
+						return coords.every(c => c.every(v => typeof v === "number"));
+					} catch (e) {
+						return false;
+					}
+				};
+				if (!validDigCoords(digCoordsMessage.content)) throw "Invalid Dig Coords!";
+				digCoordsMessage = JSON.stringify(JSON.parse(`[${digCoordsMessage.content}]`));
+
+				await this.client.db.async_run("UPDATE projects SET digCoords = ? WHERE channel_id = ?", {params: [digCoordsMessage, message.channel.id]});
+			} else if (flag === "--stop") {
+				if (JSON.parse(digCoords).length === 0) throw "There are no digs currently happening for this project";
+
+				await this.client.db.async_run("UPDATE projects SET digCoords = ? WHERE channel_id = ?", {params: ["[]", message.channel.id]});
+				await message.channel.send(generate("result").setTitle("The dig for this project has now ended"));
+			}
 		}
 	}
 
@@ -174,7 +227,7 @@ class Project extends Command {
 			schematic = JSON.parse(schematic);
 
 			if (flag === "--add" && await this.isMember(message.channel.id, message.author)) {
-				await message.channel.send("Please upload a litematic with the placement coords `x,y,z`");
+				await message.channel.send(generate("endtech").setTitle("Please upload a litematic with the placement coords `x,y,z`"));
 
 				const filter = m => {
 					return m.author === message.author && m.channel === message.channel && this.valid_coords(m.content) && m.attachments.size > 0;
@@ -207,11 +260,11 @@ class Project extends Command {
 
 	async matList(message, flag) {
 		if (await this.isProject(message.channel.id)) {
-			let { mat_list } = await this.client.db.async_get("SELECT mat_list FROM projects WHERE channel_id = ?", {params: message.channel.id});
-			let matList = JSON.parse(mat_list);
+			let { matList } = await this.client.db.async_get("SELECT matList FROM projects WHERE channel_id = ?", {params: message.channel.id});
+			matList = JSON.parse(matList);
 
 			if (flag === "--add" && await this.isMember(message.channel.id, message.author)) {
-				await message.channel.send("Please upload a text file of the material list");
+				await message.channel.send(generate("endtech").setTitle("Please upload a text file of the material list"));
 
 				const filter = m => {
 					return m.author === message.author && m.channel === message.channel && m.attachments.size > 0;
@@ -256,13 +309,39 @@ class Project extends Command {
 
 				for (let i = 0; i < matList.length; i++) {
 					let currentMatList = matList[i];
-					console.log(currentMatList);
 					matListEmbed.addField(currentMatList.name.replace(".txt", ""),
 						`**[Download Link](${currentMatList.url})**\n Materials:\n ${currentMatList.content.join("\n")}`);
 				}
 				await message.channel.send(matListEmbed);
 			}
 		}
+
+	}
+
+	getDigRandomCoords (points) {
+		let xMin = Math.min(...points.map(p => p[0]));
+		let xMax = Math.max(...points.map(p => p[0]));
+		let yMin = Math.min(...points.map(p => p[1]));
+		let yMax = Math.max(...points.map(p => p[1]));
+		let inside = false;
+		let x;
+		let y;
+
+		while (!inside) {
+			x = xMin + (Math.random() * (xMax - xMin));
+			y = yMin + (Math.random() * (yMax - yMin));
+
+			for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+				let xi = points[i][0], yi = points[i][1];
+				let xj = points[j][0], yj = points[j][1];
+
+				let intersect = ((yi > y) !== (yj > y))
+					&& (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+				if (intersect) inside = true;
+			}
+		}
+
+		return [Math.floor(x), Math.floor(y)];
 
 	}
 
