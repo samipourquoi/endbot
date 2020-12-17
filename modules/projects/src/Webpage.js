@@ -23,8 +23,10 @@ class Webpage {
 	}
 
 	async getHomepage(req, res) {
+		let projects  = await this.client.db.async_all("SELECT * FROM projects");
+		console.log(projects);
 		res.render("home", {
-			projects: await this.client.db.async_run("SELECT * FROM projects")
+			projects: projects
 		});
 	}
 }

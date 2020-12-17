@@ -8,6 +8,16 @@
 </head>
 <body>
 <main>
-    <%- include("headers/headers"); %>
+    <%- include("headers/headers") %>
+
+    <div>
+        <ul>
+            <% for (project of projects) { -%>
+                <li>
+                    <h3><%= project.name %></h3>
+                </li>
+            <%}-%>
+        </ul>
+    </div>
 
 </main>

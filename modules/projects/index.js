@@ -8,7 +8,7 @@ module.exports = {
 	server: "src/server",
 	config: {
 		"category-id": "783019338814324787",
-		"web-port": 8000
+		"web-port": 8000,
 	},
 
 	setup: async client => {
@@ -27,8 +27,8 @@ module.exports = {
 			);
 		`);
 
-		let webpage = new Webpage(client);
-		webpage.init();
+		// let webpage = new Webpage(client);
+		// webpage.init();
 
 	},
 
