@@ -28,6 +28,7 @@ class Project extends Command {
 				} else if (args[2] === undefined) {
 					args[2] = "undecided";
 				}
+
 				await this.init(message, args[1], args[2]);
 				break;
 			case "members":
@@ -50,6 +51,15 @@ class Project extends Command {
 				break;
 			case "dig":
 				await this.dig(message, args[1]);
+				break;
+			case "convert":
+				if (!this.projectTypes.includes(args[1]) && args[1] !== undefined) {
+					throw "That is not a valid type";
+				} else if (args[1] === undefined) {
+					args[1] = "undecided";
+				}
+
+				await this.convert(message, args[1]);
 				break;
 			}
 		} catch (e) {
@@ -91,8 +101,38 @@ class Project extends Command {
 				]
 			});
 
-		await message.channel.send(generate("result").setAuthor(`${name} has been created!`));
+		await message.channel.send(generate("result").setTitle(`${name} has been created!`));
 		let projectDescription = await projectChannel.send(generate("endtech").setTitle(`${name}`)
+			.setDescription(JSON.parse(description)[0]));
+		await projectDescription.pin();
+	}
+
+	async convert(message, flag) {
+		await message.channel.send(generate("endtech").setTitle("Please enter a description"));
+		let description = await this.messageCollector(message);
+		description = JSON.stringify([description.content]);
+
+		await message.channel.send(generate("endtech").setTitle("Please enter coords"));
+		const filter = m => {
+			return m.author === message.author && m.channel === message.channel && this.valid_coords(m.content);
+		};
+		let coords = await this.messageCollector(message, 30000, filter);
+
+		let projectChannel = message.channel;
+		await projectChannel.setTopic(`Coordinates: ${coords.content} | Leader(s): ${message.author.username}`);
+
+		let memberID = JSON.stringify([message.author.id]);
+
+		await this.client.db.async_run(
+			"INSERT INTO projects VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			{
+				params: [
+					projectChannel.name, flag.replace("--", ""), description, projectChannel.id, memberID, memberID, coords.content, "[]", "[]", "[]"
+				]
+			});
+
+		await message.channel.send(generate("result").setTitle("This channel is now a project channel!"));
+		let projectDescription = await projectChannel.send(generate("endtech").setTitle(`${projectChannel.name}`)
 			.setDescription(JSON.parse(description)[0]));
 		await projectDescription.pin();
 	}
