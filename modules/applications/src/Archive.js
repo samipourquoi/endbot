@@ -77,7 +77,7 @@ class Archive {
 				throw "you do not have the required permissions.";
 			} else {
 				await this.client.db.async_run(
-					"INSERT or REPLACE INTO archived_logged_on VALUES (?, ?, ?)", {
+					"REPLACE INTO archived_logged_on VALUES (?, ?, ?)", {
 						params: [ access_token, Date.now() + expires_in * 1000, `https://cdn.discordapp.com/avatars/${id}/${avatar}.png` ]
 					}
 				);
