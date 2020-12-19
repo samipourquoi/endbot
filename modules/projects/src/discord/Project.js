@@ -19,8 +19,15 @@ class Project extends Command {
 
 	async run(message, args) {
 		try {
+			if (!message.member.roles.cache.has(this.client.config["members-role"])) {
+				throw "da fuck you tryin' to do";
+			}
+
 			switch (args[0]) {
 			case "init":
+				if (!message.member.roles.cache.has(this.client.config["op-role"])) {
+					throw "da fuck you tryin' to do";
+				}
 				if (args[1] === undefined) {
 					throw "No name provided";
 				} else if (!this.projectTypes.includes(args[2]) && args[2] !== undefined) {
@@ -28,7 +35,6 @@ class Project extends Command {
 				} else if (args[2] === undefined) {
 					args[2] = "undecided";
 				}
-
 				await this.init(message, args[1], args[2]);
 				break;
 			case "members":
@@ -53,6 +59,9 @@ class Project extends Command {
 				await this.dig(message, args[1]);
 				break;
 			case "convert":
+				if (!message.member.roles.cache.has(this.client.config["op-role"])) {
+					throw "da fuck you tryin' to do";
+				}
 				if (!this.projectTypes.includes(args[1]) && args[1] !== undefined) {
 					throw "That is not a valid type";
 				} else if (args[1] === undefined) {
