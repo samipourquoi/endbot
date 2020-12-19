@@ -27,7 +27,7 @@ class Form {
 		// Fetches new submissions
 		setInterval(async () => {
 			let rows = await sheet.getRows();
-			this.totalApplications = (await this.client.db.async_get("SELECT value FROM settings WHERE key = \"total_applications\"")).value;
+			this.totalApplications = (await this.client.db.async_get("SELECT value FROM settings WHERE keyss = 'total_applications';")).value;
 			
 			if (this.totalApplications < rows.length) {
 				rows.slice(this.totalApplications).forEach(async row => await this.createTicket(row));
