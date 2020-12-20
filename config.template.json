@@ -10,10 +10,10 @@
   	"members-role": "MEMBERS-ROLE",
 
   	"database_config": {
-	  "host": "",
-	  "user": "",
-	  "password": "",
-	  "database": ""
+		"host": "localhost",
+		"user": "endbot",
+		"password": "supersecret",
+		"database": "my_db"
 	},
 
 	"servers": [

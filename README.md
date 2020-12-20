@@ -28,6 +28,8 @@ Configure the bot in the next section. Learn about the JSON syntax if you don't 
 
 Create a discord app by following [this tutorial](https://discordpy.readthedocs.io/en/latest/discord.html).
 
+Set up a MySQL database using [this tutorial](https://ladvien.com/data-analytics-mysql-localhost-setup/) (don't worry, it is pretty easy!) 
+
 Lastly, activate the Developer mode on Discord to grab necessary IDs, in [this page](https://discordia.me/en/developer-mode).
 
 # Config file
@@ -46,7 +48,12 @@ Fill in the fields:
 - `backup-role` ID of the role allowed to use the [`backup`](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md#backup)
 command.
 - `backup-format` Format in which the archived backup will be in. Defaulted and recommended to use `tar.gz`.
-- `op-role`: ID of the role allowed to use the [`execute`](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md#execute) command.
+- `op-role` ID of the role allowed to use the [`execute`](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md#execute) command.
+- `database_config` Config for the MySQL database
+		- `host` IP of the database (it often is `localhost`)
+		- `user` User
+		- `password` Password
+		- `database` Name of the database (schema)
 - `servers` Array of the configuration of all servers. You can add as many as you want.
     - `name` Name with which the bot will use when refering to that server.
     - `host` IP of the server, without any ports.
