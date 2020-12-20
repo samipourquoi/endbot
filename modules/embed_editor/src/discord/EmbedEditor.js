@@ -5,6 +5,7 @@ const url = require("url");
 const https = require("https");
 
 const Command = require("@root/src/commands/Command.js");
+const { generate, error } = require("@root/src/misc/embeds.js");
 
 class EmbedEditor extends Command {
 	constructor(client) {
@@ -27,7 +28,7 @@ class EmbedEditor extends Command {
 			case "delete":
 				this.ongoing.delete(message.author.id);
 				message.channel.send(
-					this.client.createEmbed("result")
+					generate("result")
 						.setTitle("Successfully deleted your ongoing embed")
 				);
 				break;
@@ -59,7 +60,7 @@ class EmbedEditor extends Command {
 			default:
 				if (!this.ongoing.has(message.author.id)) {
 					message.channel.send(
-						this.client.createEmbed("error")
+						generate("error")
 							.setTitle("You don't have an ongoing embed! Do " + this.client.prefix + "embed delete")
 					);
 					break;
@@ -70,7 +71,7 @@ class EmbedEditor extends Command {
 			}
 		} catch (e) {
 			message.channel.send(
-				this.client.errorEmbed("unexpected")
+				error("unexpected")
 					.setDescription(e)
 			);
 		}
@@ -79,7 +80,7 @@ class EmbedEditor extends Command {
 	create(message, args) {
 		if (this.ongoing.has(message.author.id)) {
 			message.channel.send(
-				this.client.createEmbed("error")
+				generate("error")
 					.setTitle("You already have an ongoing embed! Do " + this.client.prefix + "embed reset")
 			);
 			return;
@@ -101,11 +102,11 @@ class EmbedEditor extends Command {
 
 	setCheck(message, args) {
 		if (args[0] == undefined) {
-			message.channel.send(this.client.errorEmbed("args"));
+			message.channel.send(error("args"));
 			return true;
 		} else if (!this.ongoing.has(message.author.id)) {
 			message.channel.send(
-				this.client.createEmbed("error")
+				generate("error")
 					.setTitle("You don't have an ongoing embed! Do " + this.client.prefix + "embed create")
 			);
 			return false;
@@ -123,7 +124,7 @@ class EmbedEditor extends Command {
 			embed.setTitle(title.substring(1, title.length-1));
 			message.channel.send(embed);
 		} else {
-			message.channel.send(this.client.errorEmbed("args"));
+			message.channel.send(error("args"));
 		}
 	}
 
@@ -136,7 +137,7 @@ class EmbedEditor extends Command {
 			embed.setDescription(description.substring(1, description.length-1));
 			message.channel.send(embed);
 		} else {
-			message.channel.send(this.client.errorEmbed("args"));
+			message.channel.send(error("args"));
 		}
 	}
 
@@ -167,7 +168,7 @@ class EmbedEditor extends Command {
 			message.channel.send(embed);
 		}).catch(err => {
 			message.channel.send(
-				this.client.errorEmbed("unexpected")
+				error("unexpected")
 					.setDescription(err)
 			);
 		});
@@ -182,7 +183,7 @@ class EmbedEditor extends Command {
 			embed.setFooter(footer.substring(1, footer.length-1));
 			message.channel.send(embed);
 		} else {
-			message.channel.send(this.client.errorEmbed("args"));
+			message.channel.send(error("args"));
 		}
 	}
 
@@ -195,7 +196,7 @@ class EmbedEditor extends Command {
 			embed.setColor(color);
 			message.channel.send(embed);
 		} else {
-			message.channel.send(this.client.errorEmbed("args"));
+			message.channel.send(error("args"));
 		}
 	}
 
@@ -216,7 +217,7 @@ class EmbedEditor extends Command {
 				);
 				message.channel.send(embed);
 			} else {
-				message.channel.send(this.client.errorEmbed("args"));
+				message.channel.send(error("args"));
 			}
 		} else if (args[0] == "splice") {
 			let index = args.slice(1).join(" ");
@@ -224,17 +225,17 @@ class EmbedEditor extends Command {
 				embed.spliceFields(index, 1);
 				message.channel.send(embed);
 			} else {
-				message.channel.send(this.client.errorEmbed("args"));
+				message.channel.send(error("args"));
 			}
 		} else {
-			message.channel.send(this.client.errorEmbed("args"));
+			message.channel.send(error("args"));
 		}
 	}
 
 	publish(message, args) {
 		if (!this.ongoing.has(message.author.id)) {
 			message.channel.send(
-				this.client.createEmbed("error")
+				generate("error")
 					.setTitle("You don't have an ongoing embed! Do " + this.client.prefix + "embed create")
 			);
 			return;
@@ -257,14 +258,14 @@ class EmbedEditor extends Command {
 
 			if (message.member.hasPermission("MANAGE_CHANNELS")) {
 				webhook.send(this.ongoing.get(message.author.id));
-				message.channel.send(this.client.createEmbed("result").setTitle("Successfully sent the embed"));
+				message.channel.send(generate("result").setTitle("Successfully sent the embed"));
 			} else {
-				message.channel.send(this.client.createEmbed("result").setTitle("You don't have the require permissions to do this!"));
+				message.channel.send(generate("result").setTitle("You don't have the require permissions to do this!"));
 			}
 
 			return;
 		}
-		message.channel.send(this.client.errorEmbed("args"));
+		message.channel.send(error("args"));
 	}
 }
 
