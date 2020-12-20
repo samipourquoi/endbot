@@ -26,7 +26,7 @@ class Help extends Command {
 
 	generate(commands) {
 		let embed = new Discord.MessageEmbed()
-			.setTitle("Help Pannel")
+			.setTitle("Help Panel")
 			.setColor("#2F3136");
 		let description = "";
 
