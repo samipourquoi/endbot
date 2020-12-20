@@ -30,7 +30,7 @@ module.exports = {
 		// Database
 		// await client.db.async_run("CREATE TABLE IF NOT EXISTS tickets (id TEXT UNIQUE, applicant TEXT, link TEXT, pfp TEXT, discriminator INT, date TEXT);");
 		// await client.db.async_run("CREATE TABLE IF NOT EXISTS archived_tickets (id TEXT, name TEXT, round INTEGER, messages JSON NOT NULL, status TEXT, pfp TEXT DEFAULT '/assets/default-avatar.png', discriminator INT, date TEXT);");
-		await client.db.async_run("CREATE TABLE IF NOT EXISTS archived_logged_on (token TEXT, expires_in INT, pfp TEXT);");
+		await client.db.async_run("CREATE TABLE IF NOT EXISTS archived_logged_on (token TEXT, expires_in BIGINT, pfp TEXT);");
 		await client.db.async_run("INSERT IGNORE INTO settings VALUES ('total_applications', 0);");
 
 		await client.db.async_run(`
