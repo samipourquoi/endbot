@@ -41,7 +41,7 @@ module.exports = {
 				discriminator TEXT,
 				avatar TEXT,
 				link TEXT,
-				date DATE,
+				date BIGINT, -- Unix time
 				status TEXT,
 				round INT,
 				messages MEDIUMTEXT,
