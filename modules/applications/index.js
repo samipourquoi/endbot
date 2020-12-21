@@ -50,8 +50,8 @@ module.exports = {
 		`);
 
 		// Archive web server
-		let archive = new Archive(client);
-		archive.init();
+		// let archive = new Archive(client);
+		// archive.init();
 
 		// Form
 		let form = new Form(client);
