@@ -40,8 +40,11 @@ class Form {
 		let ticketChannel = await this.createChannel(user, username);
 		let url = await this.generateEmbed(row, ticketChannel, username);
 
+		// this bug made be cry
+		// https://stackoverflow.com/questions/4429319/you-cant-specify-target-table-for-update-in-from-clause
 		await this.client.db.async_run(
-			"INSERT INTO apps VALUES (?, ?, ?, ?, ?, ?, ?, ?, (SELECT count(*) FROM apps WHERE username = ?), ?, ?)",
+			`INSERT INTO apps VALUES (?, ?, ?, ?, ?, ?, ?, ?,
+			(SELECT COUNT(*) FROM (SELECT * FROM apps) as bonk WHERE username = ?), ?, ?);`,
 			{ params: [
 				ticketChannel.id,
 				user ? user.user.id : null,
@@ -49,11 +52,11 @@ class Form {
 				discriminator,
 				user ? user.user.displayAvatarURL({ format: "png" }) : null,
 				url,
-				Date.now(),
+				parseInt(Date.now()),
 				"pending",
 				username, // duplicate
-				[],
-				[]
+				"[]",
+				"[]"
 			]}
 		);
 	}
