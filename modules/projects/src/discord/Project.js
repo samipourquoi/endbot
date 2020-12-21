@@ -76,9 +76,9 @@ class Project extends Command {
 		}
 	}
 
-	async messageCollector(message, time=30000, filter= m=> m.author === message.author && m.channel === message.channel) {
+	async messageCollector(message, time=180000, filter= m=> m.author === message.author && m.channel === message.channel) {
 		try {
-			const collected = await message.channel.awaitMessages(filter,  { max: 1, time: time });
+			const collected = await message.channel.awaitMessages(filter,  { max: 1, time: time, errors: ["time"] });
 			message.channel.send(generate("result").setTitle("Your response has been recorded"));
 			return collected.first();
 		} catch(collected) {
@@ -91,11 +91,11 @@ class Project extends Command {
 		let description = await this.messageCollector(message);
 		description = JSON.stringify([description.content]);
 
-		await message.channel.send(generate("endtech").setTitle("Please enter coords"));
+		await message.channel.send(generate("endtech").setTitle("Please enter coords `x,y`"));
 		const filter = m => {
 			return m.author === message.author && m.channel === message.channel && this.valid_coords(m.content);
 		};
-		let coords = await this.messageCollector(message, 30000, filter);
+		let coords = await this.messageCollector(message, 180000, filter);
 		
 		let projectChannel = await message.guild.channels.create(name, {parent: this.category});
 		await projectChannel.setTopic(`Coordinates: ${coords.content} | Leader(s): ${message.author.username}`);
@@ -117,6 +117,8 @@ class Project extends Command {
 	}
 
 	async convert(message, flag) {
+		if (await this.isProject(message.channel.id)) throw "This is already a project channel";
+
 		await message.channel.send(generate("endtech").setTitle("Please enter a description"));
 		let description = await this.messageCollector(message);
 		description = JSON.stringify([description.content]);
@@ -125,7 +127,7 @@ class Project extends Command {
 		const filter = m => {
 			return m.author === message.author && m.channel === message.channel && this.valid_coords(m.content);
 		};
-		let coords = await this.messageCollector(message, 30000, filter);
+		let coords = await this.messageCollector(message, 180000, filter);
 
 		let projectChannel = message.channel;
 		await projectChannel.setTopic(`Coordinates: ${coords.content} | Leader(s): ${message.author.username}`);
@@ -161,7 +163,7 @@ class Project extends Command {
 
 				await message.channel.send(generate("result").setTitle("The members of this project are").setDescription(memberNames.join("\n")));
 
-			} else if (flag === "--add" && await this.isLeader(message.channel.id, message.author)) {
+			} else if (flag === "add" && await this.isLeader(message.channel.id, message.author)) {
 				let member = message.guild.member(message.mentions.users.first());
 
 				if (!members.includes(member.id) && leaderFlag === undefined) {
@@ -186,7 +188,7 @@ class Project extends Command {
 	}
 
 	async update(message, type) {
-		if (await this.isProject(message.channel.id) && (await this.isMember(message.channel.id, message.author))) {
+		if (await this.isProject(message.channel.id) && (await this.isLeader(message.channel.id, message.author))) {
 			if (type !== undefined) {
 				await this.client.db.async_run("UPDATE projects SET type = ? WHERE channel_id = ?", {params: [type.replace("--", ""), message.channel.id]});
 				return;
@@ -195,7 +197,7 @@ class Project extends Command {
 			reports = JSON.parse(reports);
 
 			await message.channel.send(generate("endtech").setTitle("Please give a progress report"));
-			let report = await this.messageCollector(message, 120000);
+			let report = await this.messageCollector(message, 240000);
 			reports.push(report.content);
 			await this.client.db.async_run("UPDATE projects SET reports = ? WHERE channel_id = ?", {params: [JSON.stringify(reports), message.channel.id]});
 		}
@@ -244,9 +246,9 @@ class Project extends Command {
 			let { digCoords } = await this.client.db.async_get("SELECT digCoords FROM projects WHERE channel_id = ?", {params: message.channel.id});
 			if (JSON.parse(digCoords).length > 0 && flag === undefined) throw "There is already a dig happening for this project";
 
-			if (flag === "--alter" || flag === undefined) {
+			if (flag === "alter" || flag === undefined) {
 				await message.channel.send(generate("endtech").setTitle("Please enter the points of all the vertices of the dig [x,z], [x,z] (In order)"));
-				let digCoordsMessage = await this.messageCollector(message, 60000);
+				let digCoordsMessage = await this.messageCollector(message, 180000);
 
 				const validDigCoords = (coords) => {
 					try {
@@ -261,7 +263,7 @@ class Project extends Command {
 				digCoordsMessage = JSON.stringify(JSON.parse(`[${digCoordsMessage.content}]`));
 
 				await this.client.db.async_run("UPDATE projects SET digCoords = ? WHERE channel_id = ?", {params: [digCoordsMessage, message.channel.id]});
-			} else if (flag === "--stop") {
+			} else if (flag === "stop") {
 				if (JSON.parse(digCoords).length === 0) throw "There are no digs currently happening for this project";
 
 				await this.client.db.async_run("UPDATE projects SET digCoords = ? WHERE channel_id = ?", {params: ["[]", message.channel.id]});
@@ -275,14 +277,14 @@ class Project extends Command {
 			let {schematic} = await this.client.db.async_get("SELECT schematic FROM projects WHERE channel_id = ?", {params: message.channel.id});
 			schematic = JSON.parse(schematic);
 
-			if (flag === "--add" && await this.isMember(message.channel.id, message.author)) {
+			if (flag === "add" && await this.isMember(message.channel.id, message.author)) {
 				await message.channel.send(generate("endtech").setTitle("Please upload a litematic with the placement coords `x,y,z`"));
 
 				const filter = m => {
 					return m.author === message.author && m.channel === message.channel && this.valid_coords(m.content) && m.attachments.size > 0;
 				};
 
-				let schematicMessage = await this.messageCollector(message, 90000, filter);
+				let schematicMessage = await this.messageCollector(message, 240000, filter);
 				let schematicURL = schematicMessage.attachments.first();
 				schematicURL.placement = schematicMessage.content;
 
@@ -312,14 +314,14 @@ class Project extends Command {
 			let { matList } = await this.client.db.async_get("SELECT matList FROM projects WHERE channel_id = ?", {params: message.channel.id});
 			matList = JSON.parse(matList);
 
-			if (flag === "--add" && await this.isMember(message.channel.id, message.author)) {
+			if (flag === "add" && await this.isMember(message.channel.id, message.author)) {
 				await message.channel.send(generate("endtech").setTitle("Please upload a text file of the material list"));
 
 				const filter = m => {
 					return m.author === message.author && m.channel === message.channel && m.attachments.size > 0;
 				};
 
-				let matListMessage = await this.messageCollector(message, 90000, filter);
+				let matListMessage = await this.messageCollector(message, 240000, filter);
 				let matListURL = matListMessage.attachments.first();
 
 				let data = "";
