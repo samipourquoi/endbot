@@ -166,11 +166,11 @@ class Project extends Command {
 			} else if (flag === "add" && await this.isLeader(message.channel.id, message.author)) {
 				let member = message.guild.member(message.mentions.users.first());
 
-				if (!members.includes(member.id) && leaderFlag === undefined) {
+				if (!members.includes(member.id)) {
 					members.push(member.id);
 					await this.client.db.async_run("UPDATE projects SET members = ? WHERE channel_id = ?", {params: [JSON.stringify(members), message.channel.id]});
 					await message.channel.send(generate("result").setTitle(`Added ${member.user.username} to this project`));
-				} else if (members.includes(member.id)) throw "They are already a members";
+				} else if (members.includes(member.id) && leaderFlag === undefined) throw "They are already a members";
 
 				if (leaderFlag === "--leader") {
 					let { leaders } = await this.client.db.async_get("SELECT leaders FROM projects WHERE channel_id = ?", {params: message.channel.id});
@@ -242,7 +242,7 @@ class Project extends Command {
 	}
 
 	async dig(message, flag) {
-		if (await this.isProject(message.channel.id) && this.isMember(message.channel.id, message.author)) {
+		if (await this.isProject(message.channel.id) && await this.isMember(message.channel.id, message.author)) {
 			let { digCoords } = await this.client.db.async_get("SELECT digCoords FROM projects WHERE channel_id = ?", {params: message.channel.id});
 			if (JSON.parse(digCoords).length > 0 && flag === undefined) throw "There is already a dig happening for this project";
 
