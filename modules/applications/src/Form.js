@@ -27,8 +27,8 @@ class Form {
 		// Fetches new submissions
 		setInterval(async () => {
 			let rows = await sheet.getRows();
-			this.totalApplications = (await this.client.db.async_get("SELECT value FROM settings WHERE key = \"total_applications\"")).value;
-			
+			this.totalApplications = (await this.client.db.async_get("SELECT value FROM settings WHERE keyss = 'total_applications';")).value;
+
 			if (this.totalApplications < rows.length) {
 				rows.slice(this.totalApplications).forEach(async row => await this.createTicket(row));
 			}
@@ -41,7 +41,7 @@ class Form {
 		let url = await this.generateEmbed(row, ticketChannel, username);
 
 		await this.client.db.async_run(
-			"INSERT INTO apps VALUES (?, ?, ?, ?, ?, ?, ?, ?, (SELECT count() FROM apps WHERE username = ?), ?, ?)",
+			"INSERT INTO apps VALUES (?, ?, ?, ?, ?, ?, ?, ?, (SELECT count(*) FROM apps WHERE username = ?), ?, ?)",
 			{ params: [
 				ticketChannel.id,
 				user ? user.user.id : null,
@@ -79,7 +79,7 @@ class Form {
 		});
 		if (user) await channel.createOverwrite(user, { "VIEW_CHANNEL": true });
 		else await channel.send(generate("warn").setTitle(`Couldn't find the user ${username}`));
-		await this.client.db.async_run("UPDATE settings SET value = value + 1 WHERE key = 'total_applications'");
+		await this.client.db.async_run("UPDATE settings SET value = value + 1 WHERE keyss = 'total_applications'");
 		return channel;
 	}
 	

@@ -118,7 +118,7 @@ class EndBot extends Discord.Client {
 	async initDatabase() {
 		await this.db.async_run("CREATE TABLE IF NOT EXISTS presets (username TEXT, name TEXT, objectives TEXT);");
 		//TODO: Call the key column something appropriate
-		await this.db.async_run("CREATE TABLE IF NOT EXISTS settings (keyss TEXT, value TEXT);");
+		await this.db.async_run("CREATE TABLE IF NOT EXISTS settings (keyss varchar(32) PRIMARY KEY, value TEXT);");
 	}
 
 	filterDiscord(message) {

@@ -77,7 +77,7 @@ class Archive {
 				throw "you do not have the required permissions.";
 			} else {
 				await this.client.db.async_run(
-					"INSERT or REPLACE INTO archived_logged_on VALUES (?, ?, ?)", {
+					"REPLACE INTO archived_logged_on VALUES (?, ?, ?)", {
 						params: [ access_token, Date.now() + expires_in * 1000, `https://cdn.discordapp.com/avatars/${id}/${avatar}.png` ]
 					}
 				);
@@ -140,7 +140,9 @@ class Archive {
 			// Selects the timestamp of the first message, in each of
 			// the applicant's tickets.
 			let timestamps = await this.client.db.async_all(
-				"SELECT strftime('%d/%m/%Y', date/1000, 'unixepoch') FROM apps WHERE username = ?",
+				// This was tge SQLite3 version of the query
+				// "SELECT strftime('%d/%m/%Y', date/1000, 'unixepoch') FROM apps WHERE username = ?",
+				"SELECT FROM_UNIXTIME(date, '%d/%m/%Y') FROM apps WHERE username = ?",
 				{ params: [ identifier ] }
 			);
 			let user = await this.client.db.async_get("SELECT * FROM archived_logged_on WHERE token = ?", { params: [ req.cookies.token ] });
