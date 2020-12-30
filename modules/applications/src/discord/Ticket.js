@@ -29,6 +29,9 @@ class Ticket extends Command {
 			case "yes":
 				await this.close(message, args.slice(1), "accepted");
 				break;
+			case "bruh":
+				await this.close(message, args.slice(1), "bruh");
+				break;
 			case "close": // for legacy reasons
 				await message.channel.send("it's `ticket <accept|deny>` you babunga");
 				break;
