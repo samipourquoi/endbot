@@ -10,7 +10,10 @@ Promised based mysql queries.
 
 class Database {
 	constructor(config) {
-		this.connection = mysql.createConnection(config);
+		this.connection = mysql.createConnection({
+			...config,
+			multipleStatements: true
+		});
 	}
 
 	async_run(statement, { params } = {}) {
