@@ -1,7 +1,6 @@
 "use strict";
 
 const Form = require("./src/Form");
-const Archive = require("./src/Archive");
 
 module.exports = {
 	package: "Application System",
