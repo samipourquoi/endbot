@@ -55,6 +55,7 @@ class Ticket extends Command {
 		let votable = await this.votingChannel.send(embed);
 		await votable.react(this.config["yes"]);
 		await votable.react(this.config["no"]);
+		await message.delete();
 	}
 	
 	async close(message, args, status) {
