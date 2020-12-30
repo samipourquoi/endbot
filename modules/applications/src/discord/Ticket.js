@@ -46,7 +46,7 @@ class Ticket extends Command {
 		let application = await this.client.db.async_get("SELECT * FROM apps WHERE channel_id = ?", { params: message.channel.id });
 		if (!application) throw "This channel is not a ticket";
 		let embed = generate("endtech")
-			.setAuthor(application.applicant, application.pfp)
+			.setAuthor(application.username, application.avatar)
 			.setDescription(`[Full application here](${application.link})`);
 
 		let votable = await this.votingChannel.send(embed);
