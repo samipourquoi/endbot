@@ -113,7 +113,7 @@ class Rcon {
 			this.packets.set(packet.id, resolve);
 			setTimeout(() => {
 				this.packets.delete(packet.id);
-				reject("Timeout exceeded");
+				reject("Timeout exceeded on " + this.name);
 			}, this.timeout);
 		});
 	}
