@@ -12,8 +12,8 @@ class Ping extends Command {
 		};
 	}
 
-	run(message) {
-		message.channel.send("Pong!");
+	async run(message) {
+		await message.channel.send("Pong!");
 	}
 }
 

@@ -15,13 +15,13 @@ const Discord = require("discord.js");
 function error(error) {
 	switch (error) {
 	case "bridge":
-		return this.generate("error")
+		return generate("error")
 			.setTitle("You must be in a bridge channel to do that!");
 	case "args":
-		return this.generate("error")
+		return generate("error")
 			.setTitle("Invalid arguments! Do " + this.prefix + "help for more info.");
 	case "unexpected":
-		return this.generate("error")
+		return generate("error")
 			.setTitle("An unexpected error has occured while performing that command");
 	}
 }

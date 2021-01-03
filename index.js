@@ -29,4 +29,10 @@ client.once("ready", async () => {
 	console.log("EndBot is on! 😎");
 });
 
-client.on("message", client.filterDiscord);
+client.on("message", async message => {
+	try {
+		await client.filterDiscord(message);
+	} catch (e) {
+		console.error("uh-oh!... " + e);
+	}
+});

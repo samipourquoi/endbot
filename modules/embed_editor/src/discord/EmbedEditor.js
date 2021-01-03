@@ -18,7 +18,7 @@ class EmbedEditor extends Command {
 		this.ongoing = new Map();
 	}
 
-	run(message, args) {
+	async run(message, args) {
 		try {
 			switch (args[0]) {
 			case "create":

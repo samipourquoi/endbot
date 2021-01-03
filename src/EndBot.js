@@ -121,7 +121,7 @@ class EndBot extends Discord.Client {
 		await this.db.async_run("CREATE TABLE IF NOT EXISTS settings (keyss varchar(32) PRIMARY KEY, value TEXT);");
 	}
 
-	filterDiscord(message) {
+	async filterDiscord(message) {
 		try {
 			if (message.author.bot && !this.isMock) return;
 
@@ -132,9 +132,9 @@ class EndBot extends Discord.Client {
 			if (message.content.charAt(0) !== this.prefix) return;
 
 			let command = message.content.substring(1).split(" ");
-			return this.parseDiscordCommand(message, command[0], command.slice(1));
+			await this.parseDiscordCommand(message, command[0], command.slice(1));
 		} catch (e) {
-			message.channel.send(error("unexpected").setDescription(e));
+			await message.channel.send(error("unexpected").setDescription(e));
 		}
 	}
 
@@ -147,14 +147,14 @@ class EndBot extends Discord.Client {
 		this.parseServerCommand(rcon, author, command[1], command.slice(2));
 	}
 
-	parseDiscordCommand(message, command, ...args) {
+	async parseDiscordCommand(message, command, ...args) {
 		let cmd = this.discordCommands[command];
 		if (cmd === undefined) return;
 		if (this.flags.debug) console.log(message.content, "was ran by", message.author.username);
-		return cmd.run(message, ...args);
+		return await cmd.run(message, ...args);
 	}
 
-	parseServerCommand(rcon, authorName, command, ...args) {
+	async parseServerCommand(rcon, authorName, command, ...args) {
 		let cmd = this.serverCommands[command];
 		if (cmd === undefined) return;
 
