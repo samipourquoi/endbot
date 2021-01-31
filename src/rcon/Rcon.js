@@ -93,6 +93,7 @@ class Rcon {
 			try {
 				this.connection.write(packet.buffer);
 			} catch {
+				this.connection.end();
 				console.warn("RCON connection to " + this.name + " ended");
 				this.connected = false;
 				this.draining = false;
