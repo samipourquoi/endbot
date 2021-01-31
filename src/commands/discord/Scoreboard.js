@@ -38,7 +38,7 @@ class Scoreboard extends Command {
 		let rcon = this.client.bridges.get(this.client.config.servers[0]["bridge-channel"]).rcon;
 		let objective = args[0];
 		// eslint-disable-next-line no-prototype-builtins
-		let scores = await this.getData(rcon, (scoreboards.hasOwnProperty(args[0])) ? scoreboards[args[0]] : args[0], (args[1] == "--all"));
+		let scores = await this.getData(rcon, (scoreboards.hasOwnProperty(args[0])) ? scoreboards[args[0]] : args[0], (args[1] == "all"));
 
 		let canvas = createCanvas(300, (FONT_SIZE+SPACE_BETWEEN)*scores.length + MARGIN*3 + OBJECTIVE_NAME_SPACE);
 		registerFont("./src/assets/minecraft.otf", { family: "Minecraft" });
@@ -88,7 +88,9 @@ class Scoreboard extends Command {
 			let data = await rcon.sendCommand(`scoreboard players get ${player} ${objective}`);
 			if (data.body.includes("Can't get value of")) continue;
 			if (data.body.includes("Unknown scoreboard objective")) break;
-			scores.push([player, data.body.split(" ")[2]]);
+			let scoreString = data.body.split(" ")[2];
+			if (isNaN(+scoreString)) continue;
+			scores.push([player, +scoreString]);
 		}
 
 		scores.sort((a, b) => {
@@ -112,9 +114,12 @@ class Scoreboard extends Command {
 		} else {
 			data = await rcon.sendCommand("whitelist list");
 		}
-		
-		let players = data.body.substring(data.body.indexOf(":")+2).split(", ");
-		return players;
+
+		let temp = data.body.split(", ");
+		let head = temp[0]
+			.split(" ")
+			.pop()
+		return [ head, ...temp ];
 	}
 }
 
