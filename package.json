@@ -30,20 +30,12 @@
 	},
 	"homepage": "https://github.com/samipourquoi/endbot#readme",
 	"devDependencies": {
-		"@types/dotenv": "^8.2.0",
 		"@types/node": "^14.14.2",
 		"typescript": "^3.9.7"
 	},
 	"dependencies": {
 		"@samipourquoi/commander": "^1.4.1",
 		"discord.js": "^12.2.0",
-		"dotenv": "^8.2.0"
-	},
-	"_moduleAliases": {
-		"@root": ".",
-		"@util": "./dist/misc"
-	},
-	"jest": {
-		"testEnvironment": "node"
+		"yaml": "^1.10.0"
 	}
 }

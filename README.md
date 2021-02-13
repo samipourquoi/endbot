@@ -32,7 +32,7 @@ Set up a MySQL database using [this tutorial](https://ladvien.com/data-analytics
 
 Lastly, activate the Developer mode on Discord to grab necessary IDs, in [this page](https://discordia.me/en/developer-mode).
 
-# Config file
+# Index file
 
 In the `server.properties` of your server(s), **change these properties**:
 - `broadcast-rcon-to-ops` to `false` to prevent command log spam to ops
@@ -49,7 +49,7 @@ Fill in the fields:
 command.
 - `backup-format` Format in which the archived backup will be in. Defaulted and recommended to use `tar.gz`.
 - `op-role` ID of the role allowed to use the [`execute`](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md#execute) command.
-- `database_config` Config for the MySQL database
+- `database_config` Index for the MySQL database
 		- `host` IP of the database (it often is `localhost`)
 		- `user` User
 		- `password` Password

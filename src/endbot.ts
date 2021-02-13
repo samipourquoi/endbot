@@ -1,18 +1,21 @@
 import { Client, Message, MessageEmbed } from "discord.js";
 import { Closure, CommandContext, Dispatcher } from "./commands";
 import { Colors } from "./theme";
+import { Config } from "./config";
 
 export class Endbot
 	extends Client {
 
 	dispatcher: Dispatcher;
 	prefix: string;
+	config: Config.Config;
 
 	constructor() {
 		super();
 
 		this.dispatcher = new Dispatcher();
 		this.prefix = "!";
+		this.config = Config.init();
 
 		this.on("message", this.filter)
 		this.once("ready", () => console.info(`Logged on as ${this.user?.username}`));
