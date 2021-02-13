@@ -2,6 +2,6 @@
 
 module.exports = {
 	package: "List Command",
-	discord: "src/discord",
+	discord: "/discord",
 	server: undefined,
 };

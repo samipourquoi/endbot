@@ -4,7 +4,7 @@ const { gifVersion } = require("canvas");
 const { Guild } = require("discord.js");
 const Follower = require("text-file-follower");
 
-const SPECIAL_MESSAGES = require("../assets/special_messages.json");
+const SPECIAL_MESSAGES = require("../../assets/special_messages.json");
 const COLORS = {
 	"dark_red": "#AA0000",
 	"red": "#FF5555",

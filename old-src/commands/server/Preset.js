@@ -1,7 +1,7 @@
 "use strict";
 
 const ServerCommand = require("../ServerCommand.js");
-const scoreboards = require("../../assets/scoreboards.json");
+const scoreboards = require("../../../assets/scoreboards.json");
 
 // Delay before changing of scoreboard, in seconds
 let delay = 20;

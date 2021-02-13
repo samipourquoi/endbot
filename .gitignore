@@ -1,16 +1,15 @@
-# Project specific
-config.json
-backups
-*.db
+# build
+dist
+node_modules
 
-# Modules
-modules.config.ini
+# config
+config.*
+.env.dev
+.env
 
-# macOS
-.DS_Store
-
-# IntelliJ
+# idea
 .idea
+*.iml
 
-# Dependency directories
-node_modules/
+# tmp
+old-src

@@ -4,7 +4,7 @@ const { createCanvas, registerFont } = require("canvas");
 
 const Command = require("../Command");
 
-const scoreboards = require("../../assets/scoreboards.json");
+const scoreboards = require("../../../assets/scoreboards.json");
 
 const WHITE = "#fff";
 const LIGHT_GREY = "#A0A0A0";
@@ -41,7 +41,7 @@ class Scoreboard extends Command {
 		let scores = await this.getData(rcon, (scoreboards.hasOwnProperty(args[0])) ? scoreboards[args[0]] : args[0], (args[1] == "all"));
 
 		let canvas = createCanvas(300, (FONT_SIZE+SPACE_BETWEEN)*scores.length + MARGIN*3 + OBJECTIVE_NAME_SPACE);
-		registerFont("./src/assets/minecraft.otf", { family: "Minecraft" });
+		registerFont(".//assets/minecraft.otf", { family: "Minecraft" });
 		let context = canvas.getContext("2d");
 
 		context.font = FONT_SIZE + "px Minecraft";

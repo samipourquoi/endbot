@@ -1,6 +1,6 @@
 "use strict";
 
-const Form = require("./src/Form");
+const Form = require("./dist/Form");
 
 module.exports = {
 	package: "Application System",
@@ -19,7 +19,7 @@ module.exports = {
 		"redirect-uri": ""
 	},
 	
-	discord: "src/discord",
+	discord: "/discord",
 	
 	requirements: client => {
 		let guildID = client.moduleConfig["Application System"]["guild-id"];

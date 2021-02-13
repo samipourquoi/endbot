@@ -1,6 +1,6 @@
 "use strict";
 
-const Command = require("@root/src/commands/Command.js");
+const Command = require("@root//commands/Command.js");
 const { generate, getFormattedDate } = require("@util/embeds.js");
 
 class Ticket extends Command {

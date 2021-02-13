@@ -1,17 +1,17 @@
 "use strict";
 
 require("module-alias/register");
-console = require("./src/misc/FancyConsole");
+console = require("./misc/FancyConsole");
 
 let config;
 try {
-	config = require("./config.json");
+	config = require("../config.json");
 } catch (e) {
 	console.error("Unable to load config. Have you copied `config.template.json` to `config.json`?");
 	process.exit(1);
 }
 
-const EndBot = require("./src/EndBot");
+const EndBot = require("./EndBot");
 const client = module.exports = new EndBot(config);
 
 console.log("Logging in...");

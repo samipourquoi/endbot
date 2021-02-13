@@ -4,7 +4,7 @@
 	font-family: "Whitney Medium";
 	font-style: normal;
 	font-weight: normal;
-	src: local("Whitney Medium"), url("whitney/whitneymedium.woff") format("woff");
+	: local("Whitney Medium"), url("whitney/whitneymedium.woff") format("woff");
 }
 
 
@@ -12,7 +12,7 @@
 	font-family: "Whitney Medium Italic";
 	font-style: normal;
 	font-weight: normal;
-	src: local("Whitney Medium Italic"), url("whitney/whitneymediumitalic.woff") format("woff");
+	: local("Whitney Medium Italic"), url("whitney/whitneymediumitalic.woff") format("woff");
 }
 
 
@@ -20,7 +20,7 @@
 	font-family: "Whitney Bold";
 	font-style: normal;
 	font-weight: normal;
-	src: local("Whitney Bold"), url("whitney/whitneybold.woff") format("woff");
+	: local("Whitney Bold"), url("whitney/whitneybold.woff") format("woff");
 }
 
 
@@ -28,7 +28,7 @@
 	font-family: "Whitney Semibold Regular";
 	font-style: normal;
 	font-weight: normal;
-	src: local("Whitney Semibold Regular"), url("whitney/whitneysemibold.woff") format("woff");
+	: local("Whitney Semibold Regular"), url("whitney/whitneysemibold.woff") format("woff");
 }
 
 
@@ -36,7 +36,7 @@
 	font-family: "Whitney Book Regular";
 	font-style: normal;
 	font-weight: normal;
-	src: local("Whitney Book Regular"), url("whitney/whitneybook.woff") format("woff");
+	: local("Whitney Book Regular"), url("whitney/whitneybook.woff") format("woff");
 }
 
 
@@ -44,7 +44,7 @@
 	font-family: "Whitney Light Regular";
 	font-style: normal;
 	font-weight: normal;
-	src: local("Whitney Light Regular"), url("whitney/whitneylight.woff") format("woff");
+	: local("Whitney Light Regular"), url("whitney/whitneylight.woff") format("woff");
 }
 
 
@@ -52,7 +52,7 @@
 	font-family: "Whitney Semibold Italic";
 	font-style: normal;
 	font-weight: normal;
-	src: local("Whitney Semibold Italic"), url("whitney/WhitneySemiboldItalic.woff") format("woff");
+	: local("Whitney Semibold Italic"), url("whitney/WhitneySemiboldItalic.woff") format("woff");
 }
 
 
@@ -60,7 +60,7 @@
 	font-family: "Whitney Book Italic";
 	font-style: normal;
 	font-weight: normal;
-	src: local("Whitney Book Italic"), url("whitney/whitneybookitalic.woff") format("woff");
+	: local("Whitney Book Italic"), url("whitney/whitneybookitalic.woff") format("woff");
 }
 
 
@@ -68,5 +68,5 @@
 	font-family: "Whitney Light Italic";
 	font-style: normal;
 	font-weight: normal;
-	src: local("Whitney Light Italic"), url("whitney/whitneylightitalic.woff") format("woff");
+	: local("Whitney Light Italic"), url("whitney/whitneylightitalic.woff") format("woff");
 }

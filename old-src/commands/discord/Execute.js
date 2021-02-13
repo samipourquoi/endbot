@@ -2,7 +2,7 @@
 
 const Command = require("../Command.js");
 const { error, generate } = require("../../misc/embeds.js");
-const invalidCommands = require("../../assets/invalid_commands.json");
+const invalidCommands = require("../../../assets/invalid_commands.json");
 
 class Execute extends Command {
 	constructor(client) {

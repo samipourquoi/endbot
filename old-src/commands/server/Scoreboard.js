@@ -2,7 +2,7 @@
 
 const ServerCommand = require("../ServerCommand");
 
-const everyScoreboard = require("../../assets/scoreboards.json");
+const everyScoreboard = require("../../../assets/scoreboards.json");
 
 class Scoreboard extends ServerCommand {
 	constructor(client) {

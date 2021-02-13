@@ -1,7 +1,7 @@
 "use strict";
 
-const { generate } = require("../../../../src/misc/embeds.js");
-const Command = require("../../../../src/commands/Command.js");
+const { generate } = require("../../../../misc/embeds.js");
+const Command = require("../../../../commands/Command.js");
 
 class List extends Command {
 	constructor(client) {
