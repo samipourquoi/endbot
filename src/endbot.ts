@@ -1,4 +1,4 @@
-import { Client, Message, MessageEmbed } from "discord.js";
+import { Client, Message, MessageEmbed, TextChannel } from "discord.js";
 import { Closure, CommandContext, Dispatcher } from "./commands";
 import { Colors } from "./theme";
 import { Config } from "./config";
@@ -50,7 +50,7 @@ export class Endbot
 		for (const server of this.config.servers) {
 			const channel = await this.channels
 				.fetch(server.bridge_channel.toString());
-			const bridge = new Bridge(server, channel);
+			const bridge = new Bridge(server, channel as TextChannel);
 			await bridge.connect();
 		}
 	}
