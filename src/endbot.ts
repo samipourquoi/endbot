@@ -2,6 +2,7 @@ import { Client, Message, MessageEmbed } from "discord.js";
 import { Closure, CommandContext, Dispatcher } from "./commands";
 import { Colors } from "./theme";
 import { Config } from "./config";
+import { Bridge } from "./bridge";
 
 export class Endbot
 	extends Client {
@@ -18,7 +19,10 @@ export class Endbot
 		this.config = Config.init();
 
 		this.on("message", this.filter)
-		this.once("ready", () => console.info(`Logged on as ${this.user?.username}`));
+		this.once("ready", () => {
+			this.initServers();
+			console.info(`Logged on as ${this.user?.username}`)
+		});
 	}
 
 	async filter(message: Message) {
@@ -39,6 +43,15 @@ export class Endbot
 				.setColor(Colors.ERROR)
 				.setDescription(e);
 			await message.channel.send(error);
+		}
+	}
+
+	async initServers() {
+		for (const server of this.config.servers) {
+			const channel = await this.channels
+				.fetch(server.bridge_channel.toString());
+			const bridge = new Bridge(server, channel);
+			await bridge.connect();
 		}
 	}
 }

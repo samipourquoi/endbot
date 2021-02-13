@@ -36,6 +36,7 @@
 	"dependencies": {
 		"@samipourquoi/commander": "^1.4.1",
 		"discord.js": "^12.2.0",
+		"rcon-client": "^4.2.3",
 		"yaml": "^1.10.0"
 	}
 }

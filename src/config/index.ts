@@ -22,13 +22,13 @@ export module Config {
 		token: "<YOUR TOKEN HERE>",
 		servers: [
 			{
-				name: "Server",
-				host: "localhost",
+				name: "\"Server\"",
+				host: "\"localhost\"",
 				rcon_port: 25575,
-				rcon_password: "supersecret",
-				bridge_channel: "<CHANNEL ID>",
+				rcon_password: "\"supersecret\"",
+				bridge_channel: "\"<CHANNEL ID>\"",
 				ops_only: true,
-				log_path: "path/to/latest.log"
+				log_path: "\"path/to/latest.log\""
 			}
 		]
 	}
