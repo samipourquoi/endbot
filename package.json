@@ -1,6 +1,6 @@
 {
 	"name": "endbot",
-	"version": "1.0.0",
+	"version": "4.0.0",
 	"description": "Minecraft linking bot with other general utilities.",
 	"main": "index.js",
 	"scripts": {
