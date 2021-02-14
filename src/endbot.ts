@@ -2,7 +2,7 @@ import { Client, Message, MessageEmbed, TextChannel } from "discord.js";
 import { Closure, CommandContext, Dispatcher } from "./commands";
 import { Colors } from "./theme";
 import { Config } from "./config";
-import { Bridge } from "./bridge";
+import { Bridge, Bridges } from "./bridge";
 
 export class Endbot
 	extends Client {
@@ -27,6 +27,11 @@ export class Endbot
 
 	async filter(message: Message) {
 		if (message.author.bot) return;
+
+		const bridge = Bridges.getFromMessage(message);
+		if (bridge) {
+			await bridge.onDiscordMessage(message);
+		}
 
 		// Checks prefix
 		if (!message.content.startsWith(this.prefix)) return;
