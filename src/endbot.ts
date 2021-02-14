@@ -28,10 +28,10 @@ export class Endbot
 	async filter(message: Message) {
 		if (message.author.bot) return;
 
-		const bridge = Bridges.getFromMessage(message);
-		if (bridge) {
-			await bridge.onDiscordMessage(message);
-		}
+		const bridges = Bridges.getFromMessage(message);
+		await bridges.forEach(bridge => {
+			bridge.onDiscordMessage(message);
+		});
 
 		// Checks prefix
 		if (!message.content.startsWith(this.prefix)) return;

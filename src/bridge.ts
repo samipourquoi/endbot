@@ -5,26 +5,27 @@ import { ReadStream } from "fs";
 import { spawn } from "child_process";
 import { ColorUtils } from "./utils/colors";
 
-export const bridges: Bridge[] = [];
 
 export class Bridge {
-	public rcon: Rcon | null = null;
+	public rcon: Rcon;
 
 	constructor(public config: Config.Server,
 				public channel: TextChannel) {
-	}
 
-	async connect() {
-		this.rcon = await Rcon.connect({
+		this.rcon = new Rcon({
 			host: this.config.host,
 			password: this.config.rcon_password,
 			port: this.config.rcon_port
 		});
-		bridges.push(this);
+	}
+
+	async connect() {
+		Bridges.instances.push(this);
 		this.rcon.on(
 			"authenticated",
 			() => console.info(`Connected to server: '${this.config.name}'`)
 		);
+		await this.rcon.connect();
 
 		spawn("tail", [ "-n0", "-f", this.config.log_path ])
 			.stdout
@@ -67,8 +68,10 @@ export class Bridge {
 }
 
 export module Bridges {
-	export function getFromMessage(message: Message) {
-		return bridges.find(bridge => bridge.channel.id == message.channel.id);
+	export const instances: Bridge[] = [];
+
+	export function getFromMessage(message: Message): Bridge[] {
+		return instances.filter(bridge => bridge.channel.id == message.channel.id);
 	}
 
 	export function formatDiscordMessage(message: Message) {
