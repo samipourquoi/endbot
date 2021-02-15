@@ -1,6 +1,6 @@
 import { Client, Message, MessageEmbed, TextChannel } from "discord.js";
 import { Closure, CommandContext, Dispatcher } from "./commands";
-import { Colors } from "./theme";
+import { Colors } from "./utils/theme";
 import { Config } from "./config";
 import { Bridge, Bridges } from "./bridge";
 

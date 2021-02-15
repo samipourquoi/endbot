@@ -1,0 +1,12 @@
+# config
+config.yml
+config.yaml
+config.json
+
+# build
+node_modules
+dist
+
+# misc
+.idea
+.DS_Store

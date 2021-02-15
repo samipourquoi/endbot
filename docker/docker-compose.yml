@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  bot:
+    container_name: bot
+    build:
+      context: ..
+      dockerfile: ./docker/bot/Dockerfile
+    volumes:
+      - ../config:/etc/endbot/config
+      - /:/etc/endbot/servers

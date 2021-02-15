@@ -2,7 +2,7 @@ import { Command } from "@samipourquoi/commander";
 import { CommandContext } from "../index";
 import { Bridge, Bridges } from "../../bridge";
 import { MessageEmbed, Util } from "discord.js";
-import { Colors } from "../../theme";
+import { Colors } from "../../utils/theme";
 
 export class OnlineCommand
 	extends Command {

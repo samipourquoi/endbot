@@ -27,7 +27,11 @@ export class Bridge {
 		);
 		await this.rcon.connect();
 
-		spawn("tail", [ "-n0", "-f", this.config.log_path ])
+		const logPath = process.env.ENV == "production" ?
+			`/etc/endbot/servers${this.config.log_path}` :
+			this.config.log_path;
+		console.log(logPath);
+		spawn("tail", [ "-n0", "-f", logPath ])
 			.stdout
 			.on("data", chunk => {
 				const line = chunk.toString();

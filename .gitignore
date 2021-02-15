@@ -3,9 +3,7 @@ dist
 node_modules
 
 # config
-.env.dev
-.env
-config.yml
+config/config.yml
 config.json
 
 # idea
@@ -14,3 +12,6 @@ config.json
 
 # tmp
 old-src
+
+# macOS
+.DS_Store
