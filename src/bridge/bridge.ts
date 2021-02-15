@@ -3,6 +3,8 @@ import { Config } from "../config";
 import { Message, TextChannel, Util } from "discord.js";
 import { ColorUtils } from "../utils/colors";
 import { EventEmitter } from "events";
+import { MinecraftClosure, MinecraftDispatcher } from "../commands/minecraft";
+import { instance } from "../index";
 
 export declare interface Bridge {
 	emit(event: "minecraft", line: string): boolean;
@@ -15,6 +17,7 @@ export class Bridge
 	extends EventEmitter {
 
 	public rcon: Rcon;
+	public static dispatcher: MinecraftDispatcher = new MinecraftDispatcher();
 
 	constructor(public config: Config.Server,
 				public channel: TextChannel) {
@@ -49,6 +52,25 @@ export class Bridge
 			Util.escapeMarkdown(message),
 			{ disableMentions: "none" }
 		);
+
+		const { prefix } = instance;
+		const words = message.split(" ");
+		const author = words[0]?.slice(1, words[0]?.length - 1);
+		const content = words.slice(1)
+			.join();
+		if (!content.startsWith(prefix)) return;
+		const closure: MinecraftClosure = {
+			bridge: this,
+			line,
+			author,
+			content
+		};
+
+		try {
+			Bridge.dispatcher.run(content.slice(prefix.length), closure);
+		} catch (e) {
+			await this.error(` > Unexpected error: ${e}`);
+		}
 	}
 
 	async onDiscordMessage(message: Message) {
@@ -68,6 +90,23 @@ export class Bridge
 		];
 
 		await this.rcon?.send(`tellraw @a ${JSON.stringify(json)}`);
+	}
+
+	async sendColoredMessage(message: string, color: string) {
+		const json = { color, text: message };
+		await this.rcon.send(`tellraw @a ${JSON.stringify(json)}`);
+	}
+
+	async log(message: string) {
+		await this.sendColoredMessage(message, "white");
+	}
+
+	async error(message: string) {
+		await this.sendColoredMessage(message, "red");
+	}
+
+	async succeed(message: string) {
+		await this.sendColoredMessage(message, "green");
 	}
 }
 

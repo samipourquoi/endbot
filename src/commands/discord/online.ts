@@ -1,5 +1,5 @@
 import { Command } from "@samipourquoi/commander";
-import { CommandContext } from "../index";
+import { DiscordContext } from "./index";
 import { Bridge, Bridges } from "../../bridge/bridge";
 import { MessageEmbed, Util } from "discord.js";
 import { Colors } from "../../utils/theme";
@@ -15,7 +15,7 @@ export class OnlineCommand
 	}
 }
 
-async function online(ctx: CommandContext) {
+async function online(ctx: DiscordContext) {
 	let bridges = Bridges.getFromMessage(ctx.message);
 	if (bridges.length == 0) bridges = Bridges.instances;
 

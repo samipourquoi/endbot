@@ -1,5 +1,5 @@
 import { Client, Message, MessageEmbed, TextChannel } from "discord.js";
-import { Closure, CommandContext, Dispatcher } from "./commands";
+import { DiscordClosure, DiscordContext, DiscordDispatcher } from "./commands/discord";
 import { Colors } from "./utils/theme";
 import { Config } from "./config";
 import { Bridge, Bridges } from "./bridge/bridge";
@@ -8,14 +8,14 @@ import { Webhook } from "./bridge/webhook";
 export class Endbot
 	extends Client {
 
-	dispatcher: Dispatcher;
+	dispatcher: DiscordDispatcher;
 	prefix: string;
 	config: Config.Config;
 
 	constructor() {
 		super();
 
-		this.dispatcher = new Dispatcher();
+		this.dispatcher = new DiscordDispatcher();
 		this.prefix = "!";
 		this.config = Config.init();
 
@@ -37,7 +37,7 @@ export class Endbot
 		// Checks prefix
 		if (!message.content.startsWith(this.prefix)) return;
 
-		const closure: Closure = { message };
+		const closure: DiscordClosure = { message };
 
 		try {
 			this.dispatcher.run(

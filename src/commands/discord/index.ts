@@ -1,8 +1,9 @@
-import { Command } from "@samipourquoi/commander";
+import { Command, Context } from "@samipourquoi/commander";
+import { Message, MessageEmbed } from "discord.js";
 import { HelpCommand } from "./help";
 import { OnlineCommand } from "./online";
 
-export class DiscordCommands
+export class DiscordDispatcher
 	extends Command {
 
 	constructor() {
@@ -12,4 +13,10 @@ export class DiscordCommands
 			.with.attach(new HelpCommand())
 			.or.attach(new OnlineCommand());
 	}
+}
+
+export type DiscordContext = Context<DiscordClosure>
+
+export type DiscordClosure = {
+	message: Message,
 }

@@ -1,5 +1,5 @@
 import { Command } from "@samipourquoi/commander";
-import { CommandContext } from "../index";
+import { DiscordContext } from "./index";
 
 export class HelpCommand
 	extends Command {
@@ -12,6 +12,6 @@ export class HelpCommand
 	}
 }
 
-async function discordHelp(ctx: CommandContext) {
+async function discordHelp(ctx: DiscordContext) {
 	await ctx.message.channel.send("no help defined");
 }
