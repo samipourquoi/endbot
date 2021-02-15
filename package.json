@@ -40,6 +40,7 @@
 		"express": "^4.17.1",
 		"nearest-colors": "^1.0.0",
 		"rcon-client": "^4.2.3",
+		"sequelize": "^6.5.0",
 		"yaml": "^1.10.0"
 	}
 }
