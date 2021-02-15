@@ -8,4 +8,5 @@ services:
       dockerfile: ./docker/bot/Dockerfile
     volumes:
       - ../config:/etc/endbot/config
-      - /:/etc/endbot/servers
+    ports:
+      - 34345:34345

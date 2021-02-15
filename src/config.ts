@@ -6,6 +6,8 @@ export module Config {
 		token: string,
 
 		servers: Server[]
+
+		webhook_port?: number
 	}
 
 	export interface Server {
@@ -14,8 +16,7 @@ export module Config {
 		rcon_port: number,
 		rcon_password: string,
 		bridge_channel: string,
-		ops_only?: boolean,
-		log_path: string
+		ops_only?: boolean
 	}
 
 	const defaultConfig: Config = {
@@ -28,7 +29,6 @@ export module Config {
 				rcon_password: "supersecret",
 				bridge_channel: "<CHANNEL ID>",
 				ops_only: true,
-				log_path: "path/to/latest.log"
 			}
 		]
 	}

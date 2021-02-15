@@ -2,7 +2,8 @@ import { Client, Message, MessageEmbed, TextChannel } from "discord.js";
 import { Closure, CommandContext, Dispatcher } from "./commands";
 import { Colors } from "./utils/theme";
 import { Config } from "./config";
-import { Bridge, Bridges } from "./bridge";
+import { Bridge, Bridges } from "./bridge/bridge";
+import { Webhook } from "./bridge/webhook";
 
 export class Endbot
 	extends Client {
@@ -30,7 +31,7 @@ export class Endbot
 
 		const bridges = Bridges.getFromMessage(message);
 		await bridges.forEach(bridge => {
-			bridge.onDiscordMessage(message);
+			bridge.emit("discord", message);
 		});
 
 		// Checks prefix
@@ -58,5 +59,6 @@ export class Endbot
 			const bridge = new Bridge(server, channel as TextChannel);
 			await bridge.connect();
 		}
+		Webhook.init();
 	}
 }
