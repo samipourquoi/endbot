@@ -1,93 +1,115 @@
-![Test](https://github.com/samipourquoi/endbot/workflows/Test/badge.svg?branch=master)
-![Lint](https://github.com/samipourquoi/endbot/workflows/Linter/badge.svg?branch=master)
 # EndBot
-
-Minecraft linking bot with other general utilities. Made for the technical minecraft server called [EndTech](https://discord.gg/t7UwaDc).
+Minecraft linking bot with other general utilities. Made for the technical minecraft server called [EndTech][0].
 However, it can be used by anyone willing to do so.
 
-Click [here](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md) for the documentation.
+## Compile and use
+To recommended way is to use [Docker][1].
 
-# Setup
+Create a discord bot account as shown [here][2].
+Activating the Developer mode on Discord will also be useful ([link][3]).
 
-Make sure you have the latest version of [Node](https://nodejs.org/en/) installed.
+Finally, learn more about the YAML syntax if you don't already know it
+[here][4].
 
-First of all, open the command line. Do not copy the `$` at the start of each command.
-
-Run this command to clone and open the bot files:
-```shell script
+Open the command line and clone the repository:
+```shell
 $ git clone https://github.com/samipourquoi/endbot.git
 $ cd endbot
 ```
 
-Then install the dependencies:
-```shell script
-$ npm install
+Simply run:
+```shell
+$ make prod
+
+# if you don't have make installed:
+$ cd docker
+$ docker-compose up -d
 ```
 
-Configure the bot in the next section. Learn about the JSON syntax if you don't know it yet [here](https://www.digitalocean.com/community/tutorials/an-introduction-to-json).
+It will create a new file under `config/config.yml`. Fill it accordingly to the following section.
 
-Create a discord app by following [this tutorial](https://discordpy.readthedocs.io/en/latest/discord.html).
-
-Set up a MySQL database using [this tutorial](https://ladvien.com/data-analytics-mysql-localhost-setup/) (don't worry, it is pretty easy!) 
-
-Lastly, activate the Developer mode on Discord to grab necessary IDs, in [this page](https://discordia.me/en/developer-mode).
-
-# Index file
-
-In the `server.properties` of your server(s), **change these properties**:
-- `broadcast-rcon-to-ops` to `false` to prevent command log spam to ops
-- `enable-rcon` to `true`
-- `rcon.port` choose a unique port
-- `rcon.password` choose a password.
-
-**Copy `config.template.json` to `config.json` in the root directory.**
-Fill in the fields:
-- `token` Token of your discord bot
-- `client-secret` Client secret of your discord application
-- `prefix` Prefix of the bot. Defaulted to `!`. Feel free to change it to whatever single character you want.
-- `backup-role` ID of the role allowed to use the [`backup`](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md#backup)
-command.
-- `backup-format` Format in which the archived backup will be in. Defaulted and recommended to use `tar.gz`.
-- `op-role` ID of the role allowed to use the [`execute`](https://github.com/samipourquoi/endbot/blob/master/COMMANDS.md#execute) command.
-- `database_config` Index for the MySQL database
-		- `host` IP of the database (it often is `localhost`)
-		- `user` User
-		- `password` Password
-		- `database` Name of the database (schema)
-- `servers` Array of the configuration of all servers. You can add as many as you want.
-    - `name` Name with which the bot will use when refering to that server.
-    - `host` IP of the server, without any ports.
-    - `rcon-port` Port of the Rcon of the server.
-    - `rcon-password` Password of the Rcon.
-    - `bridge-channel` ID of the channel that will be used as a bridge.
-    - `requires_op-role` True/False: Wheather or not the op-role is required to execute commands on the server
-    - `log-path` Absolute path to the `latest.log` file of the server. It's usually found in `logs`.
-	
-	
-## Optional fields
-- `colors-override`: For instance, the color `#B96AD0` appears gray in game when speaking through a bridge,
-but appears purple to our eyes. The color actually is closer to gray than purple, but we don't see it this way. To solve that issue, you can include the following:
-```json
-"colors-override": {
-	"#B96AD0": "light_purple"
-}
-```
-The list of color names are: `dark_red`, `red`, `gold`, `yellow`, `dark_green`, `green`, 
-`aqua`, `dark_aqua`, `dark_blue`, `blue`, `light_purple`, `dark_purple`, `white`, `gray`, `dark_gray`, `black`.
-
-# Run
-
-To start the bot, run:
-```shell script
-$ npm start
+For each server configured, you will need to run this command on the host machine.
+Make sure you replace `<path/to/logs/latest.log>` and `<server_name>` to an actual value. 
+Search how to run a process in the background on your os.
+```shell
+$ tail -f -n0 <path/to/logs/latest.log> | 
+  while read x; do echo -n $x |
+  curl -X POST -d @- http://localhost:34345/link/<server_name>; done
 ```
 
-There are some flags useful for debugging:
-- `--no-servers` will disable the connection of the bot to the MC servers. It will crash if someone tries to execute
-a command requiring a server.
-- `--debug` will print debug informations, like those from the discord connection.
+Once your config is done, rerun the above command, and you're good to go!
 
-To use a flag, do: (notice the `--`)
-```shell script
-$ npm start -- <flags>
+### Config
+In your minecraft server(s), you will need to set these fields in the `server.properties`:
+```properties
+enable-rcon=true
+# If you already have a server with this port open,
+# you will need to chose another port.
+rcon-port=25575
+# Please change this password...
+rcon-password=supersecret
+# to prevent log spam for ops
+broadcast-rcon-to-ops=false
 ```
+
+Then, create a file at `config/config.yml` if it doesn't already exist and
+fill it in according to the following:
+```yaml
+# Your bot's token. Needs to be kept private.
+token: Njg4OTA2Njk0NzQ2ODMzMCYy.Xm7IWw.Na2yuH3tKVrc0qGSef8C0jek3v0
+
+# This is an array: you can add as many
+# servers as you want!
+servers:
+  - # Your server name. Can be anything.
+    name: MyCoolServer
+    # Your server's ip. Use host.docker.internal if the server is hosted 
+    # on your machine and you're using docker.
+    host: host.docker.internal
+    # Your server's rcon port.
+    rcon_port: 25575
+    # Your server's rcon password.
+    rcon_password: supersecret
+    # The id of a discord channel your server will be linked with.
+    # **NEEDS TO BE PUT IN QUOTES**.
+    bridge_channel: "764219513511477308"
+    # If true, only members having the op-role can execute commands from
+    # the bridge channel. Optional, defaults to true.
+    ops_only: true
+
+## THE FOLLOWING FIELDS ARE TOTALLY OPTIONAL AND ARE NOT MEANT.
+## TO BE USED BY EVERYONE.
+
+# If you're using another MySQL database that the one
+# provided in the docker compose configuration, fill these in:
+database:
+  user: endbot
+  host: my.cool.domain
+  password: password1234
+  db: enddb
+  port: 3306
+
+# Config to use the !links command.
+discord_links:
+  # The id of the server in which the server emotes
+  # will be created.
+  emote_server_id: "797540402927239198"
+```
+
+## Contribute
+To run Endbot in a development environment, do:
+```shell
+$ make dev
+
+# or if you don't have make installed:
+$ cd docker
+$ docker-compose -f docker-compose.dev.yml up --build
+```
+
+It will watch your files and automatically recompile it on change.
+
+[0]: https://discord.gg/t7UwaDc
+[1]: https://docker.com
+[2]: https://discordpy.readthedocs.io/en/latest/discord.html
+[3]: https://discordia.me/en/developer-mode
+[4]: https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html

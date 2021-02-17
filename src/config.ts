@@ -7,7 +7,7 @@ export module Config {
 		token: string,
 		servers: Server[]
 		webhook_port?: number
-		database: DatabaseConfig
+		database?: Database
 		discord_links?: {
 			emote_server_id: string
 		}
@@ -22,7 +22,7 @@ export module Config {
 		ops_only?: boolean
 	}
 
-	export interface DatabaseConfig {
+	export interface Database {
 		user: string,
 		password: string,
 		host: string,
@@ -35,7 +35,7 @@ export module Config {
 		servers: [
 			{
 				name: "Server",
-				host: "localhost",
+				host: "host.docker.internal # Use 'localhost' if you're not using docker",
 				rcon_port: 25575,
 				rcon_password: "supersecret",
 				bridge_channel: "<CHANNEL ID>",
@@ -45,7 +45,7 @@ export module Config {
 		database: {
 			user: "endbot",
 			password: "supersecret",
-			host: "localhost",
+			host: "db",
 			db: "enddb",
 			port: 3306
 		},

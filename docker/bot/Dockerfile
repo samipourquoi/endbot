@@ -12,6 +12,4 @@ COPY . .
 
 RUN npm run build
 
-ENV ENV=production
-
 CMD [ "npm", "start" ]

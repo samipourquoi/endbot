@@ -2,18 +2,19 @@ version: "3"
 
 services:
   bot:
-    container_name: bot
     build:
       context: ..
       dockerfile: ./docker/bot/Dockerfile
     volumes:
       - ../config:/etc/endbot/config
+      - ../src:/app/src
     ports:
       - 34345:34345
     depends_on:
       - db
     environment:
-      ENV: "production"
+      ENV: "development"
+    command: npm run dev
 
   db:
     image: mysql
@@ -22,9 +23,15 @@ services:
       --character-set-server=utf8mb4
       --collation-server=utf8mb4_unicode_ci
     restart: always
-    container_name: db
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: 1
       MYSQL_DATABASE: enddb
       MYSQL_USER: endbot
       MYSQL_PASSWORD: supersecret
+    ports:
+      - 3306:3306
+
+    # Removes 'mbind: Operation not permitted'
+    # spam in the logs.
+    security_opt:
+      - seccomp:unconfined

@@ -5,6 +5,7 @@ node_modules
 # config
 config/config.yml
 config.json
+config.template.json
 
 # idea
 .idea

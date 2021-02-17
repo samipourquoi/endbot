@@ -1,9 +1,0 @@
-token: <your token here>
-servers:
-  - name: Server
-    host: host.docker.internal
-    rcon_port: 25575
-    rcon_password: password
-    bridge_channel: "012345678901234123"
-    ops_only: true
-    log_path: /host_mnt/Users/sami/Desktop/Server/logs/latest.log
