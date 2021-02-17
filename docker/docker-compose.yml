@@ -10,19 +10,28 @@ services:
       - ../config:/etc/endbot/config
     ports:
       - 34345:34345
+    depends_on:
+      - db
+    networks:
+      ENDBOT:
 
   db:
     image: mysql
-    command: --default-authentication-plugin=mysql_native_password
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
     restart: always
     container_name: db
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: 1
       MYSQL_DATABASE: enddb
-      MYSQL_USER: sami
-      MYSQL_PASSWORD: password
+      MYSQL_USER: endbot
+      MYSQL_PASSWORD: supersecret
     ports:
       - 3306:3306
+    networks:
+      ENDBOT:
 
 networks:
   ENDBOT:

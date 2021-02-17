@@ -1,13 +1,16 @@
 import * as YAML from "yaml";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { Snowflake } from "discord.js";
 
 export module Config {
 	export interface Config {
 		token: string,
-
 		servers: Server[]
-
 		webhook_port?: number
+		database: DatabaseConfig
+		discord_links?: {
+			emote_server_id: string
+		}
 	}
 
 	export interface Server {
@@ -17,6 +20,14 @@ export module Config {
 		rcon_password: string,
 		bridge_channel: string,
 		ops_only?: boolean
+	}
+
+	export interface DatabaseConfig {
+		user: string,
+		password: string,
+		host: string,
+		db: string,
+		port?: number
 	}
 
 	const defaultConfig: Config = {
@@ -30,7 +41,15 @@ export module Config {
 				bridge_channel: "<CHANNEL ID>",
 				ops_only: true,
 			}
-		]
+		],
+		database: {
+			user: "endbot",
+			password: "supersecret",
+			host: "localhost",
+			db: "enddb",
+			port: 3306
+		},
+		webhook_port: 34345
 	}
 
 	export function init(): Config {

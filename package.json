@@ -36,8 +36,10 @@
 	},
 	"dependencies": {
 		"@samipourquoi/commander": "^1.4.1",
+		"canvas": "^2.6.1",
 		"discord.js": "^12.2.0",
 		"express": "^4.17.1",
+		"mysql2": "^2.2.5",
 		"nearest-colors": "^1.0.0",
 		"rcon-client": "^4.2.3",
 		"sequelize": "^6.5.0",

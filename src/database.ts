@@ -1,26 +1,30 @@
 import { Sequelize, STRING, TEXT } from "sequelize";
+import { config } from "./index";
 
 export module Database {
+	const { database: c } = config;
+
 	export const sequelize = new Sequelize(
-		"enddb",
-		"endbot",
-		"supersecret",
+		c.db,
+		c.user,
+		c.password,
 		{
-			host: "localhost",
+			host: c.host,
 			dialect: "mysql",
 			logging: false
 		}
 	);
 
-	export const Presets = sequelize.define("presets", {
-		owner: STRING,
-		name: STRING,
-		objectives: TEXT
+	export const Links = sequelize.define("links", {
+		emote: STRING,
+		invite: STRING,
+		registry: STRING,
+		server_name: STRING
 	});
 
-	async function init() {
+	export async function init() {
 		await Promise.all([
-			Presets.sync()
+			Links.sync()
 		]);
 	}
 }

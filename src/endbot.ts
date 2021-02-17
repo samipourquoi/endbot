@@ -1,27 +1,27 @@
 import { Client, Message, MessageEmbed, TextChannel } from "discord.js";
 import { DiscordClosure, DiscordContext, DiscordDispatcher } from "./commands/discord";
 import { Colors } from "./utils/theme";
-import { Config } from "./config";
 import { Bridge, Bridges } from "./bridge/bridge";
 import { Webhook } from "./bridge/webhook";
+import { Database } from "./database";
+import { config } from "./index";
 
 export class Endbot
 	extends Client {
 
 	dispatcher: DiscordDispatcher;
 	prefix: string;
-	config: Config.Config;
 
 	constructor() {
 		super();
 
 		this.dispatcher = new DiscordDispatcher();
 		this.prefix = "!";
-		this.config = Config.init();
 
 		this.on("message", this.filter)
-		this.once("ready", () => {
-			this.initServers();
+		this.once("ready", async () => {
+			await Database.init();
+			await this.initServers();
 			console.info(`Logged on as ${this.user?.username}`)
 		});
 	}
@@ -53,7 +53,7 @@ export class Endbot
 	}
 
 	async initServers() {
-		for (const server of this.config.servers) {
+		for (const server of config.servers) {
 			const channel = await this.channels
 				.fetch(server.bridge_channel.toString());
 			const bridge = new Bridge(server, channel as TextChannel);

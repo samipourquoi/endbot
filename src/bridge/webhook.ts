@@ -1,7 +1,7 @@
 import * as Express from "express";
 import { Request, Response } from "express";
 import { Bridges } from "./bridge";
-import { instance } from "../index";
+import { config, instance } from "../index";
 
 export module Webhook {
 	export const webhook = Express();
@@ -41,7 +41,7 @@ export module Webhook {
 				.end();
 		});
 
-		const port = instance.config.webhook_port || 34345;
+		const port = config.webhook_port || 34345;
 		webhook.listen(port, () => {
 			console.info(`Webhook listening to port ${port}`);
 		});
