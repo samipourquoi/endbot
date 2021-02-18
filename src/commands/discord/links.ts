@@ -1,11 +1,12 @@
 import { Command, QuotedType, UnquotedStringType } from "@samipourquoi/commander";
-import { DiscordContext } from "./index";
 import { EmbedFieldData, Guild, MessageEmbed, TextBasedChannel, TextChannel } from "discord.js";
 import { Colors } from "../../utils/theme";
 import { config, instance } from "../../index";
 import { Database } from "../../database";
 import * as Canvas from "canvas";
+import { command, discord, DiscordContext } from "../dispatcher";
 
+@command(discord)
 export class LinksCommand
 	extends Command {
 

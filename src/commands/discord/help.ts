@@ -1,7 +1,8 @@
 import { Command } from "@samipourquoi/commander";
-import { DiscordContext } from "./index";
+import { command, discord, DiscordContext } from "../dispatcher";
 
-export class HelpCommand
+@command(discord)
+class HelpCommand
 	extends Command {
 
 	constructor() {

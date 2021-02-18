@@ -1,6 +1,7 @@
 import { Command } from "@samipourquoi/commander";
-import { MinecraftContext } from "./index";
+import { command, minecraft, MinecraftContext } from "../dispatcher";
 
+@command(minecraft)
 export class HelpCommand
 	extends Command {
 

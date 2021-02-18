@@ -1,9 +1,10 @@
 import { Command } from "@samipourquoi/commander";
-import { DiscordContext } from "./index";
 import { Bridge, Bridges } from "../../bridge/bridge";
 import { MessageEmbed, Util } from "discord.js";
 import { Colors } from "../../utils/theme";
+import { command, discord, DiscordContext } from "../dispatcher";
 
+@command(discord)
 export class OnlineCommand
 	extends Command {
 

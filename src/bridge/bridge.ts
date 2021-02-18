@@ -3,8 +3,9 @@ import { Config } from "../config";
 import { Message, TextChannel, Util } from "discord.js";
 import { ColorUtils } from "../utils/colors";
 import { EventEmitter } from "events";
-import { MinecraftClosure, MinecraftDispatcher } from "../commands/minecraft";
+import { MinecraftClosure } from "../commands/dispatcher";
 import { instance } from "../index";
+import { minecraft } from "../commands/dispatcher";
 
 export declare interface Bridge {
 	emit(event: "minecraft", line: string): boolean;
@@ -17,7 +18,6 @@ export class Bridge
 	extends EventEmitter {
 
 	public rcon: Rcon;
-	public static dispatcher: MinecraftDispatcher = new MinecraftDispatcher();
 
 	constructor(public config: Config.Server,
 				public channel: TextChannel) {
@@ -67,7 +67,7 @@ export class Bridge
 		};
 
 		try {
-			Bridge.dispatcher.run(content.slice(prefix.length), closure);
+			minecraft.run(content.slice(prefix.length), closure);
 		} catch (e) {
 			await this.error(` > Unexpected error: ${e}`);
 		}

@@ -1,21 +1,20 @@
 import { Client, Message, MessageEmbed, TextChannel } from "discord.js";
-import { DiscordClosure, DiscordContext, DiscordDispatcher } from "./commands/discord";
 import { Colors } from "./utils/theme";
 import { Bridge, Bridges } from "./bridge/bridge";
 import { Webhook } from "./bridge/webhook";
 import { Database } from "./database";
 import { config } from "./index";
+import { discord } from "./commands/dispatcher";
+import { DiscordClosure } from "./commands/dispatcher";
 
 export class Endbot
 	extends Client {
 
-	dispatcher: DiscordDispatcher;
 	prefix: string;
 
 	constructor() {
 		super();
 
-		this.dispatcher = new DiscordDispatcher();
 		this.prefix = "!";
 
 		this.on("message", this.filter)
@@ -40,7 +39,7 @@ export class Endbot
 		const closure: DiscordClosure = { message };
 
 		try {
-			this.dispatcher.run(
+			discord.run(
 				message.content.slice(this.prefix.length),
 				closure
 			);
