@@ -10,7 +10,8 @@ export module Config {
 		database?: Database
 		discord_links?: {
 			emote_server_id: string
-		}
+		},
+		application_system?: ApplicationSystem
 	}
 
 	export interface Server {
@@ -30,6 +31,11 @@ export module Config {
 		port?: number
 	}
 
+	export interface ApplicationSystem {
+		guild_id: Snowflake,
+		category_id: Snowflake
+	}
+
 	const defaultConfig: Config = {
 		token: "<YOUR TOKEN HERE>",
 		servers: [
@@ -42,13 +48,6 @@ export module Config {
 				ops_only: true,
 			}
 		],
-		database: {
-			user: "endbot",
-			password: "supersecret",
-			host: "db",
-			db: "enddb",
-			port: 3306
-		},
 		webhook_port: 34345
 	}
 
