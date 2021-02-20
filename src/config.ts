@@ -11,7 +11,8 @@ export module Config {
 		discord_links?: {
 			emote_server_id: string
 		},
-		application_system?: ApplicationSystem
+		application_system?: ApplicationSystem,
+		web?: WebConfig
 	}
 
 	export interface Server {
@@ -34,6 +35,10 @@ export module Config {
 	export interface ApplicationSystem {
 		guild_id: Snowflake,
 		category_id: Snowflake
+	}
+
+	export interface WebConfig {
+		port: number
 	}
 
 	const defaultConfig: Config = {

@@ -7,5 +7,8 @@ prod:
 dev:
 	cd docker && docker-compose -f docker-compose.dev.yml up --build
 
+dev_db:
+	cd docker && docker-compose -f docker-compose.dev.yml up -d db
+
 clean:
 	rm -rf dist node_modules

@@ -16,11 +16,11 @@ export module Database {
 	const { database: c = defaultDatabaseConfig } = config;
 
 	export const sequelize = new Sequelize(
-		c.db,
-		c.user,
-		c.password,
+		c.db 		|| defaultDatabaseConfig.db,
+		c.user 	|| defaultDatabaseConfig.user,
+		c.password || defaultDatabaseConfig.password,
 		{
-			host: c.host,
+			host: c.host 	|| defaultDatabaseConfig.host,
 			dialect: "mysql",
 			logging: false
 		}
@@ -60,7 +60,6 @@ export module Database {
 		round: {
 			type: INTEGER,
 			autoIncrement: true,
-			defaultValue: 0,
 			primaryKey: true
 		},
 		applicant_id: {
