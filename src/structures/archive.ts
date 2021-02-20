@@ -139,9 +139,13 @@ export class Ticket
 		return new Ticket(channel);
 	}
 
-	async archive(): Promise<void> {
+	async archive(status: TicketStatus = TicketStatus.DECLINED): Promise<void> {
 		const history = await Archive.getMessageHistory(this.channel);
 		const encoded = JSON.stringify(history.map(message => message.toJSON()));
+		const entry = await Database.Tickets.update(
+			{ raw_messages: encoded, status },
+			{ where: { channel_id: this.channel.id } }
+		);
 	}
 }
 
