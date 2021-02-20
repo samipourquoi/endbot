@@ -36,19 +36,6 @@ export module Database {
 		server_name: STRING
 	});
 
-	export const Applicants: ModelDefined<
-		Schemas.ApplicantAttributes,
-		Schemas.ApplicantAttributes
-	> = sequelize.define("applicants", {
-		applicant_id: {
-			type: STRING,
-			primaryKey: true
-		},
-		discriminator: STRING(4),
-		profile_picture: STRING,
-		rounds: INTEGER
-	});
-
 	export const Tickets: ModelDefined<
 		Schemas.TicketAttributes,
 		Optional<Schemas.TicketAttributes, "status" | "round">
@@ -64,7 +51,8 @@ export module Database {
 		},
 		applicant_id: {
 			type: STRING,
-			primaryKey: true
+			primaryKey: true,
+			allowNull: true
 		},
 		channel_id: STRING,
 		raw_messages: new TEXT("medium"),
@@ -73,10 +61,9 @@ export module Database {
 	export async function init() {
 		await Promise.all([
 			Links,
-			Applicants,
 			Tickets
 		].map(table => table.sync({
-			alter: false
+			alter: true
 		})));
 	}
 }
@@ -89,18 +76,11 @@ export module Schemas {
 		server_name: string
 	}
 
-	export interface ApplicantAttributes {
-		applicant_id: Snowflake,
-		discriminator: string,
-		profile_picture: string,
-		rounds: number
-	}
-
 	export interface TicketAttributes {
 		status: TicketStatus,
 		round: number,
 		channel_id: Snowflake,
-		applicant_id: Snowflake,
+		applicant_id: Snowflake | null,
 		raw_messages: string
 	}
 }

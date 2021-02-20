@@ -1,5 +1,4 @@
 POST localhost:8080/api/apps
 Content-Type: application/x-www-form-urlencoded
-Bearer: hello
 
-test=hello
+What is your Discord Tag?=samipourquoi#9267&What's your name=sami

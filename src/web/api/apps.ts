@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import { IpFilter as ipfilter } from "express-ipfilter";
+import { Ticket } from "../../structures/archive";
 
 export const apiAppsRouter = Router();
 
@@ -21,6 +22,13 @@ if (process.env.ENV == "production") {
 
 apiAppsRouter.post("/apps", onPostApps);
 
-function onPostApps(req: Request, res: Response) {
+async function onPostApps(req: Request, res: Response) {
+	const answers = req.body;
+	try {
+		const ticket = await Ticket.generate(answers);
+	} catch (e) {
+		console.error(e);
+	}
+
 	res.end();
 }
