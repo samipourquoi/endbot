@@ -67,7 +67,7 @@ export class Bridge
 		};
 
 		try {
-			minecraft.run(content.slice(prefix.length), closure);
+			await minecraft.run(content.slice(prefix.length), closure);
 		} catch (e) {
 			await this.error(` > Unexpected error: ${e}`);
 		}

@@ -9,11 +9,12 @@ import {
 	TextChannel
 } from "discord.js";
 import { config, instance } from "../index";
-import { Database } from "../database";
+import { Database, Schemas } from "../database";
 import { Colors } from "../utils/theme";
 
 export interface Archivable {
-	archive(): Promise<void>;
+	archive(status: any): Promise<void>;
+	vote(context: any): Promise<Channel>;
 }
 
 export module Archive {
@@ -44,7 +45,8 @@ export module Archive {
 export class Ticket
 	implements Archivable {
 
-	private constructor(public channel: TextChannel) {
+	private constructor(public channel: TextChannel,
+						public data: Schemas.TicketAttributes & Partial<Schemas.ApplicantAttributes>) {
 	}
 
 	static async generate(answers: { [k: string]: string }): Promise<Ticket> {
@@ -53,7 +55,7 @@ export class Ticket
 		const guild = await instance.guilds.resolve(config.application_system.guild_id)!;
 
 		const tag = answers["What is your Discord Tag?"];
-		const [, username ] = /(.+)#[0-9]{4}/g.exec(tag) ?? [];
+		const [, username, discriminator ] = /(.+)#([0-9]{4})/g.exec(tag) ?? [];
 
 		// Fetches the user on the guild
 		const members = await guild.members.fetch();
@@ -118,34 +120,65 @@ export class Ticket
 			await channel.send(embed);
 		}
 
-		const ticket = new Ticket(channel);
-
-		await Database.Tickets.create({
+		const ticket = await Database.Tickets.create({
 			channel_id: channel.id,
 			applicant_id: member?.user.id || null,
 			raw_messages: "[]"
 		});
 
-		return ticket;
+		const applicant_id = member?.user.id || null;
+
+		const [ applicant ] = await Database.Applicants.findOrCreate({
+			where: { applicant_id },
+			defaults: {
+				applicant_id,
+				profile_picture: member?.user.displayAvatarURL() || "",
+				name: username,
+				discriminator
+			}
+		})
+
+		return new Ticket(channel, { ...applicant.get(), ...ticket.get() });
 	}
 
 	static async from(channel: TextChannel): Promise<Ticket | null> {
 		const ticket = await Database.Tickets.findOne({
 			where: {
 				channel_id: channel.id
-			}
+			},
 		});
 		if (!ticket) return null;
-		return new Ticket(channel);
+		const applicant = await Database.Applicants.findOne({
+			where: { applicant_id: ticket.get().applicant_id }
+		});
+
+		return new Ticket(channel, { ...ticket.get(), ...applicant?.get() });
 	}
 
-	async archive(status: TicketStatus = TicketStatus.DECLINED): Promise<void> {
+	async archive(status: TicketStatus): Promise<void> {
 		const history = await Archive.getMessageHistory(this.channel);
 		const encoded = JSON.stringify(history.map(message => message.toJSON()));
 		const entry = await Database.Tickets.update(
 			{ raw_messages: encoded, status },
 			{ where: { channel_id: this.channel.id } }
 		);
+	}
+
+	async vote(): Promise<Channel> {
+		const channel = await instance.channels.fetch(config.application_system!.voting_channel) as TextChannel;
+		if (!channel) throw "invalid voting channel";
+
+		const embed = new MessageEmbed()
+			.setColor(Colors.ENDTECH)
+			.setAuthor(this.data.name || "unknown name",
+				this.data.profile_picture)
+			.setDescription(`<#${this.data.channel_id}>`);
+
+		const message = await channel.send(embed);
+		await message.react(config.application_system!.yes);
+		await message.react(config.application_system!.no);
+
+		return channel;
 	}
 }
 

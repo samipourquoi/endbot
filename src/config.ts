@@ -34,7 +34,10 @@ export module Config {
 
 	export interface ApplicationSystem {
 		guild_id: Snowflake,
-		category_id: Snowflake
+		category_id: Snowflake,
+		voting_channel: Snowflake,
+		yes: string,
+		no: string
 	}
 
 	export interface WebConfig {

@@ -58,10 +58,25 @@ export module Database {
 		raw_messages: new TEXT("medium"),
 	});
 
+	export const Applicants: ModelDefined<
+		Schemas.ApplicantAttributes,
+		Schemas.ApplicantAttributes
+	> = sequelize.define("applicants", {
+		applicant_id: {
+			type: STRING,
+			allowNull: true,
+			primaryKey: true
+		},
+		profile_picture: STRING,
+		name: STRING,
+		discriminator: STRING
+	});
+
 	export async function init() {
 		await Promise.all([
 			Links,
-			Tickets
+			Tickets,
+			Applicants
 		].map(table => table.sync({
 			alter: true
 		})));
@@ -82,5 +97,12 @@ export module Schemas {
 		channel_id: Snowflake,
 		applicant_id: Snowflake | null,
 		raw_messages: string
+	}
+
+	export interface ApplicantAttributes {
+		applicant_id: Snowflake | null,
+		profile_picture: string,
+		name: string,
+		discriminator: string
 	}
 }

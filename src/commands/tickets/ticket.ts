@@ -1,6 +1,6 @@
 import { command, discord, DiscordContext } from "../dispatcher";
 import { Command } from "@samipourquoi/commander";
-import { config } from "../../index";
+import { config, instance } from "../../index";
 import { Ticket, TicketStatus } from "../../structures/archive";
 import { MessageEmbed, TextChannel } from "discord.js";
 import { Colors } from "../../utils/theme";
@@ -18,7 +18,7 @@ class TicketCommand
 			.with.literal("yes", "accept").run(close(TicketStatus.ACCEPTED))
 			.or.literal("no", "decline").run(close(TicketStatus.DECLINED))
 			.or.literal("bruh").run(close(TicketStatus.BRUH))
-			.or.literal("vote")
+			.or.literal("vote").run(vote);
 	}
 }
 
@@ -36,4 +36,13 @@ function close(status: TicketStatus) {
 		await ticket.archive(status);
 		await ctx.message.channel.delete();
 	}
+}
+
+async function vote(ctx: DiscordContext) {
+	if (!config.application_system) return;
+
+	const ticket = await Ticket.from(ctx.message.channel as TextChannel);
+	if (!ticket) throw "this channel isn't a ticket";
+
+	await ticket.vote();
 }

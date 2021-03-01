@@ -41,7 +41,7 @@ export class Endbot
 		const closure: DiscordClosure = { message };
 
 		try {
-			discord.run(
+			await discord.run(
 				message.content.slice(this.prefix.length),
 				closure
 			);
