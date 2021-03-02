@@ -2,10 +2,7 @@ version: "3"
 
 services:
   bot:
-    container_name: bot
-    build:
-      context: ..
-      dockerfile: ./docker/bot/Dockerfile
+    build: ..
     volumes:
       - ../config:/etc/endbot/config
     ports:
@@ -22,7 +19,6 @@ services:
       --character-set-server=utf8mb4
       --collation-server=utf8mb4_unicode_ci
     restart: always
-    container_name: db
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: 1
       MYSQL_DATABASE: enddb

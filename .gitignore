@@ -13,6 +13,7 @@ config.template.json
 
 # tmp
 old-src
+yarn-error.log
 
 # macOS
 .DS_Store

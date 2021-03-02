@@ -1,7 +1,5 @@
 # config
-config.yml
-config.yaml
-config.json
+config
 
 # build
 node_modules

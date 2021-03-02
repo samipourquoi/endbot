@@ -2,12 +2,10 @@ version: "3"
 
 services:
   bot:
-    build:
-      context: ..
-      dockerfile: ./docker/bot/Dockerfile
+    build: ..
     volumes:
       - ../config:/etc/endbot/config
-      - ../src:/app/src
+      - ../packages/endbot/src:/app/packages/endbot/src
     ports:
       - 34345:34345
     depends_on:

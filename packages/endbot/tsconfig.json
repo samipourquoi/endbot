@@ -1,11 +1,11 @@
 {
 	"compilerOptions": {
-        "experimentalDecorators": true,
+		"experimentalDecorators": true,
+		"sourceRoot": "src",
+		"outDir": "dist",
 		"module": "commonjs",
 		"target": "es6",
 		"sourceMap": true,
-		"sourceRoot": "src",
-		"outDir": "dist",
 		"strict": true,
 		"alwaysStrict": true,
 		"incremental": true,

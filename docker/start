@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+/* Starts Endbot */
+require("endbot");
