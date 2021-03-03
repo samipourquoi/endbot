@@ -3,6 +3,7 @@
 	"name": "endtech",
 	"workspaces": [ "packages/*" ],
 	"scripts": {
-		"start": "./docker/start"
+		"start": "./docker/start",
+		"build": "yarn workspaces run build"
 	}
 }

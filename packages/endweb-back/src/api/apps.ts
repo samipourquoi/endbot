@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { IpFilter as ipfilter } from "express-ipfilter";
-import { Ticket } from "../../structures/archive";
+import { Ticket } from "endbot/dist/structures/archive";
 
 export const apiAppsRouter = Router();
 

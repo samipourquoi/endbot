@@ -6,7 +6,6 @@ import { Database } from "./database";
 import { config } from "./index";
 import { discord } from "./commands/dispatcher";
 import { DiscordClosure } from "./commands/dispatcher";
-import { Web } from "./web";
 
 export class Endbot
 	extends Client {
@@ -22,7 +21,6 @@ export class Endbot
 		this.once("ready", async () => {
 			await Database.init();
 			await this.initServers();
-			await Web.init();
 			console.info(`Logged on as ${this.user?.username}`)
 		});
 	}

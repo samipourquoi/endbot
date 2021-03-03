@@ -5,7 +5,7 @@
 	"main": "dist/index.js",
 	"scripts": {
 		"start": "node .",
-		"build": "npx tsc --version && npx tsc",
+		"build": "npx tsc",
 		"dev": "npx tsc-watch --onSuccess \"node .\""
 	},
 	"repository": "git+https://github.com/samipourquoi/endbot.git",

@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		"experimentalDecorators": true,
+		"module": "commonjs",
+		"target": "es6",
+		"sourceMap": true,
+		"strict": true,
+		"alwaysStrict": true,
+		"incremental": true,
+		"skipLibCheck": true,
+		"moduleResolution": "Node",
+		"declaration": true,
+		"composite": true,
+		"resolveJsonModule": true
+	},
+	"exclude": [
+		"node_modules",
+		"**/dist"
+	]
+}
