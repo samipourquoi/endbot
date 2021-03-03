@@ -4,6 +4,7 @@ config
 # build
 node_modules
 dist
+.cache
 
 # misc
 .idea

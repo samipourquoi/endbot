@@ -3,6 +3,7 @@
 	"version": "3.0.0",
 	"license": "MIT",
 	"scripts": {
+		"build": "npx parcel build src/index.html",
 		"dev": "npx parcel src/index.html"
 	},
 	"dependencies": {

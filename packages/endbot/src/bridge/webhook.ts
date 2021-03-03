@@ -1,10 +1,10 @@
-import * as Express from "express";
+import * as express from "express";
 import { Request, Response } from "express";
 import { Bridges } from "./bridge";
 import { config, instance } from "../index";
 
 export module Webhook {
-	export const webhook = Express();
+	export const webhook = express();
 
 	export function init() {
 		// Copy pasted from:
