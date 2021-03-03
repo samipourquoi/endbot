@@ -11,7 +11,9 @@
 		"moduleResolution": "Node",
 		"declaration": true,
 		"composite": true,
-		"resolveJsonModule": true
+		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true
 	},
 	"exclude": [
 		"node_modules",
