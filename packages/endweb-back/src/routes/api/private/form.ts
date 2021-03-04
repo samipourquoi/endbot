@@ -2,11 +2,12 @@ import { Request, Response, Router } from "express";
 import { IpFilter as ipfilter } from "express-ipfilter";
 import { Ticket } from "endbot/dist/structures/archive";
 
-export const apiAppsRouter = Router();
+module.exports = Router()
+	.post("/", onPostApps);
 
 if (process.env.ENV == "production") {
 	// Only authorize Google's IPs.
-	apiAppsRouter.use(ipfilter([
+	module.exports.use(ipfilter([
 		[ "216.239.32.0", "216.239.63.255" ],
 		[ "64.233.160.0", "64.233.191.255" ],
 		[ "66.249.80.0", "66.249.95.255" ],
@@ -19,8 +20,6 @@ if (process.env.ENV == "production") {
 		[ "173.194.0.0", "173.194.255.255" ]
 	], { mode: "allow" }));
 }
-
-apiAppsRouter.post("/apps", onPostApps);
 
 async function onPostApps(req: Request, res: Response) {
 	const answers = req.body;

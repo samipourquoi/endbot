@@ -1,7 +1,9 @@
 import * as express from "express";
 import { config, instance } from "endbot";
+import { router } from "./routes";
 
-export const web = express();
+export const web = express()
+	.use(router);
 const port = config.web?.port ||
 	process.env.PORT ||
 	8080;
