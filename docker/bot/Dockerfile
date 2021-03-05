@@ -36,4 +36,6 @@ RUN yarn workspace endweb-back build
 
 COPY . .
 
+ENV CONTAINER=1
+
 ENTRYPOINT ["yarn", "start"]

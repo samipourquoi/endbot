@@ -5,7 +5,7 @@
 	"scripts": {
 		"start": "./docker/start",
 		"build": "yarn workspaces run build",
-		"dev:db": "cd docker && docker-compose -f docker-compose.dev.yml up -d db",
+		"dev:db": "cd docker && docker-compose -f docker-compose.dev.yml up -d db redis",
 		"dev": "cd docker && docker-compose -f docker-compose.dev.yml up --build",
 		"prod": "cd docker && docker-compose up -d --build"
 	}

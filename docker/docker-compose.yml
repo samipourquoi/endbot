@@ -11,6 +11,7 @@ services:
       - 34345:34345
     depends_on:
       - db
+      - redis
     environment:
       ENV: "production"
 
@@ -26,3 +27,7 @@ services:
       MYSQL_DATABASE: enddb
       MYSQL_USER: endbot
       MYSQL_PASSWORD: supersecret
+
+  redis:
+    image: redis
+    restart: always

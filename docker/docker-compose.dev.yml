@@ -35,3 +35,9 @@ services:
     # spam in the logs.
     security_opt:
       - seccomp:unconfined
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
