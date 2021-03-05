@@ -41,7 +41,11 @@ export module Config {
 	}
 
 	export interface WebConfig {
-		port: number
+		port: number,
+		redirect_uri: string,
+		client_secret: string,
+		oauth2_url: string,
+		member_role_id: string
 	}
 
 	const defaultConfig: Config = {
