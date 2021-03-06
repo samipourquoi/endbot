@@ -4,13 +4,13 @@ import { Auth } from "../../../auth";
 module.exports = Router()
 	.all("/*", isAuthed)
 	.use("/apps", require("./apps"))
+	.use("/user", require("./user"));
 
 async function isAuthed(req: Request, res: Response, next: NextFunction) {
 	const token = req.header("Authorization")
-	if (token && await Auth.isLoggedIn(token)) {
+	if (token && await Auth.isLoggedIn(token))
 		next();
-	} else {
+	else
 		res.status(401)
 			.end();
-	}
 }
