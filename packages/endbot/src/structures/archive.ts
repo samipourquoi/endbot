@@ -132,7 +132,7 @@ export class Ticket
 			where: { applicant_id },
 			defaults: {
 				applicant_id,
-				profile_picture: member?.user.displayAvatarURL() || "",
+				profile_picture: member?.user.displayAvatarURL({ format: "png" }) || "",
 				name: username,
 				discriminator
 			}

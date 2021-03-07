@@ -1,0 +1,76 @@
+@use "src/styles/abstracts/colors";
+@use "src/styles/abstracts/fonts";
+
+.ticket-widget {
+  $spacing: 12px;
+
+  background: rgba(colors.$gray, 60%);
+  transition: background .2s ease;
+  border-radius: 15px;
+  vertical-align: middle;
+  height: 52px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  font-family: fonts.$normal;
+  font-weight: 600;
+  font-size: 18px;
+
+  &:hover {
+    background: rgba(colors.$dark-gray, 75%);
+  }
+
+  .avatar {
+    display: inline-block;
+    height: 50px;
+    margin-right: $spacing;
+    clip-path: circle(50%);
+
+    img {
+      height: 100%;
+    }
+  }
+
+  .name {
+    color: colors.$light-gray;
+  }
+
+  .discriminator {
+    color: colors.$light-gray;
+    opacity: 80%;
+  }
+
+  %status {
+    text-transform: capitalize;
+
+    &::before {
+      content: "-";
+      color: colors.$very-dark-gray;
+      margin: $spacing;
+    }
+  }
+
+  @each $name, $color in (
+    "accepted": #027A30,
+    "declined": #FF3333,
+    "pending" : #FFCC00
+  ) {
+    .#{$name} {
+      @extend %status;
+      color: $color;
+    }
+  }
+
+  .right-part {
+    margin-left: auto;
+
+    .round {
+      margin-right: $spacing;
+      color: colors.$very-dark-gray;
+    }
+
+    .date {
+      color: colors.$light-gray;
+    }
+  }
+}
