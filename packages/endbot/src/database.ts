@@ -58,8 +58,7 @@ export module Database {
 			primaryKey: true,
 			allowNull: true
 		},
-		channel_id: STRING,
-		raw_messages: new TEXT("medium"),
+		channel_id: STRING
 	}, defaultModelOptions);
 
 	export const Applicants: ModelDefined<
@@ -76,13 +75,33 @@ export module Database {
 		discriminator: STRING
 	}, defaultModelOptions);
 
+	export const ArchiveChannel: ModelDefined<
+		Schemas.ArchiveChannelAttributes,
+		Schemas.ArchiveChannelAttributes
+	> = sequelize.define("archive_channel", {
+		channel_id: {
+			type: STRING,
+			primaryKey: true
+		},
+		raw_messages: new TEXT("medium")
+	}, defaultModelOptions);
+
 	export async function init() {
+		Tickets.hasOne(ArchiveChannel, {
+			sourceKey: "channel_id",
+			foreignKey: "channel_id"
+		});
+		ArchiveChannel.belongsTo(Tickets, {
+			foreignKey: "channel_id",
+			targetKey: "channel_id"
+		});
+
 		await Promise.all([
 			Links,
 			Tickets,
-			Applicants
-		].map(table => table.sync({ alter: true }))
-		);
+			Applicants,
+			ArchiveChannel
+		].map(table => table.sync({ alter: true })));
 	}
 }
 
@@ -98,8 +117,7 @@ export module Schemas {
 		status: TicketStatus,
 		round: number,
 		channel_id: Snowflake,
-		applicant_id: Snowflake | null,
-		raw_messages: string
+		applicant_id: Snowflake | null
 	}
 
 	export interface ApplicantAttributes {
@@ -107,5 +125,10 @@ export module Schemas {
 		profile_picture: string,
 		name: string,
 		discriminator: string
+	}
+
+	export interface ArchiveChannelAttributes {
+		channel_id: Snowflake,
+		raw_messages: string
 	}
 }

@@ -122,8 +122,7 @@ export class Ticket
 
 		const ticket = await Database.Tickets.create({
 			channel_id: channel.id,
-			applicant_id: member?.user.id || null,
-			raw_messages: "[]"
+			applicant_id: member?.user.id || null
 		});
 
 		const applicant_id = member?.user.id || null;
@@ -158,10 +157,10 @@ export class Ticket
 	async archive(status: TicketStatus): Promise<void> {
 		const history = await Archive.getMessageHistory(this.channel);
 		const encoded = JSON.stringify(history.map(message => message.toJSON()));
-		const entry = await Database.Tickets.update(
-			{ raw_messages: encoded, status },
-			{ where: { channel_id: this.channel.id } }
-		);
+		const { id: channel_id } = this.channel;
+		await Database.ArchiveChannel.create({ raw_messages: encoded, channel_id});
+		await Database.Tickets.update({ status },
+			{ where: { channel_id } });
 	}
 
 	async vote(): Promise<Channel> {

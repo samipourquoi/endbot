@@ -16,12 +16,14 @@ async function getApps(req: Request, res: Response) {
 
 async function getChannel(req: Request, res: Response) {
 	const { id } = req.params;
-	const ticket = await Database.Tickets.findOne({ where: { channel_id: id } });
-	if (!ticket) {
+	const channel = await Database.ArchiveChannel.findOne({
+		where: { channel_id: id }
+	});
+	if (!channel) {
 		res.status(404)
 			.end();
 		return;
 	}
-	const messages = JSON.parse(ticket.get("raw_messages") as string);
+	const messages = JSON.parse(channel.get("raw_messages") as string);
 	res.send(messages);
 }
