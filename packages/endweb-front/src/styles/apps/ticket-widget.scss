@@ -1,5 +1,8 @@
 @use "src/styles/abstracts/colors";
 @use "src/styles/abstracts/fonts";
+@use "src/styles/abstracts/mixins";
+
+@include mixins.remove_anchor_style;
 
 .ticket-widget {
   $spacing: 12px;
@@ -32,6 +35,7 @@
   }
 
   .name {
+    @include mixins.remove_anchor_style;
     color: colors.$light-gray;
   }
 

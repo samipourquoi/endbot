@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { GetAppInfo } from "endweb-back/src/api";
+import { GETAppInfo } from "endweb-back/src/api";
 import { getAppsInfo } from "../../api";
 import { TicketWidget } from "./ticket-widget";
 
 export function TicketList() {
-	const [tickets, setTickets] = useState([] as GetAppInfo[]);
+	const [tickets, setTickets] = useState([] as GETAppInfo[]);
 
 	useEffect(() => {
 		getAppsInfo().then(setTickets);

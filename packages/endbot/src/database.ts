@@ -1,4 +1,4 @@
-import { INTEGER, ModelDefined, NUMBER, Optional, Sequelize, STRING, TEXT } from "sequelize";
+import { INTEGER, ModelDefined, ModelOptions, NUMBER, Optional, Sequelize, STRING, TEXT } from "sequelize";
 import { config } from "./index";
 import { Config } from "./config";
 import { TicketStatus } from "./structures/archive";
@@ -26,6 +26,10 @@ export module Database {
 		}
 	);
 
+	const defaultModelOptions: ModelOptions = {
+		underscored: true
+	}
+
 	export const Links: ModelDefined<
 		Schemas.LinkAttributes,
 		Schemas.LinkAttributes
@@ -34,7 +38,7 @@ export module Database {
 		invite: STRING,
 		registry: STRING,
 		server_name: STRING
-	});
+	}, defaultModelOptions);
 
 	export const Tickets: ModelDefined<
 		Schemas.TicketAttributes,
@@ -56,7 +60,7 @@ export module Database {
 		},
 		channel_id: STRING,
 		raw_messages: new TEXT("medium"),
-	});
+	}, defaultModelOptions);
 
 	export const Applicants: ModelDefined<
 		Schemas.ApplicantAttributes,
@@ -70,16 +74,15 @@ export module Database {
 		profile_picture: STRING,
 		name: STRING,
 		discriminator: STRING
-	});
+	}, defaultModelOptions);
 
 	export async function init() {
 		await Promise.all([
 			Links,
 			Tickets,
 			Applicants
-		].map(table => table.sync({
-			alter: true
-		})));
+		].map(table => table.sync({ alter: true }))
+		);
 	}
 }
 

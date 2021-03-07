@@ -1,6 +1,8 @@
 import { Schemas } from "endbot/dist/database";
 
-export type GetAppInfo = Pick<
+export type GETAppInfo = Omit<
 	Schemas.TicketAttributes,
-	"round" | "status"
+	"raw_messages"
 > & Schemas.ApplicantAttributes;
+
+export type GETChannel = object[];
