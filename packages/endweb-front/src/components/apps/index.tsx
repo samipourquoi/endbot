@@ -6,7 +6,6 @@ import { Channel } from "./channel";
 
 export function Apps() {
 	const { path } = useRouteMatch();
-	console.info(path);
 
 	return (
 		<Switch>

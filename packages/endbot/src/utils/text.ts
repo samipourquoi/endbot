@@ -1,5 +1,7 @@
 export module TextUtils {
-	export function getFormattedDate(date: Date) {
+	export function getFormattedDate(timestamp: number | Date) {
+		const date = new Date(timestamp);
+
 		let year = date.getFullYear();
 
 		let month = (1 + date.getMonth()).toString();

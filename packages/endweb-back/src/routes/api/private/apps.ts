@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { Database, Schemas } from "endbot/dist/database";
-import { GETAppInfo } from "../../../api";
+import { GETAppInfo, GETChannel } from "../../../api";
 
 module.exports = Router()
 	.get("/", getApps)
@@ -24,6 +24,6 @@ async function getChannel(req: Request, res: Response) {
 			.end();
 		return;
 	}
-	const messages = JSON.parse(channel.get("raw_messages") as string);
+	const messages = JSON.parse(channel.get("raw_messages") as string) as GETChannel;
 	res.send(messages);
 }

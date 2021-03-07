@@ -4,17 +4,30 @@ import {
 	EmbedField,
 	EmbedFieldData,
 	Message,
-	MessageEmbed,
+	MessageEmbed, MessageEmbedOptions,
 	SnowflakeUtil,
 	TextChannel
 } from "discord.js";
 import { config, instance } from "../index";
 import { Database, Schemas } from "../database";
 import { Colors } from "../utils/theme";
+import { APIUser } from "discord-api-types";
 
 export interface Archivable {
 	archive(status: any): Promise<void>;
 	vote(context: any): Promise<Channel>;
+}
+
+export interface ArchiveMessage {
+	author: {
+		username: string,
+		id: string,
+		avatar: string
+	},
+	content: string,
+	embeds: MessageEmbedOptions[],
+	attachments: unknown,
+	timestamp: number
 }
 
 export module Archive {
@@ -39,6 +52,20 @@ export module Archive {
 		} while (batch.size == BATCH_SIZE);
 
 		return history.reverse();
+	}
+
+	export function encodeMessage(message: Message): ArchiveMessage {
+		return {
+			content:      message.content,
+			embeds: 	  message.embeds as MessageEmbedOptions[],
+			author: {
+				avatar:   message.author.avatar!,
+				id:		  message.author.id,
+				username: message.author.username
+			},
+			attachments:  [],
+			timestamp:	  message.createdTimestamp
+		}
 	}
 }
 
@@ -156,7 +183,7 @@ export class Ticket
 
 	async archive(status: TicketStatus): Promise<void> {
 		const history = await Archive.getMessageHistory(this.channel);
-		const encoded = JSON.stringify(history.map(message => message.toJSON()));
+		const encoded = JSON.stringify(history.map(Archive.encodeMessage));
 		const { id: channel_id } = this.channel;
 		await Database.ArchiveChannel.create({ raw_messages: encoded, channel_id});
 		await Database.Tickets.update({ status },

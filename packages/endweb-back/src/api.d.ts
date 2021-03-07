@@ -1,8 +1,6 @@
 import { Schemas } from "endbot/dist/database";
+import { ArchiveMessage } from "endbot/dist/structures/archive";
 
-export type GETAppInfo = Omit<
-	Schemas.TicketAttributes,
-	"raw_messages"
-> & Schemas.ApplicantAttributes;
+export type GETAppInfo = Schemas.TicketAttributes & Schemas.ApplicantAttributes;
 
-export type GETChannel = object[];
+export type GETChannel = ArchiveMessage[];

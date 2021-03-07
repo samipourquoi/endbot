@@ -22,7 +22,6 @@ export async function getAppsInfo() {
 }
 
 export async function getChannel(id: string) {
-	console.log(id);
 	const response = await bonkfetch(`/api/private/apps/${id}`);
 	return await response.json() as GETChannel;
 }
