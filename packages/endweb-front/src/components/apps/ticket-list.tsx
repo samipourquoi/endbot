@@ -10,7 +10,9 @@ export function TicketList() {
 		getAppsInfo().then(setTickets);
 	}, []);
 
-	return (<div>
-		{ tickets.map(TicketWidget) }
-	</div>)
+	return (
+		<div>
+			{ tickets.map(TicketWidget) }
+		</div>
+	);
 }
