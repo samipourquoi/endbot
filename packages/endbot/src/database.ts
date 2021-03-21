@@ -87,20 +87,21 @@ export module Database {
 	}, defaultModelOptions);
 
 	export async function init() {
-		Tickets.hasOne(ArchiveChannel, {
-			sourceKey: "channel_id",
-			foreignKey: "channel_id"
-		});
-		ArchiveChannel.belongsTo(Tickets, {
-			foreignKey: "channel_id",
-			targetKey: "channel_id"
-		});
+		if (config.application_system) {
+			Tickets.hasOne(ArchiveChannel, {
+				sourceKey: "channel_id",
+				foreignKey: "channel_id"
+			});
+			ArchiveChannel.belongsTo(Tickets, {
+				foreignKey: "channel_id",
+				targetKey: "channel_id"
+			});
+		}
 
 		await Promise.all([
 			Links,
-			Tickets,
-			Applicants,
-			ArchiveChannel
+			ArchiveChannel,
+			...(config.application_system ? [Tickets, Applicants] : [])
 		].map(table => table.sync({ alter: true })));
 	}
 }
