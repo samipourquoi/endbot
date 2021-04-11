@@ -1,5 +1,6 @@
 {
-	"name": "endweb-back",
+	"name": "@endweb/back",
+	"private": true,
 	"version": "3.0.0",
 	"license": "MIT",
 	"main": "dist/index.js",

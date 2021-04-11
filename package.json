@@ -3,6 +3,9 @@
 	"name": "endtech",
 	"workspaces": [ "packages/*" ],
 	"scripts": {
+		"endbot": "yarn workspace endbot",
+		"endweb:front": "yarn workspace endweb-front",
+		"endweb:back": "yarn workspace endweb-back",
 		"start": "./docker/start",
 		"build": "yarn workspaces run build",
 		"dev:db": "cd docker && docker-compose -f docker-compose.dev.yml up -d db redis",

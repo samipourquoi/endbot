@@ -45,6 +45,7 @@
 		"nearest-colors": "^1.0.0",
 		"rcon-client": "^4.2.3",
 		"sequelize": "^6.5.0",
+		"sequelize-typescript": "^2.1.0",
 		"yaml": "^1.10.0"
 	},
 	"private": true

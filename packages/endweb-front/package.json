@@ -1,5 +1,6 @@
 {
-	"name": "endweb-front",
+	"name": "@endweb/front",
+	"private": true,
 	"version": "3.0.0",
 	"license": "MIT",
 	"scripts": {
