@@ -2,9 +2,9 @@ import { Command, QuotedType, UnquotedStringType } from "@samipourquoi/commander
 import { EmbedFieldData, Guild, MessageEmbed, TextBasedChannel, TextChannel } from "discord.js";
 import { Colors } from "../../utils/theme";
 import { config, instance } from "../../index";
-import { Database } from "../../database";
 import * as Canvas from "canvas";
 import { command, discord, DiscordContext } from "../dispatcher";
+import { LinkModel } from "../../models/link-model";
 
 @command(discord)
 export class LinksCommand
@@ -49,7 +49,7 @@ async function add(ctx: DiscordContext) {
 	const emote = await createEmote(invite.guild!);
 	if (emote == null) throw new Error("can't create emote");
 
-	await Database.Links.create({
+	await LinkModel.create({
 		invite: link,
 		emote: emote.identifier,
 		registry,
@@ -68,7 +68,7 @@ async function add(ctx: DiscordContext) {
 async function remove(ctx: DiscordContext) {
 	const [,, invite, registry = "default" ] = ctx.args;
 
-	await Database.Links.destroy({
+	await LinkModel.destroy({
 		where: { invite, registry }
 	});
 
@@ -122,7 +122,7 @@ async function createEmote(guild: Guild) {
 async function formatCard(registry: string):
 	Promise<MessageEmbed> {
 
-	const entries = await Database.Links.findAll({
+	const entries = await LinkModel.findAll({
 		where: { registry }
 	});
 	entries.sort((a, b) => {

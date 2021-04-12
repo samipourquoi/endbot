@@ -9,9 +9,11 @@ import {
 	TextChannel
 } from "discord.js";
 import { config, instance } from "../index";
-import { Database, Schemas } from "../database";
 import { Colors } from "../utils/theme";
 import { APIUser } from "discord-api-types";
+import { TicketAttributes, TicketModel, TicketStatus } from "../models/ticket-model";
+import { ApplicantAttributes, ApplicantModel } from "../models/applicant-model";
+import { ArchiveChannelModel } from "../models/archive-channel-model";
 
 export interface Archivable {
 	archive(status: any): Promise<void>;
@@ -70,10 +72,10 @@ export module Archive {
 }
 
 export class Ticket
-	implements Archivable {
-
+	implements Archivable
+{
 	private constructor(public channel: TextChannel,
-						public data: Schemas.TicketAttributes & Partial<Schemas.ApplicantAttributes>) {
+						public data: TicketAttributes & Partial<ApplicantAttributes>) {
 	}
 
 	static async generate(answers: { [k: string]: string }): Promise<Ticket> {
@@ -147,14 +149,14 @@ export class Ticket
 			await channel.send(embed);
 		}
 
-		const ticket = await Database.Tickets.create({
+		const ticket = await TicketModel.create({
 			channel_id: channel.id,
 			applicant_id: member?.user.id || null
 		});
 
 		const applicant_id = member?.user.id || null;
 
-		const [ applicant ] = await Database.Applicants.findOrCreate({
+		const [ applicant ] = await ApplicantModel.findOrCreate({
 			where: { applicant_id },
 			defaults: {
 				applicant_id,
@@ -168,13 +170,13 @@ export class Ticket
 	}
 
 	static async from(channel: TextChannel): Promise<Ticket | null> {
-		const ticket = await Database.Tickets.findOne({
+		const ticket = await TicketModel.findOne({
 			where: {
 				channel_id: channel.id
 			},
 		});
 		if (!ticket) return null;
-		const applicant = await Database.Applicants.findOne({
+		const applicant = await ApplicantModel.findOne({
 			where: { applicant_id: ticket.get().applicant_id }
 		});
 
@@ -185,8 +187,8 @@ export class Ticket
 		const history = await Archive.getMessageHistory(this.channel);
 		const encoded = JSON.stringify(history.map(Archive.encodeMessage));
 		const { id: channel_id } = this.channel;
-		await Database.ArchiveChannel.create({ raw_messages: encoded, channel_id});
-		await Database.Tickets.update({ status },
+		await ArchiveChannelModel.create({ raw_messages: encoded, channel_id});
+		await TicketModel.update({ status },
 			{ where: { channel_id } });
 	}
 
@@ -206,11 +208,4 @@ export class Ticket
 
 		return channel;
 	}
-}
-
-export enum TicketStatus {
-	PENDING,
-	ACCEPTED,
-	DECLINED,
-	BRUH
 }

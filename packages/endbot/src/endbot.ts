@@ -2,10 +2,10 @@ import { Client, Message, MessageEmbed, TextChannel } from "discord.js";
 import { Colors } from "./utils/theme";
 import { Bridge, Bridges } from "./bridge/bridge";
 import { Webhook } from "./bridge/webhook";
-import { Database } from "./database";
 import { config } from "./index";
 import { discord } from "./commands/dispatcher";
 import { DiscordClosure } from "./commands/dispatcher";
+import * as Models from "./models";
 
 export class Endbot
 	extends Client {
@@ -19,7 +19,7 @@ export class Endbot
 
 		this.on("message", this.filter)
 		this.once("ready", async () => {
-			await Database.init();
+			await Models.sync();
 			await this.initServers();
 			console.info(`Logged on as ${this.user?.username}`)
 		});

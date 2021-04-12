@@ -4,4 +4,4 @@
 require("endbot");
 
 /* Starts Webserver */
-require("endweb-back")
+require("@endweb/back")

@@ -1,9 +1,10 @@
 import { command, discord, DiscordContext } from "../dispatcher";
 import { Command } from "@samipourquoi/commander";
 import { config, instance } from "../../index";
-import { Ticket, TicketStatus } from "../../structures/archive";
+import { Ticket } from "../../structures/archive";
 import { MessageEmbed, TextChannel } from "discord.js";
 import { Colors } from "../../utils/theme";
+import { TicketStatus } from "../../models/ticket-model";
 
 @command(discord)
 class TicketCommand
