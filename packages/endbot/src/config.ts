@@ -5,6 +5,7 @@ import { Snowflake } from "discord.js";
 export module Config {
 	export interface Config {
 		token: string,
+		client_secret: string,
 		servers: Server[]
 		webhook_port?: number
 		database?: Database
@@ -43,13 +44,12 @@ export module Config {
 	export interface WebConfig {
 		port: number,
 		redirect_uri: string,
-		client_secret: string,
-		oauth2_url: string,
 		member_role_id: string
 	}
 
 	const defaultConfig: Config = {
 		token: "<YOUR TOKEN HERE>",
+		client_secret: "<CLIENT SECRET>",
 		servers: [
 			{
 				name: "Server",

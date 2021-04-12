@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 /* Starts Endbot */
-require("endbot");
+const { config, instance } = require("endbot");
 
 /* Starts Webserver */
-require("@endweb/back")
+if (config.web) {
+	instance.on("ready", () => require("@endweb/back"));
+}

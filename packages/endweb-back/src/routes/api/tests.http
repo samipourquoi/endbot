@@ -1,4 +1,0 @@
-POST localhost:8080/api/form
-Content-Type: application/x-www-form-urlencoded
-
-What is your Discord Tag?=samipourquoi#9267&What's your name=sami
