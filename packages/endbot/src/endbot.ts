@@ -28,8 +28,6 @@ export class Endbot
 	async filter(message: Message) {
 		if (message.author.bot) return;
 
-		console.log(JSON.stringify(message.author, null, "\t"));
-
 		const bridges = Bridges.getFromMessage(message);
 		await bridges.forEach(bridge => {
 			bridge.emit("discord", message);

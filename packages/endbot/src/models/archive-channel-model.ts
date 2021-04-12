@@ -7,7 +7,7 @@ export interface ArchiveChannelAttributes {
 	raw_messages: string
 }
 
-@Table
+@Table({ underscored: true })
 export class ArchiveChannelModel
 	extends Model<ArchiveChannelAttributes>
 	implements ArchiveChannelAttributes

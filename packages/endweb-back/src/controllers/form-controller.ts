@@ -5,8 +5,6 @@ import { IpFilter as ipfilter } from "express-ipfilter";
 export module FormController {
 	export function googleOnly(req: Request, res: Response, next: NextFunction) {
 		if (process.env.ENV == "production") {
-			next()
-		} else {
 			ipfilter([
 				[ "216.239.32.0", "216.239.63.255" ],
 				[ "64.233.160.0", "64.233.191.255" ],
@@ -19,8 +17,11 @@ export module FormController {
 				[ "207.126.144.0", "207.126.159.255" ],
 				[ "173.194.0.0", "173.194.255.255" ]
 			], { mode: "allow" })(req, res, next);
+		} else {
+			next();
 		}
 	}
+
 	export async function submit(req: Request, res: Response) {
 		const answers = req.body;
 		try {

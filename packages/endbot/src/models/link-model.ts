@@ -7,7 +7,7 @@ export interface LinkAttributes {
 	server_name: string
 }
 
-@Table
+@Table({ underscored: true })
 export class LinkModel
 	extends Model<LinkAttributes>
 	implements LinkAttributes

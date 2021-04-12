@@ -12,7 +12,7 @@ import { config, instance } from "../index";
 import { Colors } from "../utils/theme";
 import { APIUser } from "discord-api-types";
 import { TicketAttributes, TicketModel, TicketStatus } from "../models/ticket-model";
-import { ApplicantAttributes, ApplicantModel } from "../models/applicant-model";
+import { ApplicantAttributes, ApplicantModel, defaultID } from "../models/applicant-model";
 import { ArchiveChannelModel } from "../models/archive-channel-model";
 
 export interface Archivable {
@@ -82,7 +82,6 @@ export class Ticket
 		if (!config.application_system) throw new Error();
 
 		const guild = await instance.guilds.resolve(config.application_system.guild_id)!;
-
 		const tag = answers["What is your Discord Tag?"];
 		const [, username, discriminator ] = /(.+)#([0-9]{4})/g.exec(tag) ?? [];
 
@@ -108,8 +107,8 @@ export class Ticket
 		// Generates the embed (i hate this code)
 		const fields: EmbedFieldData[] = [];
 		for (const [ question, answer ]
-			of Object.entries(answers)) {
-
+			of Object.entries(answers))
+		{
 			const maxLength = 1000;
 			let hasAlreadyPutTitle = false;
 			let bitWhichFits = "";
@@ -131,10 +130,9 @@ export class Ticket
 			.setAuthor("ENDTECH APPLICATION");
 		let currentEmbedCharacterLength = 0;
 		for (const field of fields) {
-			if (embed == null) {
+			if (embed == null)
 				embed = new MessageEmbed()
 					.setColor(Colors.TRANSPARENT);
-			}
 
 			embed.fields.push(field as EmbedField);
 			currentEmbedCharacterLength += field.value.length;
@@ -145,17 +143,10 @@ export class Ticket
 				embed = null;
 			}
 		}
-		if (embed != null) {
+		if (embed != null)
 			await channel.send(embed);
-		}
 
-		const ticket = await TicketModel.create({
-			channel_id: channel.id,
-			applicant_id: member?.user.id || null
-		});
-
-		const applicant_id = member?.user.id || null;
-
+		const applicant_id = member?.user.id || defaultID;
 		const [ applicant ] = await ApplicantModel.findOrCreate({
 			where: { applicant_id },
 			defaults: {
@@ -164,7 +155,11 @@ export class Ticket
 				name: username,
 				discriminator
 			}
-		})
+		});
+		const ticket = await TicketModel.create({
+			channel_id: channel.id,
+			applicant_id
+		});
 
 		return new Ticket(channel, { ...applicant.get(), ...ticket.get() });
 	}

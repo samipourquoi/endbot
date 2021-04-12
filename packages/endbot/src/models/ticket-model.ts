@@ -1,4 +1,4 @@
-import { Snowflake } from "discord.js";
+import { Snowflake, SnowflakeUtil, Util } from "discord.js";
 import {
 	AllowNull,
 	AutoIncrement,
@@ -11,7 +11,8 @@ import {
 	Table
 } from "sequelize-typescript";
 import { INTEGER, Optional, STRING } from "sequelize";
-import { ApplicantModel } from "./applicant-model";
+import { ApplicantModel, defaultID } from "./applicant-model";
+import { config } from "../index";
 
 export enum TicketStatus {
 	PENDING,
@@ -24,12 +25,12 @@ export interface TicketAttributes {
 	status: TicketStatus,
 	round: number,
 	channel_id: Snowflake,
-	applicant_id: Snowflake | null
+	applicant_id: Snowflake
 }
 
-@Table
+@Table({ underscored: true })
 export class TicketModel
-	extends Model<TicketAttributes, Optional<TicketAttributes, "status" | "round">>
+	extends Model<TicketAttributes, Optional<TicketAttributes, "status" | "round" | "applicant_id">>
 	implements TicketAttributes
 {
 	@Default(TicketStatus.PENDING)
@@ -41,14 +42,14 @@ export class TicketModel
 	@Column
 	round!: number;
 
-	@ForeignKey(() => ApplicantModel)
 	@Column
 	channel_id!: string;
 
+	@ForeignKey(() => ApplicantModel)
+	@Default(defaultID)
 	@PrimaryKey
-	@AllowNull
 	@Column(STRING)
-	applicant_id!: Snowflake;
+	applicant_id!: string;
 
 	@BelongsTo(() => ApplicantModel)
 	applicant!: ApplicantModel;
