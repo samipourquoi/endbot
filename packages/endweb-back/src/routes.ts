@@ -17,6 +17,8 @@ export const routes = express.Router()
 		AppsController.getChannel)
 	.get("/auth",
 		authenticate("discord", { scope: ["identify", "email"] }))
+	.delete("/auth",
+		AuthController.logout)
 	.get("/auth/callback",
 		authenticate("discord", { failureRedirect: "/" }),
 		AuthController.onDiscordCallback);

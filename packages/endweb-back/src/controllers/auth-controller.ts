@@ -5,4 +5,9 @@ export module AuthController {
 		// res.redirect("/");
 		res.send("connected");
 	}
+
+	export function logout(req: Request, res: Response) {
+		req.logout();
+		res.redirect("/");
+	}
 }
