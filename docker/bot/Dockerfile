@@ -26,11 +26,11 @@ RUN yarn workspace endbot build
 
 COPY ./packages/endweb-front ./packages/endweb-front/
 
-RUN yarn workspace endweb-front build
+RUN yarn workspace @endweb/front build
 
 COPY ./packages/endweb-back ./packages/endweb-back/
 
-RUN yarn workspace endweb-back build
+RUN yarn workspace @endweb/back build
 
 # OTHER
 
