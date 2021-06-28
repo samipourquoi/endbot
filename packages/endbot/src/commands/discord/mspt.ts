@@ -33,11 +33,11 @@ async function online(ctx: DiscordContext) {
 
 async function Mspt(bridge: Bridge) {
     let data = await bridge.rcon.send("script run reduce(last_tick_times(),_a+_,0)/100;");
-    let response = parseFloat(data.split(" ")[2]);
-    let tps = (response <= 50) && 20 || 1000/response;
-    let embedColor = (response <= 25) && Colors.RESULT || (response >= 50) && Colors.ERROR || Colors.WARN;
+    let mspt = parseFloat(data.split(" ")[2]);
+    let tps = (mspt <= 50) && 20 || 1000 / mspt;
+    let embedColor = (mspt <= 25) && Colors.RESULT || (mspt >= 50) && Colors.ERROR || Colors.WARN;
     return {
-        mspt: response,
+        mspt,
         tps,
         embedColor
     };
