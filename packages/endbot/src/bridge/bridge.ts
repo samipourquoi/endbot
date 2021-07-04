@@ -46,13 +46,12 @@ export class Bridge
 		const [, message ] = (/\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \[Server thread\/INFO]: (.+)/g).exec(line) ?? [];
 		if (!message) return;
 		
-		if (message.startsWith("[") && message.endsWith("]")) return;
-
-		await this.channel.send(
-			Util.escapeMarkdown(message),
-			{ disableMentions: "none" }
-		);
-
+		if (message.startsWith("<") || message.endsWith("the game")) {
+			await this.channel.send(
+				Util.escapeMarkdown(message),
+				{ disableMentions: "none" }
+		)};
+	
 		const { prefix } = instance;
 		const words = message.split(" ");
 		const author = words[0]?.slice(1, words[0]?.length - 1);

@@ -12,7 +12,7 @@ export class OnlineCommand
 		super();
 
 		this.register
-			.with.literal("online").run(online);
+			.with.literal("online", "o").run(online);
 	}
 }
 
