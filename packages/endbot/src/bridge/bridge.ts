@@ -6,6 +6,7 @@ import { EventEmitter } from "events";
 import { MinecraftClosure } from "../commands/dispatcher";
 import { instance } from "../index";
 import { minecraft } from "../commands/dispatcher";
+const specialMessage = require("../../assets/special_messages.json");
 
 export declare interface Bridge {
 	emit(event: "minecraft", line: string): boolean;
@@ -46,11 +47,22 @@ export class Bridge
 		const [, message ] = (/\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \[Server thread\/INFO]: (.+)/g).exec(line) ?? [];
 		if (!message) return;
 		
-		if (message.startsWith("<") || message.endsWith("the game")) {
+		if(message.startsWith("[") && message.endsWith("]")) return;
+
+		if (message.startsWith("<")) {
 			await this.channel.send(
 				Util.escapeMarkdown(message),
-				{ disableMentions: "none" }
-		)};
+				{ disableMentions: "none" })
+		} else {
+			for (const word of specialMessage) {
+				if (message.includes(word)) {
+					await this.channel.send(
+						Util.escapeMarkdown(message),
+						{ disableMentions: "none" })
+					break;
+				}
+			}
+		};
 	
 		const { prefix } = instance;
 		const words = message.split(" ");
