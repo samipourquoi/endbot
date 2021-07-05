@@ -1,4 +1,4 @@
-import { Command, QuotedType } from "@samipourquoi/commander";
+import { Command, RestType, UnquotedStringType } from "@samipourquoi/commander";
 import { MessageEmbed } from "discord.js";
 import { command, discord, DiscordContext } from "../dispatcher";
 import { Colors } from "../../utils/theme";
@@ -12,23 +12,23 @@ class ListCommand
 
     this.register
       .with.literal("list")
-      .__.with.arg("<role>", new QuotedType()).run(roles);
+      .__.with.arg("<role>", new RestType(new UnquotedStringType())).run(roles);
   }
 }
-// To-Do: Add functionality to work with multi-word roles
+
 async function roles(ctx: DiscordContext) {
-  const chosenRole = ctx.args[1];
+  const chosenRole = ctx.arg.join(" ");
   let validRole = false;
   const members = await ctx.message.guild!.members.fetch();
 
   ctx.message.guild!.roles.cache.forEach(async (role) => {
     if (role.name != "@everyone") {
-      if (role.name.toLowerCase() === chosenRole) {
+      if (role.name === chosenRole) {
         validRole = true;
         let membersWithRole: string[] = [];
 
         members.forEach(member => {
-          if (member.roles.cache.find(role => role.name.toLowerCase() === chosenRole)) membersWithRole.push(member.user.toString());
+          if (member.roles.cache.find(role => role.name === chosenRole)) membersWithRole.push(member.user.toString());
         });
 
         await output(membersWithRole);

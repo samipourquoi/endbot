@@ -40,7 +40,7 @@ export class Endbot
 
 		try {
 			await discord.run(
-				message.content.toLowerCase().slice(this.prefix.length),
+				message.content.slice(this.prefix.length),
 				closure
 			);
 		} catch (e) {
