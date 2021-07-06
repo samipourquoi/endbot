@@ -135,4 +135,8 @@ export module Bridges {
 	export function formatDiscordMessage(message: Message) {
 		return `[${message.author.username}] ${message.content}`;
 	}
+
+	export function checkOP(ops_only: boolean): Bridge | undefined {
+		return instances.find(bridge => bridge.config.ops_only == ops_only);
+	}
 }

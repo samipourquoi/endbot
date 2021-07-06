@@ -6,6 +6,7 @@ export module Config {
 	export interface Config {
 		token: string,
 		client_secret: string,
+		op_role: string,
 		servers: Server[]
 		webhook_port?: number
 		database?: Database
@@ -50,6 +51,7 @@ export module Config {
 	const defaultConfig: Config = {
 		token: "<YOUR TOKEN HERE>",
 		client_secret: "<CLIENT SECRET>",
+		op_role: "<role.id>",
 		servers: [
 			{
 				name: "Server",
