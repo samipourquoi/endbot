@@ -1,4 +1,4 @@
-import { Command } from "@samipourquoi/commander";
+import { Command, QuotedType } from "@samipourquoi/commander";
 import { Bridge, Bridges } from "../../bridge/bridge";
 import { MessageEmbed } from "discord.js";
 import { Colors } from "../../utils/theme";
@@ -12,13 +12,21 @@ export class MsptCommand
         super();
 
         this.register
-            .with.literal("mspt", "tps").run(online); 
+            .with.literal("mspt", "tps").run(online)
+            .__.with.arg("<server_name>", new QuotedType()).run(online);
     }
 }
 
 async function online(ctx: DiscordContext) {
     let bridges = Bridges.getFromMessage(ctx.message);
     if (bridges.length == 0) bridges = Bridges.instances;
+    if (ctx.args[1]) {
+		for (const bridge of Bridges.instances) {
+			if (ctx.args[1] === bridge.config.name) {
+				bridges = [bridge]
+			} 
+		}
+	}
 
     for (const bridge of bridges) {
         const result = await Mspt(bridge);
