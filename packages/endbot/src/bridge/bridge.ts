@@ -68,7 +68,7 @@ export class Bridge
 		const words = message.split(" ");
 		const author = words[0]?.slice(1, words[0]?.length - 1);
 		const content = words.slice(1)
-			.join();
+			.join(" ");
 		if (!content.startsWith(prefix)) return;
 		const closure: MinecraftClosure = {
 			bridge: this,
