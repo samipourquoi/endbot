@@ -57,6 +57,6 @@ async function execute(bridge: Bridge, ctx: DiscordContext) {
     
     const embed = new MessageEmbed()
         .setColor(embedColor)
-        .setTitle(response)
+        .setDescription(response)
     await ctx.message.channel.send(embed)
 }

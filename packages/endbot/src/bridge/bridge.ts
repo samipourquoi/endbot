@@ -47,7 +47,9 @@ export class Bridge
 		const [, message ] = (/\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \[Server thread\/INFO]: (.+)/g).exec(line) ?? [];
 		if (!message) return;
 		
-		if(message.startsWith("[") && message.endsWith("]")) return;
+		if (message.startsWith("[") && message.endsWith("]")) return;
+
+		if (message.startsWith("Villager") && message.endsWith("'")) return;
 
 		if (message.startsWith("<")) {
 			await this.channel.send(
