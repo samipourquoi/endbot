@@ -22,13 +22,17 @@ async function online(ctx: DiscordContext) {
 
     for (const bridge of bridges) {
         const result = await Mspt(bridge);
+        if (isNaN(result.mspt)) {
+            await ctx.message.channel.send("That command requires carpet mod on the server!")
+            return;
+        }
 
         const embed = new MessageEmbed()
             .setColor(result.embedColor)
             .setTitle(`${bridge.config.name} - TPS: ${result.tps.toFixed(1)} MSPT: ${result.mspt.toFixed(1)}`);
         await ctx.message.channel.send(embed);
     }
-
+    
 }
 
 async function Mspt(bridge: Bridge) {
