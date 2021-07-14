@@ -3,7 +3,7 @@
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
 		"module": "commonjs",
-		"target": "es6",
+		"target": "es2021",
 		"strict": true,
 		"alwaysStrict": true,
 		"incremental": true,
