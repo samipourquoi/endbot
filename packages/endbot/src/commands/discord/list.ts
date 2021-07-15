@@ -35,24 +35,44 @@ async function roles(ctx: DiscordContext) {
         members.forEach(member => {
           if (member.roles.cache.find(role => role.name.toLowerCase() === chosenRole)) membersWithRole.push(member.user.toString());
         });
-        
-        const embed = new MessageEmbed()
-          .setColor(Colors.RESULT)
-          .setTitle(`There are ${membersWithRole.length} people with ${chosenRole}`)
-          .setDescription(membersWithRole)
 
-        await ctx.message.channel.send(embed);
+        if (membersWithRole.length == 0) {
+          const embed = new MessageEmbed()
+            .setColor(role.color)
+            .setTitle(`There are 0 people with ${chosenRole}`)
+
+          await ctx.message.channel.send(embed);
+          return;
+        }
+
+        let memberList = membersWithRole.sort().join("\r\n").toString().match(/[\s\S]{1,2047}/g);
+
+        for (let i = 0; i < memberList!.length; i++) {
+          const embed = new MessageEmbed()
+            .setColor(role.color)
+            .setTitle(`There are ${membersWithRole.length} people with ${chosenRole}`)
+            .setDescription(memberList![i])
+
+          await ctx.message.channel.send(embed);
+        }
+      }
     }
-  }
-});
+  });
 
   if (allRoles.length) {
     const embed = new MessageEmbed()
-      .setColor(Colors.RESULT)
+      .setColor(Colors.ENDTECH)
       .setTitle(`There are ${allRoles.length} roles on this server`)
       .setDescription(allRoles)
-    await ctx.message.channel.send(embed);
-}
 
-  if (!validRole) ctx.message.channel.send("That role doesn't exist");
+    await ctx.message.channel.send(embed);
+  }
+
+  if (!validRole) {
+    const embed = new MessageEmbed()
+      .setColor(Colors.ERROR)
+      .setTitle("That role doesn't exist!")
+   
+    await ctx.message.channel.send(embed);
+  }
 }

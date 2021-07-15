@@ -5,9 +5,11 @@
 	"Could not parse command:",
 	"<--[HERE]",
 	"No player was found",
+	"No entity was found",
 	"An unexpected error occurred trying to execute that command",
 	"Can only manipulate existing players",
 	"banned by Mojang",
 	"Player is not whitelisted",
-	"The player already is an operator"
+	"The player already is an operator",
+	"A player is required to run this command here"
 ]

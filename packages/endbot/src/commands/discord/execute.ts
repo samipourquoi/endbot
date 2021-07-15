@@ -55,8 +55,13 @@ async function execute(bridge: Bridge, ctx: DiscordContext) {
         }
     }
     
-    const embed = new MessageEmbed()
-        .setColor(embedColor)
-        .setDescription(response)
-    await ctx.message.channel.send(embed)
+    let description = response.match(/.{1,2047}/g);
+
+    for (let i = 0; i < description!.length; i++) {
+        const embed = new MessageEmbed()
+            .setColor(embedColor)
+            .setDescription(description![i])
+
+        await ctx.message.channel.send(embed)
+    }
 }
