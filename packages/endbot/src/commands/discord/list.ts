@@ -11,39 +11,48 @@ class ListCommand
     super();
 
     this.register
-      .with.literal("list")
+      .with.literal("list").run(roles)
       .__.with.arg("<role>", new RestType(new UnquotedStringType())).run(roles);
   }
 }
 
 async function roles(ctx: DiscordContext) {
-  const chosenRole = ctx.arg.join(" ");
+  const chosenRole = (ctx.args[1]) ? ctx.arg.join(" ").toLowerCase() : false;
   let validRole = false;
   const members = await ctx.message.guild!.members.fetch();
+  let allRoles: string[] = [];
 
   ctx.message.guild!.roles.cache.forEach(async (role) => {
     if (role.name != "@everyone") {
-      if (role.name === chosenRole) {
+      if (!chosenRole) {
+        allRoles.push(role.name);
+        validRole = true;
+      } 
+      else if (role.name.toLowerCase() === chosenRole) {
         validRole = true;
         let membersWithRole: string[] = [];
 
         members.forEach(member => {
-          if (member.roles.cache.find(role => role.name === chosenRole)) membersWithRole.push(member.user.toString());
+          if (member.roles.cache.find(role => role.name.toLowerCase() === chosenRole)) membersWithRole.push(member.user.toString());
         });
+        
+        const embed = new MessageEmbed()
+          .setColor(Colors.RESULT)
+          .setTitle(`There are ${membersWithRole.length} people with ${chosenRole}`)
+          .setDescription(membersWithRole)
 
-        await output(membersWithRole);
-      }
+        await ctx.message.channel.send(embed);
     }
-  });
+  }
+});
+
+  if (allRoles.length) {
+    const embed = new MessageEmbed()
+      .setColor(Colors.RESULT)
+      .setTitle(`There are ${allRoles.length} roles on this server`)
+      .setDescription(allRoles)
+    await ctx.message.channel.send(embed);
+}
 
   if (!validRole) ctx.message.channel.send("That role doesn't exist");
-
-  async function output(members: any) {
-    const embed = new MessageEmbed()
-        .setColor(Colors.RESULT)
-        .setTitle(`There are ${members.length} people with ${chosenRole}`)
-        .setDescription(members)
-
-    await ctx.message.channel.send(embed);
-  }
 }
