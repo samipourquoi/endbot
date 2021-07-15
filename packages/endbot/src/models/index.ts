@@ -13,7 +13,7 @@ export const defaultModelOptions: ModelOptions = {
 
 const defaultDatabaseConfig: Config.Database = {
 	user: "endbot",
-	host: "db",
+	host: "localhost",
 	password: "supersecret",
 	db: "enddb",
 	port: 3306

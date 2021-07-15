@@ -68,7 +68,7 @@ export module Config {
 	export function init(): Config {
 		const configDir = process.env.ENV == "production" ?
 			"/etc/endbot/config" :
-			"config";
+			"../../config";
 
 		if (existsSync(`${configDir}/config.yml`) ||
 			existsSync(`${configDir}/config.yaml`)) {
@@ -78,14 +78,13 @@ export module Config {
 				"";
 			return YAML.parse(content);
 		} else {
-			mkdirSync("config");
+			mkdirSync("../../config");
 			writeFileSync(`${configDir}/config.yml`, YAML.stringify(defaultConfig));
 			console.info(
 				"Wrote default config to 'config/config.yml'. Please fill it out, more info at:\n" +
 				" > https://github.com/samipourquoi/endbot"
 			);
-			process.exit(1);
-			return defaultConfig;
+			return defaultConfig
 		}
 	}
 }
