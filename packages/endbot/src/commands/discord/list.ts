@@ -36,22 +36,14 @@ async function roles(ctx: DiscordContext) {
           if (member.roles.cache.find(role => role.name.toLowerCase() === chosenRole)) membersWithRole.push(member.user.toString());
         });
 
-        if (membersWithRole.length == 0) {
-          const embed = new MessageEmbed()
-            .setColor(role.color)
-            .setTitle(`There are 0 people with ${chosenRole}`)
-
-          await ctx.message.channel.send(embed);
-          return;
-        }
-
         let memberList = membersWithRole.sort().join("\r\n").toString().match(/[\s\S]{1,2047}/g);
+        if (memberList == null) memberList = [""]
 
-        for (let i = 0; i < memberList!.length; i++) {
+        for (let i = 0; i < memberList.length; i++) {
           const embed = new MessageEmbed()
             .setColor(role.color)
             .setTitle(`There are ${membersWithRole.length} people with ${chosenRole}`)
-            .setDescription(memberList![i])
+            .setDescription(memberList[i])
 
           await ctx.message.channel.send(embed);
         }
