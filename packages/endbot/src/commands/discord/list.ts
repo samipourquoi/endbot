@@ -2,6 +2,7 @@ import { Command, RestType, UnquotedStringType } from "@samipourquoi/commander";
 import { MessageEmbed } from "discord.js";
 import { command, discord, DiscordContext } from "../dispatcher";
 import { Colors } from "../../utils/theme";
+import { Embed } from "../../utils/embeds";
 
 @command(discord)
 class ListCommand
@@ -61,10 +62,6 @@ async function roles(ctx: DiscordContext) {
   }
 
   if (!validRole) {
-    const embed = new MessageEmbed()
-      .setColor(Colors.ERROR)
-      .setTitle("That role doesn't exist!")
-   
-    await ctx.message.channel.send(embed);
+    await ctx.message.channel.send(Embed.error("That role doesn't exist"));
   }
 }

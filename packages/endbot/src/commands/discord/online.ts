@@ -3,6 +3,7 @@ import { Bridge, Bridges } from "../../bridge/bridge";
 import { MessageEmbed, Util } from "discord.js";
 import { Colors } from "../../utils/theme";
 import { command, discord, DiscordContext } from "../dispatcher";
+import { Embed } from "../../utils/embeds";
 
 @command(discord)
 export class OnlineCommand
@@ -32,10 +33,7 @@ async function online(ctx: DiscordContext) {
 		const result = await getOnlinePlayers(bridge);
 
 		if (result.onlineCount == 0) {
-			const error = new MessageEmbed()
-				.setColor(Colors.ERROR)
-				.setDescription(`No player online on \`${ bridge.config.name }\``);
-			await ctx.message.channel.send(error);
+			await ctx.message.channel.send(Embed.error("", `No player online on \`${ bridge.config.name }\``));
 		} else {
 			const embed = new MessageEmbed()
 				.setColor(Colors.RESULT)

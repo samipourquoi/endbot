@@ -4,6 +4,7 @@ import { Bridge, Bridges } from "../../bridge/bridge";
 import { Colors } from "../../utils/theme";
 import { command, discord, DiscordContext } from "../dispatcher";
 import { config } from "../../index";
+import { Embed } from "../../utils/embeds";
 const invalidCommands = require("../../../assets/invalid_commands.json");
 
 @command(discord)
@@ -25,16 +26,13 @@ async function online(ctx: DiscordContext) {
     let bridges = Bridges.getFromMessage(ctx.message);
 
     if (bridges.length == 0) {
-        let embed = new MessageEmbed()
-            .setColor(Colors.ERROR)
-            .setTitle("You must be in a bridge channel to do that!");
-        await ctx.message.channel.send(embed);    
+        await ctx.message.channel.send(Embed.error("You must be in a bridge channel to do that!"));    
         return;
     }
 
     if (Bridges.checkOP(true)) {
         if (!ctx.message.member?.roles.cache.has(config.op_role)) {
-            await ctx.message.channel.send("You need to be OP to run !execute");
+            await ctx.message.channel.send(Embed.error("You need to be OP to run !execute"));
             return;
         }
     }
@@ -44,22 +42,21 @@ async function online(ctx: DiscordContext) {
 async function execute(bridge: Bridge, ctx: DiscordContext) {
     let command = ctx.arg.join(" ");
     let response = await bridge.rcon.send(command);
-    let embedColor = Colors.RESULT
 
     if(!response) return;
 
     for (const word of invalidCommands) {
         if (response.includes(word)) {
-            embedColor = Colors.ERROR;
-            response = word;
+            await ctx.message.channel.send(Embed.error("", word));
+            return;
         }
     }
-    
+
     let description = response.match(/.{1,2047}/g);
 
     for (let i = 0; i < description!.length; i++) {
         const embed = new MessageEmbed()
-            .setColor(embedColor)
+            .setColor(Colors.RESULT)
             .setDescription(description![i])
 
         await ctx.message.channel.send(embed)

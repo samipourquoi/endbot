@@ -5,6 +5,7 @@ import { config, instance } from "../../index";
 import * as Canvas from "canvas";
 import { command, discord, DiscordContext } from "../dispatcher";
 import { LinkModel } from "../../models/link-model";
+import { Embed } from "../../utils/embeds";
 
 @command(discord)
 export class LinksCommand
@@ -40,10 +41,7 @@ async function add(ctx: DiscordContext) {
 	try {
 		invite = await instance.fetchInvite(link);
 	} catch {
-		const error = new MessageEmbed()
-			.setColor(Colors.ERROR)
-			.setDescription("You must provide a valid invite!");
-		await ctx.message.channel.send(error);
+		await ctx.message.channel.send(Embed.error("", "You must provide a valid invite!"));
 		return;
 	}
 	const emote = await createEmote(invite.guild!);

@@ -3,6 +3,7 @@ import { Bridge, Bridges } from "../../bridge/bridge";
 import { MessageEmbed } from "discord.js";
 import { Colors } from "../../utils/theme";
 import { command, discord, DiscordContext } from "../dispatcher";
+import { Embed } from "../../utils/embeds";
 
 @command(discord)
 export class MsptCommand
@@ -31,7 +32,7 @@ async function online(ctx: DiscordContext) {
     for (const bridge of bridges) {
         const result = await Mspt(bridge);
         if (isNaN(result.mspt)) {
-            await ctx.message.channel.send("That command requires carpet mod on the server!")
+            await ctx.message.channel.send(Embed.error("That command requires carpet mod on the server!"));
             return;
         }
 
@@ -40,7 +41,7 @@ async function online(ctx: DiscordContext) {
             .setTitle(`${bridge.config.name} - TPS: ${result.tps.toFixed(1)} MSPT: ${result.mspt.toFixed(1)}`);
         await ctx.message.channel.send(embed);
     }
-    
+
 }
 
 async function Mspt(bridge: Bridge) {

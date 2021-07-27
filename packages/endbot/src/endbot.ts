@@ -1,11 +1,11 @@
 import { Client, Message, MessageEmbed, TextChannel } from "discord.js";
-import { Colors } from "./utils/theme";
 import { Bridge, Bridges } from "./bridge/bridge";
 import { Webhook } from "./bridge/webhook";
 import { config } from "./index";
 import { discord } from "./commands/dispatcher";
 import { DiscordClosure } from "./commands/dispatcher";
 import * as Models from "./models";
+import { Embed } from "./utils/embeds";
 
 export class Endbot
 	extends Client {
@@ -44,10 +44,7 @@ export class Endbot
 				closure
 			);
 		} catch (e) {
-			const error = new MessageEmbed()
-				.setColor(Colors.ERROR)
-				.setDescription(e);
-			await message.channel.send(error);
+			await message.channel.send(Embed.error("", e));
 		}
 	}
 

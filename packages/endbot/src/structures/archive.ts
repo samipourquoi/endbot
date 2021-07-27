@@ -14,6 +14,7 @@ import { APIUser } from "discord-api-types";
 import { TicketAttributes, TicketModel, TicketStatus } from "../models/ticket-model";
 import { ApplicantAttributes, ApplicantModel, defaultID } from "../models/applicant-model";
 import { ArchiveChannelModel } from "../models/archive-channel-model";
+import { Embed } from "../utils/embeds";
 
 export interface Archivable {
 	archive(status: any): Promise<void>;
@@ -98,10 +99,7 @@ export class Ticket
 		if (member)
 			await channel.createOverwrite(member, { VIEW_CHANNEL: true });
 		else {
-			const embed = new MessageEmbed()
-				.setColor(Colors.ERROR)
-				.setDescription(`Couldn't find user ${tag}`);
-			await channel.send(embed);
+			await channel.send(Embed.error("", `Couldn't find user ${tag}`));
 		}
 
 		// Generates the embed (i hate this code)

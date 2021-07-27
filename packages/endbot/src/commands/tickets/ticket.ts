@@ -3,8 +3,8 @@ import { Command } from "@samipourquoi/commander";
 import { config, instance } from "../../index";
 import { Ticket } from "../../structures/archive";
 import { MessageEmbed, TextChannel } from "discord.js";
-import { Colors } from "../../utils/theme";
 import { TicketStatus } from "../../models/ticket-model";
+import { Embed } from "../../utils/embeds";
 
 @command(discord)
 class TicketCommand
@@ -27,10 +27,7 @@ function close(status: TicketStatus) {
 	return async (ctx: DiscordContext) => {
 		const ticket = await Ticket.from(ctx.message.channel as TextChannel);
 		if (ticket == null) {
-			const error = new MessageEmbed()
-				.setColor(Colors.ERROR)
-				.setDescription("This channel isn't a ticket.");
-			await ctx.message.channel.send(error);
+			await ctx.message.channel.send(Embed.error("", "This channel isn't a ticket." ));
 			return;
 		}
 

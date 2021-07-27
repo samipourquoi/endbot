@@ -1,7 +1,7 @@
 import { Command, QuotedType } from "@samipourquoi/commander";
 import { createCanvas, registerFont } from "canvas";
-import { MessageEmbed } from "discord.js";
 import { Bridge, Bridges } from "../../bridge/bridge";
+import { Embed } from "../../utils/embeds";
 import { Colors } from "../../utils/theme";
 import { command, discord, DiscordContext } from "../dispatcher";
 const scoreboards = require("../../../assets/scoreboards.json");
@@ -42,9 +42,7 @@ async function Scoreboard(bridge: Bridge, ctx: DiscordContext) {
         let data = await bridge.rcon.send(`scoreboard players get ${player} ${objective}`)
         if (data.includes("Can't get value of")) continue;
         if (data.includes("Unknown scoreboard objective")) {
-            await ctx.message.channel.send(new MessageEmbed()
-                .setColor(Colors.ERROR)
-                .setTitle("Unknown scoreboard objective"))
+            await ctx.message.channel.send(Embed.error("Unknown scoreboard objective"));
             return;
         }
         scores.push([player, data.split(" ")[2]]);
