@@ -18,7 +18,7 @@ class EmbedCommand
 		super();
 
 		this.register
-			.with.literal("embed")
+			.with.literal("embed").run(cases)
 			.__.with.arg("<function>", new RestType(new UnquotedStringType())).run(cases);
 
 	}
@@ -106,21 +106,38 @@ async function create(ctx: DiscordContext, args: string[]) {
 async function createFrom(ctx: DiscordContext, args: string[]) {
 	if (args[0] == undefined) {
 			await ctx.message.channel.send(Embed.error(EmbedCommand.invalidArgs));
+	} else if (args[0].includes("discordapp.com")) {
+			const link = args[0].split("/")
+			const channelID = link[5];
+ 			const messageID = link[6];
+			const channel: TextChannel = ctx.message.guild!.channels.cache.get(channelID) as TextChannel;
+
+			try {
+					const content = channel.messages.fetch(messageID)
+					.then(content => {
+							const embed = new MessageEmbed(content.embeds[0])
+							ctx.message.channel.send(embed)
+							.then(message => EmbedCommand.ongoing.set(ctx.message.author, embed))
+							.catch(error => ctx.message.channel.send(Embed.error("Invalid embed")));
+					}).catch(error => {
+							ctx.message.channel.send(Embed.error(error.toString().replace("DiscordAPIError: ", "")));
+					});
+			} catch {
+					await ctx.message.channel.send(Embed.error("Unknown link destination"));
+			}
 	} else {
 			try {
 					const response = await fetch(args[0])
 					try {
 							const json = await response.json()
 							const embed = new MessageEmbed(json);
-							EmbedCommand.ongoing.set(ctx.message.author, embed);
 							await ctx.message.channel.send(embed);
+							EmbedCommand.ongoing.set(ctx.message.author, embed);
 					} catch {
 							await ctx.message.channel.send(Embed.error("Invalid JSON format"));
-							await EmbedCommand.ongoing.delete(ctx.message.author);
 					}
 			} catch {
 					await ctx.message.channel.send(Embed.error("Invalid URL"));
-					await EmbedCommand.ongoing.delete(ctx.message.author);
 			}
 	}
 }
@@ -269,16 +286,13 @@ async function edit(ctx: DiscordContext, args: string[]) {
 	// This function replaces the specified message(in the arguments) with the author's embed
  	if(!await check(ctx, args)) return;
 
-	let channelID = args[0].slice(2, -1);
-	let messageID = args[1];
-	if (!messageID) {
-		await ctx.message.channel.send(Embed.error(EmbedCommand.invalidArgs));
-		return;
-	}
+	const link = args[0].split("/")
+	const channelID = link[5];
+ 	const messageID = link[6];
+	const channel: TextChannel = ctx.message.guild!.channels.cache.get(channelID) as TextChannel;
 
-	let channel: TextChannel = ctx.message.guild!.channels.cache.get(channelID) as TextChannel;
 	try {
-			let message = channel.messages.fetch(messageID)
+			const message = channel.messages.fetch(messageID)
 			.then(message => {
 					if (ctx.message.member!.hasPermission("MANAGE_CHANNELS")) {
 								message.edit(EmbedCommand.ongoing.get(ctx.message.author))
@@ -288,9 +302,9 @@ async function edit(ctx: DiscordContext, args: string[]) {
 								ctx.message.channel.send(Embed.error("You don't have permission to do that!"));
 					}
 			}).catch(error => {
-					ctx.message.channel.send(Embed.error(error));
+					ctx.message.channel.send(Embed.error(error.toString().replace("DiscordAPIError: ", "")));
 			});
 	} catch {
-			await ctx.message.channel.send(Embed.error("Unknown channel!"));
+			await ctx.message.channel.send(Embed.error("Unknown link destination"));
 	}
 }
