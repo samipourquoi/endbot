@@ -281,8 +281,9 @@ async function edit(ctx: DiscordContext, args: string[]) {
 			let message = channel.messages.fetch(messageID)
 			.then(message => {
 					if (ctx.message.member!.hasPermission("MANAGE_CHANNELS")) {
-								message.edit(EmbedCommand.ongoing.get(ctx.message.author));
-								ctx.message.react("✅");
+								message.edit(EmbedCommand.ongoing.get(ctx.message.author))
+								.then(message => ctx.message.react("✅"))
+								.catch(error => ctx.message.channel.send(Embed.error("You can only edit Endbot messages!")));
 					} else {
 								ctx.message.channel.send(Embed.error("You don't have permission to do that!"));
 					}
