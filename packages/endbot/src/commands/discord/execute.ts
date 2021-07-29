@@ -17,7 +17,7 @@ export class ExecuteCommand
         this.register
             .with.literal("execute")
             .__.with.arg("<command>", new RestType(new UnquotedStringType())).run(online);
-            
+
     }
 }
 
@@ -26,7 +26,7 @@ async function online(ctx: DiscordContext) {
     let bridges = Bridges.getFromMessage(ctx.message);
 
     if (bridges.length == 0) {
-        await ctx.message.channel.send(Embed.error("You must be in a bridge channel to do that!"));    
+        await ctx.message.channel.send(Embed.error("You must be in a bridge channel to do that!"));
         return;
     }
 

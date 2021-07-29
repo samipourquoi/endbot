@@ -46,7 +46,7 @@ export class Bridge
 	async onMinecraftMessage(line: string) {
 		const [, message ] = (/\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \[Server thread\/INFO]: (.+)/g).exec(line) ?? [];
 		if (!message) return;
-		
+
 		if (message.startsWith("[") && message.endsWith("]")) return;
 
 		if (message.startsWith("Villager") && message.endsWith("'")) return;
@@ -65,7 +65,7 @@ export class Bridge
 				}
 			}
 		};
-	
+
 		const { prefix } = instance;
 		const words = message.split(" ");
 		const author = words[0]?.slice(1, words[0]?.length - 1);

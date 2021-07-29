@@ -28,7 +28,7 @@ async function roles(ctx: DiscordContext) {
       if (!chosenRole) {
         allRoles.push(role.name);
         validRole = true;
-      } 
+      }
       else if (role.name.toLowerCase() === chosenRole) {
         validRole = true;
         let membersWithRole: string[] = [];
@@ -37,13 +37,16 @@ async function roles(ctx: DiscordContext) {
           if (member.roles.cache.find(role => role.name.toLowerCase() === chosenRole)) membersWithRole.push(member.user.toString());
         });
 
-        let memberList = membersWithRole.sort().join("\r\n").toString().match(/[\s\S]{1,2047}/g);
-        if (memberList == null) memberList = [""]
+        let memberList = membersWithRole.sort().join("\n").toString().match(/[\s\S]{1,2047}/g) || [""];
+        let title = `There are ${membersWithRole.length} people with ${chosenRole}`
+        if (membersWithRole.length == 1) {
+          title = `There is 1 person with ${chosenRole}`
+        }
 
         for (let i = 0; i < memberList.length; i++) {
           const embed = new MessageEmbed()
             .setColor(role.color)
-            .setTitle(`There are ${membersWithRole.length} people with ${chosenRole}`)
+            .setTitle(title)
             .setDescription(memberList[i])
 
           await ctx.message.channel.send(embed);

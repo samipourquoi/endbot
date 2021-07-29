@@ -5,7 +5,7 @@ const scoreboards = require("../../../assets/scoreboards.json");
 @command(minecraft)
 export class ScoreboardCommand
     extends Command {
-    
+
     constructor() {
         super();
 
@@ -27,7 +27,7 @@ async function scoreboard(ctx: MinecraftContext) {
     if (objective === "clear") {
         await ctx.bridge.rcon.send(`scoreboard objectives setdisplay ${display}`);
         await ctx.bridge.succeed(`Cleared the ${display} from any objective`);
-    } 
+    }
     else if (ctx.args[2] === "total") {
         let data = await ctx.bridge.rcon.send("scoreboard players list");
         let players = data.substring(data.indexOf(": ")+2).split(", ");
@@ -49,7 +49,7 @@ async function scoreboard(ctx: MinecraftContext) {
     else if (ctx.args[2] === "query") {
         const player = ctx.args[3];
         const response =(await ctx.bridge.rcon.send(`scoreboard players get ${player} ${objective}`)).replace(/\[|]/g, "");
-        (response.includes("Unknown scoreboard objective")) ? await ctx.bridge.error(response) : await ctx.bridge.succeed(response);
+        response.includes("Unknown scoreboard objective") ? await ctx.bridge.error(response) : await ctx.bridge.succeed(response);
     }
     else {
         const response = (await ctx.bridge.rcon.send(`scoreboard objectives setdisplay ${display} ${objective}`));

@@ -1,7 +1,7 @@
 import * as express from "express";
 import { Request, Response } from "express";
 import { Bridges } from "./bridge";
-import { config, instance } from "../index";
+import { config } from "../index";
 
 export module Webhook {
 	export const webhook = express();

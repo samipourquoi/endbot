@@ -1,5 +1,5 @@
 import { Command, QuotedType, UnquotedStringType } from "@samipourquoi/commander";
-import { EmbedFieldData, Guild, MessageEmbed, TextBasedChannel, TextChannel } from "discord.js";
+import { EmbedFieldData, Guild, MessageEmbed, TextChannel } from "discord.js";
 import { Colors } from "../../utils/theme";
 import { config, instance } from "../../index";
 import * as Canvas from "canvas";

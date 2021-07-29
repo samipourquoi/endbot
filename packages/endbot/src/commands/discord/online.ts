@@ -25,10 +25,10 @@ async function online(ctx: DiscordContext) {
 		for (const bridge of Bridges.instances) {
 			if (ctx.args[1] === bridge.config.name) {
 				bridges = [bridge]
-			} 
+			}
 		}
 	}
-	
+
 	for (const bridge of bridges) {
 		const result = await getOnlinePlayers(bridge);
 

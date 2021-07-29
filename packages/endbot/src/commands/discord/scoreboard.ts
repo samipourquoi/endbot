@@ -23,7 +23,7 @@ class ScoreboardCommand
 async function online(ctx: DiscordContext) {
     let bridges = Bridges.getFromMessage(ctx.message);
     if (bridges.length == 0) bridges = Bridges.instances;
-    
+
     await Scoreboard(bridges[0], ctx);
 }
 
@@ -34,7 +34,7 @@ async function Scoreboard(bridge: Bridge, ctx: DiscordContext) {
     if (objective in scoreboards) {
         objective = scoreboards[objective]
     }
-    
+
     let scores = []
     let i = players.length;
     while (i--) {
