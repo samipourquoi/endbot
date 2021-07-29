@@ -47,10 +47,14 @@ async function scoreboard(ctx: MinecraftContext) {
         await ctx.bridge.succeed(`The total of ${objective} is ${total}`);
     }
     else if (ctx.args[2] === "query") {
-        const player = ctx.args[3];
-        const response =(await ctx.bridge.rcon.send(`scoreboard players get ${player} ${objective}`)).replace(/\[|]/g, "");
-        response.includes("Unknown scoreboard objective") ? await ctx.bridge.error(response) : await ctx.bridge.succeed(response);
-    }
+       const player = ctx.args[3] || ctx.author;
+       const response =(await ctx.bridge.rcon.send(`scoreboard players get ${player} ${objective}`)).replace(/\[|]/g, "");
+       if (response.includes("Unknown scoreboard objective") || response.includes("Can't get value of")) {
+					await ctx.bridge.error(response)
+			} else {
+					await ctx.bridge.succeed(response);
+			}
+		}
     else {
         const response = (await ctx.bridge.rcon.send(`scoreboard objectives setdisplay ${display} ${objective}`));
         if (response.includes("Unknown scoreboard objective")) await ctx.bridge.error(response);

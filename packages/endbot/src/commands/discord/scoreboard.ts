@@ -16,7 +16,8 @@ class ScoreboardCommand
         this.register
             .with.literal("scoreboard","score", "sb", "s")
             .__.with.arg("<objective>", new QuotedType()).run(online)
-            .__.__.with.literal("-all", "-a", "-board", "-b").run(online);
+            .__.__.with.literal("-all", "-a", "-board", "-b", "query", "total").run(online)
+						.__.__.__.with.arg("<player>", new QuotedType()).run(online);
     }
 }
 
@@ -28,28 +29,34 @@ async function online(ctx: DiscordContext) {
 }
 
 async function Scoreboard(bridge: Bridge, ctx: DiscordContext) {
-    let data = (ctx.args[2] === "-all" || ctx.args[2] === "-a") ? await bridge.rcon.send("scoreboard players list") : await bridge.rcon.send("whitelist list");
-    let players = data.substring(data.indexOf(": ")+2).split(", ");
-    let objective = ctx.args[1];
-    if (objective in scoreboards) {
-        objective = scoreboards[objective]
-    }
+	let playerList = (ctx.args[2]) ? await bridge.rcon.send("scoreboard players list") : await bridge.rcon.send("whitelist list");
+	let players = playerList.substring(playerList.indexOf(": ")+2).split(", ");
+	let objective = ctx.args[1];
+	if (objective in scoreboards) {
+		objective = scoreboards[objective]
+	}
 
-    let scores = []
-    let i = players.length;
-    while (i--) {
-        let player = players[i];
-        let data = await bridge.rcon.send(`scoreboard players get ${player} ${objective}`)
-        if (data.includes("Can't get value of")) continue;
-        if (data.includes("Unknown scoreboard objective")) {
-            await ctx.message.channel.send(Embed.error("Unknown scoreboard objective"));
-            return;
-        }
-        scores.push([player, data.split(" ")[2]]);
-    }
-    scores.sort((a, b) => +b[1] - +a[1]);
-    if (ctx.args[2] === "-board" || ctx.args[2] === "-b") scores.splice(15);
-    scores.push(["Total", String(scores.reduce((a, b) => a + parseInt(b[1]), 0))]);
+	let scores = []
+	let i = (ctx.args[2] === "query") ? 1 : players.length;
+	while (i--) {
+		let player = players[i]
+		if (ctx.args[2] === "query") player = ctx.args[3];
+		if (!players.includes(player)) {
+			await ctx.message.channel.send(Embed.error("Unknown player"));
+			return;
+		}
+		let data = await bridge.rcon.send(`scoreboard players get ${player} ${objective}`)
+		if (data.includes("Can't get value of")) continue;
+		if (data.includes("Unknown scoreboard objective") || data.includes("Objective names cannot be longer than 16")) {
+			await ctx.message.channel.send(Embed.error("Unknown scoreboard objective"));
+			return;
+		}
+		scores.push([player, data.split(" ")[2]]);
+	}
+	scores.sort((a, b) => +b[1] - +a[1]);
+	if (ctx.args[2] === "-board" || ctx.args[2] === "-b") scores.splice(15);
+	if (ctx.args[2] !== "query") scores.push(["Total", String(scores.reduce((a, b) => a + parseInt(b[1]), 0))]);
+	if (ctx.args[2] === "total") scores = scores.slice(-1);
 
     // Creates the style for the embed and sends it
     const FONT_SIZE = 22;
