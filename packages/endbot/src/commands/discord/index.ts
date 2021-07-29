@@ -6,3 +6,4 @@ export * from "./mspt";
 export * from "./execute";
 export * from "./scoreboard";
 export * from "./embed-editor";
+export * from "./pos";
