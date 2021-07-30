@@ -1,6 +1,7 @@
 import { Client, Message, MessageEmbed, TextChannel } from "discord.js";
 import { Bridge, Bridges } from "./bridge/bridge";
 import { Webhook } from "./bridge/webhook";
+import { Tails } from "./bridge/tail";
 import { config } from "./index";
 import { discord } from "./commands/dispatcher";
 import { DiscordClosure } from "./commands/dispatcher";
@@ -49,12 +50,22 @@ export class Endbot
 	}
 
 	async initServers() {
+		if (config.servers == null || config.servers.length == 0) {
+			console.log("Setup your server in the config file to connect to your server")
+		 	return;
+		}
+		let local_server = false;
+
 		for (const server of config.servers) {
 			const channel = await this.channels
 				.fetch(server.bridge_channel.toString());
 			const bridge = new Bridge(server, channel as TextChannel);
 			await bridge.connect();
+			if (server.is_local) {
+				Tails.init(server);
+				local_server = true;
+			}
 		}
-		Webhook.init();
+		if (!local_server) Webhook.init();
 	}
 }
