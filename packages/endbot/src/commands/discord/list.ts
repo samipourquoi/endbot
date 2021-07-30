@@ -24,12 +24,11 @@ async function roles(ctx: DiscordContext) {
   let allRoles: string[] = [];
 
   ctx.message.guild!.roles.cache.forEach(async (role) => {
-    if (role.name != "@everyone") {
-      if (!chosenRole) {
-        allRoles.push(role.name);
-        validRole = true;
-      }
-      else if (role.name.toLowerCase() === chosenRole) {
+    if (role.name === "@everyone") return;
+    if (!chosenRole) {
+    		allRoles.push(role.name);
+    		validRole = true;
+    } else if (role.name.toLowerCase() === chosenRole) {
         validRole = true;
         let membersWithRole: string[] = [];
 
@@ -51,8 +50,7 @@ async function roles(ctx: DiscordContext) {
 
           await ctx.message.channel.send(embed);
         }
-      }
-    }
+		}
   });
 
   if (allRoles.length) {

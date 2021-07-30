@@ -33,4 +33,5 @@ async function pos(ctx: MinecraftContext) {
 
 	let position = `${player} is at X:${x} Y:${y} Z:${z} in the ${dimension}`;
 	await ctx.bridge.sendColoredMessage(position, "aqua")
+	await ctx.bridge.rcon.send(`effect give ${player} minecraft:glowing 30 0 true`);
 }

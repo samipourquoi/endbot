@@ -106,7 +106,7 @@ async function create(ctx: DiscordContext, args: string[]) {
 async function createFrom(ctx: DiscordContext, args: string[]) {
 	if (args[0] == undefined) {
 			await ctx.message.channel.send(Embed.error(EmbedCommand.invalidArgs));
-	} else if (args[0].includes("discordapp.com")) {
+	} else if (args[0].includes("discord")) {
 			const link = args[0].split("/")
 			const channelID = link[5];
  			const messageID = link[6];
