@@ -54,7 +54,7 @@ export class Endbot
 			console.log("Setup your server in the config file to connect to your server")
 		 	return;
 		}
-		let local_server = false;
+		let local_server = true
 
 		for (const server of config.servers) {
 			const channel = await this.channels
@@ -62,8 +62,9 @@ export class Endbot
 			const bridge = new Bridge(server, channel as TextChannel);
 			await bridge.connect();
 			if (server.is_local) {
-				Tails.init(server);
-				local_server = true;
+					Tails.init(server);
+			} else {
+					local_server = false;
 			}
 		}
 		if (!local_server) Webhook.init();
