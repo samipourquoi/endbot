@@ -30,7 +30,14 @@ async function online(ctx: DiscordContext) {
 	}
 
     for (const bridge of bridges) {
-        const result = await Mspt(bridge);
+        let result;
+        try { 
+            result = await Mspt(bridge)
+        } catch (e) {
+            await ctx.message.channel.send(Embed.error("", `${e} to '${bridge.config.name}'`));
+            continue;
+        }
+
         if (isNaN(result.mspt)) {
             await ctx.message.channel.send(Embed.error("That command requires carpet mod on the server!"));
             return;

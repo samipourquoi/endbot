@@ -40,12 +40,25 @@ export class Bridge
 			"authenticated",
 			() => console.info(`Connected to server: '${this.config.name}'`)
 		);
-		await this.rcon.connect();
+		this.rcon.on(
+			"end",
+			() => console.info(`Disconnected from ${this.config.name}`)
+		);
+		try {
+				await this.rcon.connect();
+		} catch {
+				console.info(`Failed to connect to server: '${this.config.name}'`);
+		}
 	}
 
 	async onMinecraftMessage(line: string) {
 		const [, message ] = (/\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \[Server thread\/INFO]: (.+)/g).exec(line) ?? [];
 		if (!message) return;
+
+		if (message.includes("Thread RCON Listener started")) {
+			await this.rcon.connect();
+			return;
+		}
 
 		if (message.startsWith("[") && message.endsWith("]")) return;
 
@@ -87,11 +100,15 @@ export class Bridge
 	}
 
 	async onDiscordMessage(message: Message) {
-		await this.sendMessageToMinecraft(
-			message.author.username,
-			message.content,
-			ColorUtils.closestMinecraftColor(message.member?.roles.highest.color || 0)
-		);
+		try {
+			await this.sendMessageToMinecraft(
+				message.author.username,
+				message.content,
+				ColorUtils.closestMinecraftColor(message.member?.roles.highest.color || 0)
+			);
+		} catch {
+			return;
+		}
 	}
 
 	async sendMessageToMinecraft(author: string, message: string, color: string = "white") {

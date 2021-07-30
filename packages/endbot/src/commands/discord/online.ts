@@ -30,8 +30,14 @@ async function online(ctx: DiscordContext) {
 	}
 
 	for (const bridge of bridges) {
-		const result = await getOnlinePlayers(bridge);
-
+		let result;
+		try {
+			result = await getOnlinePlayers(bridge);
+		} catch (e) {
+			await ctx.message.channel.send(Embed.error("", `${e} to '${bridge.config.name}'`));
+			continue;
+		}
+		
 		if (result.onlineCount == 0) {
 			await ctx.message.channel.send(Embed.error("", `No player online on \`${ bridge.config.name }\``));
 		} else {
