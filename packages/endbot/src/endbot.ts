@@ -7,6 +7,7 @@ import { discord } from "./commands/dispatcher";
 import { DiscordClosure } from "./commands/dispatcher";
 import * as Models from "./models";
 import { Embed } from "./utils/embeds";
+import { TextUtils } from "./utils/text";
 
 export class Endbot
 	extends Client {
@@ -22,7 +23,7 @@ export class Endbot
 		this.once("ready", async () => {
 			await Models.sync();
 			await this.initServers();
-			console.info(`Logged on as ${this.user?.username}`)
+			console.info(`[${TextUtils.getCurrentTime()}] Logged on as ${this.user?.username}`)
 		});
 	}
 

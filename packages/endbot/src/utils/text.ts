@@ -12,4 +12,20 @@ export module TextUtils {
 
 		return day + "/" + month + "/" + year;
 	}
+
+	export function getCurrentTime() {
+		const time = new Date()
+
+		let hours = time.getHours().toString();
+		hours = hours.length > 1 ? hours : "0" + hours;
+
+		let minutes = time.getMinutes().toString()
+		minutes = minutes.length > 1 ? minutes : "0" + minutes;
+
+		let seconds = time.getSeconds().toString();
+		seconds = seconds.length > 1 ? seconds : "0" + seconds;
+
+		return hours + ":" + minutes + ":" + seconds;
+
+	}
 }

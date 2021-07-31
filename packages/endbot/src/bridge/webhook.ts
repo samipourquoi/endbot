@@ -2,6 +2,7 @@ import * as express from "express";
 import { Request, Response } from "express";
 import { Bridges } from "./bridge";
 import { config } from "../index";
+import { TextUtils } from "../utils/text";
 
 export module Webhook {
 	export const webhook = express();
@@ -43,7 +44,7 @@ export module Webhook {
 
 		const port = config.webhook_port || 34345;
 		webhook.listen(port, () => {
-			console.info(`Webhook listening to port ${port}`);
+			console.info(`[${TextUtils.getCurrentTime()}] Webhook listening to port ${port}`);
 		});
 	}
 }

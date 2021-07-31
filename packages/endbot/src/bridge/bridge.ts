@@ -6,6 +6,7 @@ import { EventEmitter } from "events";
 import { MinecraftClosure } from "../commands/dispatcher";
 import { instance } from "../index";
 import { minecraft } from "../commands/dispatcher";
+import { TextUtils } from "../utils/text"
 const specialMessage = require("../../assets/special_messages.json");
 
 export declare interface Bridge {
@@ -38,16 +39,16 @@ export class Bridge
 		Bridges.instances.push(this);
 		this.rcon.on(
 			"authenticated",
-			() => console.info(`Connected to server: '${this.config.name}'`)
+			() => console.info(`[${TextUtils.getCurrentTime()}] Connected to server: '${this.config.name}'`)
 		);
 		this.rcon.on(
 			"end",
-			() => console.info(`Disconnected from ${this.config.name}`)
+			() => console.info(`[${TextUtils.getCurrentTime()}] Disconnected from: '${this.config.name}'`)
 		);
 		try {
 				await this.rcon.connect();
 		} catch {
-				console.info(`Failed to connect to server: '${this.config.name}'`);
+				console.info(`[${TextUtils.getCurrentTime()}] Failed to connect to server: '${this.config.name}'`);
 		}
 	}
 

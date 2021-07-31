@@ -2,6 +2,7 @@ import { Config } from "../config";
 import { Tail } from "tail"
 import { Bridges } from "./bridge";
 import { existsSync } from "fs";
+import { TextUtils } from "../utils/text";
 
 export module Tails {
 	export function init(server : Config.Server) {
@@ -9,9 +10,9 @@ export module Tails {
 		// > https://github.com/destruc7i0n/shulker/blob/dc70468459c0b510b5bf8b8c045e9c374b84cad1/src/MinecraftHandler.ts#L135
 
 		if (existsSync(server.local_log_file_path)) {
-				const tail = new Tail(server.local_log_file_path, {useWatchFile: true})
+				const tail = new Tail(server.local_log_file_path, {useWatchFile: true, fsWatchOptions: {interval: 500}})
 				const bridge = Bridges.getFromName(server.name);
-				console.log(`Tailing log file in '${server.name}'`);
+				console.log(`[${TextUtils.getCurrentTime()}] Tailing log file in '${server.name}'`);
 
 				tail.on("line", (line: string) => {
 				if (!bridge) return;
@@ -19,7 +20,7 @@ export module Tails {
 				});
 
 				tail.on("error", (error: any) => {
-					console.log("Error when tailing log file: " + error);
+					console.log(`[${TextUtils.getCurrentTime()}] Error when tailing log file: ${error}`);
 				});
 		} else {
 			console.log("Error: Could not find log file : " + server.local_log_file_path);

@@ -31,10 +31,10 @@ async function online(ctx: DiscordContext) {
 
     for (const bridge of bridges) {
         let result;
-        try { 
+        try {
             result = await Mspt(bridge)
         } catch (e) {
-            await ctx.message.channel.send(Embed.error("", `${e} to '${bridge.config.name}'`));
+            await ctx.message.channel.send(Embed.error("", `${e} to \`${bridge.config.name}\``));
             continue;
         }
 
