@@ -8,6 +8,7 @@ import { DiscordClosure } from "./commands/dispatcher";
 import * as Models from "./models";
 import { Embed } from "./utils/embeds";
 import { TextUtils } from "./utils/text";
+import { backupScript } from "./commands/discord/backup"
 
 export class Endbot
 	extends Client {
@@ -24,6 +25,7 @@ export class Endbot
 			await Models.sync();
 			await this.initServers();
 			console.info(`[${TextUtils.getCurrentTime()}] Logged on as ${this.user?.username}`)
+			await backupScript();
 		});
 	}
 

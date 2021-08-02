@@ -11,7 +11,7 @@ const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
 @command(discord)
-export class BackupCommand
+class BackupCommand
     extends Command {
 
     constructor() {
@@ -61,14 +61,21 @@ async function online(ctx: DiscordContext) {
 			.setTitle(`Running a backup for ${bridge.config.name}...`)
 
 			const createEmbed = await ctx.message.channel.send(embed);
-			const backup_name = await backup(bridge, ctx);
+			let backupName
+
+			try {
+					backupName = await backup(bridge);
+			} catch (e) {
+					await ctx.message.channel.send(Embed.error("Failed to create a backup", e));
+			}
+
 			await createEmbed.delete();
-			if (backup_name == null) return;
+			if (backupName == null) return;
 
 			const finishEmbed = new MessageEmbed()
 				.setColor(Colors.RESULT)
 				.setTitle("Backup has been created successfully!")
-				.setFooter(backup_name)
+				.setFooter(backupName)
 
 			await ctx.message.channel.send(finishEmbed);
 	} else {
@@ -76,13 +83,33 @@ async function online(ctx: DiscordContext) {
 	}
 }
 
-async function backup(bridge: Bridge, ctx: DiscordContext) {
-	const backup_name = `${bridge.config.name}_on_${TextUtils.getCurrentDate()}_at_${TextUtils.getCurrentTime()}`
+async function backup(bridge: Bridge) {
+	const backupName = `${bridge.config.name}_on_${TextUtils.getCurrentDate()}_at_${TextUtils.getCurrentTime()}`
 
-	try {
-			await exec(`zip -r ${bridge.config.backup_folder_path}/${backup_name} ${bridge.config.local_folder_path}/world`);
-			return backup_name;
-	} catch (e) {
-					await ctx.message.channel.send(Embed.error(`Failed to create a backup on ${bridge.config.name}`, e));
+	await exec(`zip -r ${bridge.config.backup_folder_path}/${backupName} ${bridge.config.local_folder_path}/world`);
+	return backupName;
+}
+
+async function autoBackup(bridge: Bridge) {
+			console.log(`[${TextUtils.getCurrentTime()}] Creating a scheduled backup for '${bridge.config.name}'`)
+			let backupName;
+			try {
+					backupName = await backup(bridge);
+			} catch (e) {
+					console.log(`[${TextUtils.getCurrentTime()}] Failed to create a scheduled backup for '${bridge.config.name}': ${e}`);
+					return;
+			}
+			if (backupName == null) return console.log(`Could not create a backup for ${bridge.config.name}`);
+
+			console.log(`[${TextUtils.getCurrentTime()}] Successfully created a scheduled backup for '${bridge.config.name}': ${backupName}`);
+}
+
+export function backupScript() {
+	for (const bridge of Bridges.instances) {
+		if (bridge.config.auto_backups) {
+			const backupInterval = parseFloat(bridge.config.backup_interval) * 3_600_000;
+			if (isNaN(backupInterval)) return console.log(`Invalid backup_interval for ${bridge.config.name}`);
+			setInterval(() => autoBackup(bridge), backupInterval);
+		}
 	}
 }
