@@ -7,3 +7,4 @@ export * from "./execute";
 export * from "./scoreboard";
 export * from "./embed-editor";
 export * from "./pos";
+export * from "./backup";

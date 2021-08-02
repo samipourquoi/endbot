@@ -1,6 +1,6 @@
 export module TextUtils {
-	export function getFormattedDate(timestamp: number | Date) {
-		const date = new Date(timestamp);
+	export function getCurrentDate() {
+		const date = new Date();
 
 		let year = date.getFullYear();
 
@@ -10,7 +10,7 @@ export module TextUtils {
 		let day = date.getDate().toString();
 		day = day.length > 1 ? day : "0" + day;
 
-		return day + "/" + month + "/" + year;
+		return day + "-" + month + "-" + year;
 	}
 
 	export function getCurrentTime() {

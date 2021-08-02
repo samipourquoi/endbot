@@ -9,8 +9,8 @@ export module Tails {
 		// Copy pasted from:
 		// > https://github.com/destruc7i0n/shulker/blob/dc70468459c0b510b5bf8b8c045e9c374b84cad1/src/MinecraftHandler.ts#L135
 
-		if (existsSync(server.local_log_file_path)) {
-				const tail = new Tail(server.local_log_file_path, {useWatchFile: true, fsWatchOptions: {interval: 500}})
+		if (existsSync(`${server.local_folder_path}/logs/latest.log`)) {
+				const tail = new Tail(`${server.local_folder_path}/logs/latest.log`, {useWatchFile: true, fsWatchOptions: {interval: 500}})
 				const bridge = Bridges.getFromName(server.name);
 				console.log(`[${TextUtils.getCurrentTime()}] Tailing log file in '${server.name}'`);
 
@@ -23,7 +23,7 @@ export module Tails {
 					console.log(`[${TextUtils.getCurrentTime()}] Error when tailing log file: ${error}`);
 				});
 		} else {
-			console.log("Error: Could not find log file : " + server.local_log_file_path);
+			console.log(`Error: Could not find log file : ${server.local_folder_path}/logs/latest.log`);
 		}
 	}
 }
