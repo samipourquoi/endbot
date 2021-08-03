@@ -119,7 +119,7 @@ const commands: {[command: string]: commandInfo} = {
 	}
 }
 
-interface commandInfo {
+export interface commandInfo {
 	name: string;
 	usage: string;
 	description: string;
