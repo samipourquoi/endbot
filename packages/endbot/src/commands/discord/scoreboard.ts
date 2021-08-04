@@ -1,4 +1,4 @@
-import { Command, QuotedType } from "@samipourquoi/commander";
+import { Command, QuotedType, RestType } from "@samipourquoi/commander";
 import { createCanvas, registerFont } from "canvas";
 import { Bridge, Bridges } from "../../bridge/bridge";
 import { Embed } from "../../utils/embeds";
@@ -16,8 +16,9 @@ class ScoreboardCommand
         this.register
             .with.literal("scoreboard","score", "sb", "s")
             .__.with.arg("<objective>", new QuotedType()).run(online)
-            .__.__.with.literal("-all", "-a", "-board", "-b", "query", "total").run(online)
-						.__.__.__.with.arg("<player>", new QuotedType()).run(online);
+            .__.__.with.arg("<flag>", new QuotedType()).run(online)
+            .__.__.__.with.arg("<player>", new RestType(new QuotedType())).run(online);
+
     }
 }
 
@@ -29,7 +30,8 @@ async function online(ctx: DiscordContext) {
 }
 
 async function Scoreboard(bridge: Bridge, ctx: DiscordContext) {
-	let playerList = (ctx.args[2]) ? await bridge.rcon.send("scoreboard players list") : await bridge.rcon.send("whitelist list");
+	const flags = ["-all", "-a", "-board", "-b", "query", "total"];
+	let playerList = (flags.includes(ctx.args[2])) ? await bridge.rcon.send("scoreboard players list") : await bridge.rcon.send("whitelist list");
 	let players = playerList.substring(playerList.indexOf(": ")+2).split(", ");
 	let objective = ctx.args[1];
 	if (objective in scoreboards) {
@@ -40,7 +42,7 @@ async function Scoreboard(bridge: Bridge, ctx: DiscordContext) {
 	let i = (ctx.args[2] === "query") ? 1 : players.length;
 	while (i--) {
 		let player = players[i]
-		if (ctx.args[2] === "query") player = ctx.args[3];
+		if (ctx.args[2] === "query") player = (ctx.args[3])[0];
 		if (!players.includes(player)) {
 			await ctx.message.channel.send(Embed.error("Unknown player"));
 			return;
