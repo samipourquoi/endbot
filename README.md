@@ -34,7 +34,7 @@ Make sure you replace `<path/to/logs/latest.log>` and `<server_name>` to an actu
 Also, replace `localhost` with the ip address of the bot's host machine if the Minecraft server
 isn't run on the same machine. Search how to run a process in the background on your os. 
 ```shell
-$ tail -f -n0 <path/to/logs/latest.log> | 
+$ tail -F -n0 <path/to/logs/latest.log> | 
   while read x; do echo -n $x |
   curl -X POST -d @- http://localhost:34345/link/<server_name>; done
 ```
