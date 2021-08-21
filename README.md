@@ -3,13 +3,13 @@ Minecraft linking bot with other general utilities. Made for the technical minec
 However, it can be used by anyone willing to do so.
 
 ## Compile and use
-To recommended way is to use [Docker][1].
+To run the bot, you will need the following: [Docker][1], [Node.js][2], and [Yarn][3]. 
 
-Create a discord bot account as shown [here][2].
-Activating the Developer mode on Discord will also be useful ([link][3]).
+Create a discord bot account as shown [here][4].
+Activating the Developer mode on Discord will also be useful ([link][5]).
 
 Finally, learn more about the YAML syntax if you don't already know it
-[here][4].
+[here][6].
 
 Open the command line and clone the repository:
 ```shell
@@ -28,16 +28,24 @@ $ docker-compose up -d
 
 It will create a new file under `config/config.yml`. Fill it accordingly to the following section.
 
-For each server configured, you will need to run this command on the host machine.
+If you are not running the bot on the same server as your Minecraft server, 
+you will need to run the following command on the host machine (for each server configured).
 Make sure you replace `<path/to/logs/latest.log>` and `<server_name>` to an actual value. 
-Search how to run a process in the background on your os.
+Also, replace `localhost` with the ip address of the bot's host machine if the Minecraft server
+isn't run on the same machine. Search how to run a process in the background on your os. 
 ```shell
 $ tail -f -n0 <path/to/logs/latest.log> | 
   while read x; do echo -n $x |
   curl -X POST -d @- http://localhost:34345/link/<server_name>; done
 ```
 
-Once your config is done, rerun the above command, and you're good to go!
+Once your config is done, run the following to start the bot:
+```shell
+$ yarn endbot build 
+# Only when changes to the config file are made
+
+$ yarn endbot start
+```
 
 ### Config
 In your minecraft server(s), you will need to set these fields in the `server.properties`:
@@ -61,8 +69,19 @@ token: Njg4OTA2Njk0NzQ2ODMzMCYy.Xm7IWw.Na2yuH3tKVrc0qGSef8C0jek3v0
 # This is an array: you can add as many
 # servers as you want!
 servers:
-  - # Your server name. Can be anything.
+  - # Your server's name. Can be anything.
     name: MyCoolServer
+    # If true, a tail will be created to read the server's latest.log
+    # If false, a webhook will be created to communicate messages between servers
+    is_local: true
+    # The full path to the server's latest.log.
+    local_folder_path: path/to/logs/latest.log
+    # The folder you want the server's backups to be stored in 
+    backup_folder_path: path/to/backup_folder
+    # If true, a backup will be automatically created on an interval
+    auto_backups: false
+    # The time in between automatic backups. Time in hours.
+    backup_interval: 24
     # Your server's ip. Use host.docker.internal if the server is hosted 
     # on your machine and you're using docker.
     host: host.docker.internal
@@ -110,6 +129,8 @@ It will watch your files and automatically recompile it on change.
 
 [0]: https://discord.gg/t7UwaDc
 [1]: https://docker.com
-[2]: https://discordpy.readthedocs.io/en/latest/discord.html
-[3]: https://discordia.me/en/developer-mode
-[4]: https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
+[2]: https://nodejs.org/en/download/
+[3]: https://classic.yarnpkg.com/lang/en/
+[3]: https://discordpy.readthedocs.io/en/latest/discord.html
+[4]: https://discordia.me/en/developer-mode
+[5]: https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
