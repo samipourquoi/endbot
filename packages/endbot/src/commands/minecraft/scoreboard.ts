@@ -57,6 +57,7 @@ async function scoreboard(ctx: MinecraftContext) {
 		}
     else {
         const response = (await ctx.bridge.rcon.send(`scoreboard objectives setdisplay ${display} ${objective}`));
-        if (response.includes("Unknown scoreboard objective")) await ctx.bridge.error(response);
+        if (response.includes("Unknown scoreboard objective") || response.includes("Objective names cannot be longer than 16"))
+            await ctx.bridge.error(response);
     }
 }
