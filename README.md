@@ -3,7 +3,8 @@ Minecraft linking bot with other general utilities. Made for the technical minec
 However, it can be used by anyone willing to do so.
 
 ## Compile and use
-To run the bot, you will need the following: [Docker][1], [Node.js][2], and [Yarn][3]. 
+To run the bot, you will need the following: [Docker][1], [Node.js][2], and [Yarn][3]. \
+Note: Make sure to have the latest recommended version of Node.js
 
 Create a discord bot account as shown [here][4].
 Activating the Developer mode on Discord will also be useful ([link][5]).
@@ -15,6 +16,10 @@ Open the command line and clone the repository:
 ```shell
 $ git clone https://github.com/samipourquoi/endbot.git
 $ cd endbot
+```
+To install the dependencies for the bot, run: 
+```shell
+$ yarn install
 ```
 
 Simply run:
@@ -37,6 +42,9 @@ isn't run on the same machine. Search how to run a process in the background on 
 $ tail -F -n0 <path/to/logs/latest.log> | 
   while read x; do echo -n $x |
   curl -X POST -d @- http://localhost:34345/link/<server_name>; done
+  
+  #If you are using a Windows OS, you will need WSL to run the above command
+  #https://docs.microsoft.com/en-us/windows/wsl/install-win10
 ```
 
 Once your config is done, run the following to start the bot:
@@ -131,6 +139,6 @@ It will watch your files and automatically recompile it on change.
 [1]: https://docker.com
 [2]: https://nodejs.org/en/download/
 [3]: https://classic.yarnpkg.com/lang/en/
-[3]: https://discordpy.readthedocs.io/en/latest/discord.html
-[4]: https://discordia.me/en/developer-mode
-[5]: https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
+[4]: https://discordpy.readthedocs.io/en/latest/discord.html
+[5]: https://discordia.me/en/developer-mode
+[6]: https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
