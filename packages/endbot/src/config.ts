@@ -80,21 +80,25 @@ export module Config {
 			"/etc/endbot/config" :
 			"../../config";
 
-		if (existsSync(`${configDir}/config.yml`) ||
-			existsSync(`${configDir}/config.yaml`)) {
-
-			const content = readFileSync(`${configDir}/config.yml`, "utf-8") ??
-				readFileSync(`${configDir}/config.yml`, "utf-8") ??
-				"";
+		let content;
+		if (existsSync(`${configDir}/config.yml`)) {
+			content = readFileSync(`${configDir}/config.yml`, "utf-8");
 			return YAML.parse(content);
-		} else {
-			mkdirSync("../../config");
+		}
+		else if (existsSync(`${configDir}/config.yaml`)) {
+			content = readFileSync(`${configDir}/config.yaml`, "utf-8")
+			return YAML.parse(content);
+		} 
+		else {
+			if (!existsSync(configDir)) {
+				mkdirSync("../../config");
+			}	
 			writeFileSync(`${configDir}/config.yml`, YAML.stringify(defaultConfig));
 			console.info(
 				"Wrote default config to 'config/config.yml'. Please fill it out, more info at:\n" +
 				" > https://github.com/samipourquoi/endbot"
 			);
-			return defaultConfig
+			process.exit();
 		}
 	}
 }

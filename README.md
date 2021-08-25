@@ -22,13 +22,9 @@ To install the dependencies for the bot, run:
 $ yarn install
 ```
 
-Simply run:
+To generate the config file for the bot, run: 
 ```shell
-$ make prod
-
-# if you don't have make installed:
-$ cd docker
-$ docker-compose up -d
+$ yarn endbot start
 ```
 
 It will create a new file under `config/config.yml`. Fill it accordingly to the following section.
