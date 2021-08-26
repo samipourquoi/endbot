@@ -61,7 +61,7 @@ export module Config {
 			{
 				name: "Server",
 				is_local: true,
-				local_folder_path: "path/to/logs/latest.log # Only fill out if is_local is true",
+				local_folder_path: "path/to/server_folder # Only fill out if is_local is true",
 				backup_folder_path: "path/to/backup_folder # Only fill out if is_local is true. This path also has to be local",
 				auto_backups: "false # Only works if server is local. Backups a server every 24 hours(can be changed below)",
 				backup_interval: "24 # Time in hours. Only needed if auto_backups is true",

@@ -78,8 +78,8 @@ servers:
     # If true, a tail will be created to read the server's latest.log
     # If false, a webhook will be created to communicate messages between servers
     is_local: true
-    # The full path to the server's latest.log.
-    local_folder_path: path/to/logs/latest.log
+    # The full path to the server's main folder.
+    local_folder_path: path/to/server_folder
     # The folder you want the server's backups to be stored in 
     backup_folder_path: path/to/backup_folder
     # If true, a backup will be automatically created on an interval
