@@ -86,7 +86,7 @@ async function online(ctx: DiscordContext) {
 async function backup(bridge: Bridge) {
 	const backupName = `${bridge.config.name}_on_${TextUtils.getCurrentDate()}_at_${TextUtils.getCurrentTime()}`
 
-	await exec(`zip -r ${bridge.config.backup_folder_path}/${backupName} ${bridge.config.local_folder_path}/world`);
+	await exec(`cd ${bridge.config.backup_folder_path} && tar -zcf ./${backupName}.tar ${bridge.config.local_folder_path}/world`);
 	return backupName;
 }
 

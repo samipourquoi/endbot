@@ -34,14 +34,14 @@ async function backup(ctx: MinecraftContext) {
 		return;
 	}
 
-	const backup_name = `${ctx.bridge.config.name}_on_${TextUtils.getCurrentDate()}_at_${TextUtils.getCurrentTime()}`
+	const backupName = `${ctx.bridge.config.name}_on_${TextUtils.getCurrentDate()}_at_${TextUtils.getCurrentTime()}`
 	await ctx.bridge.succeed("Running a backup...");
 
 	try {
-			await exec(`zip -r ${ctx.bridge.config.backup_folder_path}/${backup_name} ${ctx.bridge.config.local_folder_path}/world`);
+			await exec(`cd ${ctx.bridge.config.backup_folder_path} && tar -zcf ./${backupName}.tar ${ctx.bridge.config.local_folder_path}/world`);
 	} catch (e) {
 			await ctx.bridge.error("Failed to create a backup: " + e);
 	}
 
-	await ctx.bridge.succeed(`Backup has been created successfully: ${backup_name}`);
+	await ctx.bridge.succeed(`Backup has been created successfully: ${backupName}`);
 }
