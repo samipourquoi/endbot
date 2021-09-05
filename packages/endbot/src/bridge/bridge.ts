@@ -66,8 +66,33 @@ export class Bridge
 		if (message.startsWith("Villager") && message.endsWith("'")) return;
 
 		if (message.startsWith("<")) {
+			let info = message;
+
+			if (info.includes("@") || info.includes("#")) {
+				const members = this.channel.guild.members.cache;
+				members.forEach(member => {
+					if (info.includes(member.displayName)) {
+						info = info.replace("@" + member.displayName, "<@!" + member.id + ">")
+					}
+				})
+
+				const roles = this.channel.guild!.roles.cache;
+				roles.forEach(role => {
+					if (info.includes(role.name)) {
+						info = info.replace("@" + role.name, "<@&" + role.id + ">")
+					}
+				})
+
+				const channels = this.channel.guild!.channels.cache;
+				channels.forEach(channel => {
+					if (info.includes(channel.name)) {
+						info = info.replace("#" + channel.name, "<#" + channel.id + ">")
+					}
+				})
+			}
+
 			await this.channel.send(
-				Util.escapeMarkdown(message),
+				Util.escapeMarkdown(info),
 				{ disableMentions: "none" })
 		} else {
 			for (const word of specialMessage) {
@@ -102,9 +127,34 @@ export class Bridge
 
 	async onDiscordMessage(message: Message) {
 		try {
+			let content = message.content;
+
+			if (content.includes("@") || content.includes("#")) {
+				const members = message.guild!.members.cache;
+				members.forEach(member => {
+					if (content.includes(member.id)) {
+						content = content.replace("<@!" + member.id + ">", "@" + member.displayName)
+					}
+				})
+
+				const roles = message.guild!.roles.cache;
+				roles.forEach(role => {
+					if (content.includes(role.id)) {
+						content = content.replace("<@&" + role.id + ">", "@" + role.name)
+					}
+				})
+
+				const channels = message.guild!.channels.cache;
+				channels.forEach(channel => {
+					if (content.includes(channel.id)) {
+						content = content.replace("<#" + channel.id + ">", "@" + channel.name)
+					}
+				})
+			}
+			
 			await this.sendMessageToMinecraft(
 				message.author.username,
-				message.content,
+				content,
 				ColorUtils.closestMinecraftColor(message.member?.roles.highest.color || 0)
 			);
 		} catch {
