@@ -115,7 +115,14 @@ const commands: {[command: string]: commandInfo} = {
 	{
 		name: "Scoreboard command",
 		usage: "scoreboard <objectives> [flag]",
-		description: "Displays a scoreboard of the specified objective",
+		description: "Displays a scoreboard of the specified objective"
+	},
+
+	stop:
+	{
+		name: "Stop command",
+		usage: "stop",
+		description: "Stops the bot"
 	}
 }
 
