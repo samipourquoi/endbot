@@ -24,6 +24,7 @@ $ yarn install
 
 To generate the config file for the bot, run: 
 ```shell
+$ yarn endbot build
 $ yarn endbot start
 ```
 
