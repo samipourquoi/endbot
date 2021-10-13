@@ -1,5 +1,5 @@
 import { Command, RestType, UnquotedStringType } from "@samipourquoi/commander";
-import { MessageEmbed } from "discord.js";
+import { MessageEmbed, GuildMember } from "discord.js";
 import { command, discord, DiscordContext } from "../dispatcher";
 import { Colors } from "../../utils/theme";
 import { Embed } from "../../utils/embeds";
@@ -22,7 +22,6 @@ async function roles(ctx: DiscordContext) {
   let validRole = false;
   const members = await ctx.message.guild!.members.fetch();
   let allRoles: string[] = [];
-
   ctx.message.guild!.roles.cache.forEach(async (role) => {
     if (role.name === "@everyone") return;
     if (!chosenRole) {
@@ -30,13 +29,13 @@ async function roles(ctx: DiscordContext) {
     		validRole = true;
     } else if (role.name.toLowerCase() === chosenRole) {
         validRole = true;
-        let membersWithRole: string[] = [];
+        let membersWithRole: GuildMember[] = [];
 
         members.forEach(member => {
-          if (member.roles.cache.find(role => role.name.toLowerCase() === chosenRole)) membersWithRole.push(member.user.toString());
+          if (member.roles.cache.find(role => role.name.toLowerCase() === chosenRole)) membersWithRole.push(member);
         });
 
-        let memberList = membersWithRole.sort().join("\n").toString().match(/[\s\S]{1,2047}/g) || [""];
+        let memberList = membersWithRole.sort().join("\n").toString().match(/[\s\S]{1,2048}/g) || [""];
         let title = `There are ${membersWithRole.length} people with ${chosenRole}`
         if (membersWithRole.length == 1) {
           title = `There is 1 person with ${chosenRole}`

@@ -52,7 +52,7 @@ async function execute(bridge: Bridge, ctx: DiscordContext) {
         }
     }
 
-    let description = response.match(/.{1,2047}/g);
+    let description = response.match(/.{1,2048}/g);
 
     for (let i = 0; i < description!.length; i++) {
         const embed = new MessageEmbed()
