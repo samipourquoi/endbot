@@ -78,8 +78,14 @@ export module Config {
 	}
 
 	export function init(): Config {
-		const configDir = process.env.ENV == "production" ?
-			"/etc/endbot/config" :
+		/*
+		This isn't a very robust way of deciding the config directory
+		I'm trying to detect if the program is run in a yarn workspace or not
+		Let me know if there is a safer/better way of doing this
+		*/
+
+		const configDir = process.env.npm_package_scripts_start == "./docker/start" ?
+			"config" :
 			"../../config";
 
 		let content;

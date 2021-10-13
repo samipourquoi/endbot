@@ -1,5 +1,5 @@
 import { Command, RestType, UnquotedStringType } from "@samipourquoi/commander";
-import { MessageEmbed, GuildMember } from "discord.js";
+import { MessageEmbed, GuildMember, Role } from "discord.js";
 import { command, discord, DiscordContext } from "../dispatcher";
 import { Colors } from "../../utils/theme";
 import { Embed } from "../../utils/embeds";
@@ -21,11 +21,11 @@ async function roles(ctx: DiscordContext) {
   const chosenRole = (ctx.args[1]) ? ctx.arg.join(" ").toLowerCase() : false;
   let validRole = false;
   const members = await ctx.message.guild!.members.fetch();
-  let allRoles: string[] = [];
+  let allRoles: Role[] = [];
   ctx.message.guild!.roles.cache.forEach(async (role) => {
     if (role.name === "@everyone") return;
     if (!chosenRole) {
-    		allRoles.push(role.name);
+    		allRoles.push(role);
     		validRole = true;
     } else if (role.name.toLowerCase() === chosenRole) {
         validRole = true;
