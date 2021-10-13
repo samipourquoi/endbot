@@ -70,7 +70,13 @@ fill it in according to the following:
 ```yaml
 # Your bot's token. Needs to be kept private.
 token: Njg4OTA2Njk0NzQ2ODMzMCYy.Xm7IWw.Na2yuH3tKVrc0qGSef8C0jek3v0
-
+# Your bot's client secret. Needs to be kept private.
+client secret: <client-secret>
+# The port used to connect to the webhook.
+webhook_port: 00000
+# Your server's role ID which defines 
+# which people can run administrator commands.
+op_role: <role_id>
 # This is an array: you can add as many
 # servers as you want!
 servers:
@@ -81,6 +87,9 @@ servers:
     is_local: true
     # The full path to the server's main folder.
     local_folder_path: path/to/server_folder
+    # In milliseconds. How often the tail checks for log file changes.
+    # Only needed if it is a local server.
+    file_watch_interval: 500
     # The folder you want the server's backups to be stored in 
     backup_folder_path: path/to/backup_folder
     # If true, a backup will be automatically created on an interval

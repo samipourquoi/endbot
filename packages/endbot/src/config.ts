@@ -21,6 +21,7 @@ export module Config {
 		name: string,
 		is_local: boolean,
 		local_folder_path: string,
+		file_watch_interval: number,
 		backup_folder_path: string,
 		auto_backups: string,
 		backup_interval: string,
@@ -56,12 +57,14 @@ export module Config {
 	const defaultConfig: Config = {
 		token: "<YOUR TOKEN HERE>",
 		client_secret: "<CLIENT SECRET>",
+		webhook_port: 34345,
 		op_role: "<role.id>",
 		servers: [
 			{
 				name: "Server",
 				is_local: true,
 				local_folder_path: "path/to/server_folder # Only fill out if is_local is true",
+				file_watch_interval: 500,
 				backup_folder_path: "path/to/backup_folder # Only fill out if is_local is true. This path also has to be local",
 				auto_backups: "false # Only works if server is local. Backups a server every 24 hours(can be changed below)",
 				backup_interval: "24 # Time in hours. Only needed if auto_backups is true",
@@ -71,8 +74,7 @@ export module Config {
 				bridge_channel: "<CHANNEL ID>",
 				ops_only: true,
 			}
-		],
-		webhook_port: 34345
+		]
 	}
 
 	export function init(): Config {
@@ -88,11 +90,11 @@ export module Config {
 		else if (existsSync(`${configDir}/config.yaml`)) {
 			content = readFileSync(`${configDir}/config.yaml`, "utf-8")
 			return YAML.parse(content);
-		} 
+		}
 		else {
 			if (!existsSync(configDir)) {
 				mkdirSync("../../config");
-			}	
+			}
 			writeFileSync(`${configDir}/config.yml`, YAML.stringify(defaultConfig));
 			console.info(
 				"Wrote default config to 'config/config.yml'. Please fill it out, more info at:\n" +

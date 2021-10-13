@@ -10,7 +10,7 @@ export module Tails {
 		// > https://github.com/destruc7i0n/shulker/blob/dc70468459c0b510b5bf8b8c045e9c374b84cad1/src/MinecraftHandler.ts#L135
 
 		if (existsSync(`${server.local_folder_path}/logs/latest.log`)) {
-				const tail = new Tail(`${server.local_folder_path}/logs/latest.log`, {useWatchFile: true, fsWatchOptions: {interval: 500}})
+				const tail = new Tail(`${server.local_folder_path}/logs/latest.log`, {useWatchFile: true, fsWatchOptions: {interval: server.file_watch_interval}})
 				const bridge = Bridges.getFromName(server.name);
 				console.log(`[${TextUtils.getCurrentTime()}] Tailing log file in '${server.name}'`);
 
