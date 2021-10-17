@@ -1,5 +1,5 @@
 import { Command, RestType, UnquotedStringType } from "@samipourquoi/commander";
-import { MessageEmbed, GuildMember, Role } from "discord.js";
+import { MessageEmbed, Role } from "discord.js";
 import { command, discord, DiscordContext } from "../dispatcher";
 import { Colors } from "../../utils/theme";
 import { Embed } from "../../utils/embeds";
@@ -29,10 +29,10 @@ async function roles(ctx: DiscordContext) {
     		validRole = true;
     } else if (role.name.toLowerCase() === chosenRole) {
         validRole = true;
-        let membersWithRole: GuildMember[] = [];
+        let membersWithRole: string[] = [];
 
         members.forEach(member => {
-          if (member.roles.cache.find(role => role.name.toLowerCase() === chosenRole)) membersWithRole.push(member);
+          if (member.roles.cache.find(role => role.name.toLowerCase() === chosenRole)) membersWithRole.push(member.user.username);
         });
 
         let memberList = membersWithRole.sort().join("\n").toString().match(/[\s\S]{1,2048}/g) || [""];
