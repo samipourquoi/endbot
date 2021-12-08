@@ -29,7 +29,7 @@ services:
       MYSQL_USER: endbot
       MYSQL_PASSWORD: supersecret
     ports:
-      - 3306:3306
+      - 127.0.0.1:3306:3306
 
     # Removes 'mbind: Operation not permitted'
     # spam in the logs.

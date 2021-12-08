@@ -4,9 +4,9 @@
 	"description": "Minecraft linking bot with other general utilities.",
 	"main": "dist/index.js",
 	"scripts": {
-		"start": "node .",
+		"start": "yarn --cwd ../.. db && node .",
 		"build": "npx tsc",
-		"dev": "npx tsc-watch --onSuccess \"node .\""
+		"dev": "yarn --cwd ../.. dev:db && npx tsc-watch --onSuccess \"node .\""
 	},
 	"repository": "git+https://github.com/samipourquoi/endbot.git",
 	"keywords": [

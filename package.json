@@ -3,13 +3,14 @@
 	"name": "endtech",
 	"workspaces": [ "packages/*" ],
 	"scripts": {
-		"endbot": "yarn dev:db && yarn workspace endbot",
+		"endbot": "yarn workspace endbot",
 		"endweb:back": "yarn workspace @endweb/back",
 		"endweb:front": "yarn workspace @endweb/front",
-		"start": "./docker/start",
+		"start": "yarn db && ./docker/start",
 		"build": "yarn workspaces run build",
+		"db": "cd docker && docker-compose -f docker-compose.yml up -d db redis",
 		"dev:db": "cd docker && docker-compose -f docker-compose.dev.yml up -d db redis",
-		"dev": "cd docker && docker-compose -f docker-compose.dev.yml up --build",
+		"dev": "cd docker && yarn dev:db && docker-compose -f docker-compose.dev.yml up --build",
 		"prod": "cd docker && docker-compose up -d --build"
 	}
 }

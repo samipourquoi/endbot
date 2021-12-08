@@ -27,7 +27,11 @@ services:
       MYSQL_DATABASE: enddb
       MYSQL_USER: endbot
       MYSQL_PASSWORD: supersecret
+    ports:
+      - 127.0.0.1:3306:3306
 
   redis:
     image: redis
     restart: always
+    ports:
+      - 127.0.0.1:6379:6379

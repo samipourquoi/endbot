@@ -84,7 +84,7 @@ export module Config {
 		Let me know if there is a safer/better way of doing this
 		*/
 
-		const configDir = process.env.npm_package_scripts_start == "./docker/start" ?
+		const configDir = process.env.npm_package_scripts_start?.includes("./docker/start") ?
 			"config" :
 			"../../config";
 
