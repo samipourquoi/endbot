@@ -2,18 +2,12 @@ FROM node:16.13.1
 
 WORKDIR /endbot
 
-COPY ./package.json ./yarn.lock ./
+# Copy everything into docker
+COPY . .
 
-COPY ./tsconfig.json ./
-
-COPY ./src/ /endbot/src/
-
+# Install the dependencies needed
 RUN yarn install
 
 RUN yarn build
-
-COPY . .
-
-USER node
 
 CMD ["yarn", "start"]

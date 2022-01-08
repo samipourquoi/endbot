@@ -8,5 +8,5 @@ services:
     ports:
       - 34345:34345
     environment:
-      ENV: "production"
-    user: node
+      ENV: "development"
+    command: yarn dev
