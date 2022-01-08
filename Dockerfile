@@ -14,4 +14,6 @@ RUN yarn build
 
 COPY . .
 
+USER node
+
 CMD ["yarn", "start"]

@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  bot:
+    build: .
+    volumes:
+      - ./src:/endbot/src
+    ports:
+      - 34345:34345
