@@ -13,8 +13,11 @@
 		"composite": true,
 		"resolveJsonModule": true
 	},
+	"include": [
+		"**/*"
+	],
 	"exclude": [
-		"node_modules",
-		"**/dist"
+		"/node_modules",
+		"/dist"
 	]
 }

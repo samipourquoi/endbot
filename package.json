@@ -1,15 +1,35 @@
 {
+	"name": "endbot",
+	"description": "Minecraft linking bot with other general utilities.",
+	"version": "5.0.0",
 	"private": true,
-	"name": "endtech",
-	"workspaces": [ "packages/*" ],
+	"main": "dist/index.js",
+	"author": "samipourquoi",
+	"contributors": [
+		"trunkyredstone",
+		"iDarkLightning",
+		"jezzerswastaken",
+		"londonmine",
+		"syntro"
+	],
+	"repository": "git+https://github.com/samipourquoi/endbot.git",
+	"homepage": "https://github.com/samipourquoi/endbot#readme",
+	"bugs": {
+		"url": "https://github.com/samipourquoi/endbot/issues"
+	},
+	"license": "MIT",
 	"scripts": {
-		"endbot": "yarn dev:db && yarn workspace endbot",
-		"endweb:back": "yarn workspace @endweb/back",
-		"endweb:front": "yarn workspace @endweb/front",
-		"start": "./docker/start",
-		"build": "yarn workspaces run build",
-		"dev:db": "cd docker && docker-compose -f docker-compose.dev.yml up -d db redis",
-		"dev": "cd docker && docker-compose -f docker-compose.dev.yml up --build",
-		"prod": "cd docker && docker-compose up -d --build"
+		"start": "node src/bot.ts",
+		"build": "tsc",
+		"dev": "tsc --watch"
+	},
+	"keywords": [
+		"EndTech",
+		"Minecraft",
+		"Discord",
+		"Bot"
+	],
+	"devDependencies": {
+		"typescript": "^4.5.4"
 	}
 }
