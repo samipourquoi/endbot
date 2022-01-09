@@ -1,0 +1,23 @@
+name: Run linter and formatter on push
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    name: Run linters and formatters
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: install
+      - uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: build
+      - uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: lint
+      - uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: format

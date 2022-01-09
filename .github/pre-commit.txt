@@ -1,0 +1,63 @@
+#!/bin/sh
+
+# Most of this file is from here: https://gist.github.com/linhmtran168/2286aeafe747e78f53bf
+# I added a way to make it work with prettier
+
+# This script will run prettier and ESLint to all staged files before a commit
+# To make this work for you, first rename this file to pre-commit, then put this
+# file in .git/hooks/ and make the file executable (eg. chmod +x .git/hooks/pre-commit)
+
+# Ensures echo works with backslash escapes
+shopt -s xpg_echo
+
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep ".*\.ts$")
+
+if [[ "$STAGED_FILES" = "" ]]; then
+  exit 0
+fi
+
+PASS=true
+
+echo "\nValidating Javascript:\n"
+
+# Check for eslint
+which eslint &> /dev/null
+if [[ "$?" == 1 ]]; then
+  echo "\t\033[41mPlease install ESlint\033[0m"
+  exit 1
+fi
+
+for FILE in $STAGED_FILES
+do
+  eslint "$FILE"
+
+  if [[ "$?" == 0 ]]; then
+    echo "\t\033[32mESLint Passed: $FILE\033[0m"
+  else
+    echo "\t\033[41mESLint Failed: $FILE\033[0m"
+    PASS=false
+  fi
+done
+
+# Check for prettier
+which prettier &> /dev/null
+if [[ "$?" == 1 ]]; then
+	echo "\t\033[41mPlease install Prettier\033[0m"
+  exit 1
+fi
+
+for FILE in $STAGED_FILES
+do
+  prettier --write "$FILE"
+done
+
+echo "\nJavascript validation completed!\n"
+
+if ! $PASS; then
+  echo "\033[41mCOMMIT FAILED:\033[0m Your commit contains files that should pass ESLint but do not. Please fix the ESLint errors and try again.\n"
+  exit 1
+else
+  echo "\033[32mCOMMIT SUCCEEDED\033[0m\n"
+fi
+
+exit $?

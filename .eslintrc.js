@@ -33,7 +33,7 @@ module.exports = {
 				functions: "always-multiline",
 			},
 		],
-		"eol-last": ["error", "never"],
+		"eol-last": ["error", "always"],
 		"function-call-argument-newline": ["error", "consistent"],
 		indent: ["error", "tab"],
 		"line-comment-position": "off",
