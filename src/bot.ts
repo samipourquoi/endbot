@@ -1,1 +1,1 @@
-console.log("Hello in Node from Docker")
+console.log("Hello in Node from Docker");
