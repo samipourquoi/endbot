@@ -17,12 +17,12 @@ Open the command line and clone the repository:
 $ git clone https://github.com/samipourquoi/endbot.git
 $ cd endbot
 ```
-To install the dependencies for the bot, run: 
+To install the dependencies for the bot, run:
 ```shell
 $ yarn install
 ```
 
-To generate the config file for the bot, run: 
+To generate the config file for the bot, run:
 ```shell
 $ yarn endbot build
 $ yarn endbot start
@@ -30,23 +30,23 @@ $ yarn endbot start
 
 It will create a new file under `config/config.yml`. Fill it accordingly to the following section.
 
-If you are not running the bot on the same server as your Minecraft server, 
+If you are not running the bot on the same server as your Minecraft server,
 you will need to run the following command on the host machine (for each server configured).
-Make sure you replace `<path/to/logs/latest.log>` and `<server_name>` to an actual value. 
+Make sure you replace `<path/to/logs/latest.log>` and `<server_name>` to an actual value.
 Also, replace `localhost` with the ip address of the bot's host machine if the Minecraft server
-isn't run on the same machine. Search how to run a process in the background on your os. 
+isn't run on the same machine. Search how to run a process in the background on your os.
 ```shell
-$ tail -F -n0 <path/to/logs/latest.log> | 
+$ tail -F -n0 <path/to/logs/latest.log> |
   while read x; do echo -n $x |
   curl -X POST -d @- http://localhost:34345/link/<server_name>; done
-  
+
   #If you are using a Windows OS, you will need WSL to run the above command
   #https://docs.microsoft.com/en-us/windows/wsl/install-win10
 ```
 
 Once your config is done, run the following to start the bot:
 ```shell
-$ yarn endbot build 
+$ yarn endbot build
 # Only when changes to the config file are made
 
 $ yarn endbot start
@@ -74,7 +74,7 @@ token: Njg4OTA2Njk0NzQ2ODMzMCYy.Xm7IWw.Na2yuH3tKVrc0qGSef8C0jek3v0
 client secret: <client-secret>
 # The port used to connect to the webhook.
 webhook_port: 00000
-# Your server's role ID which defines 
+# Your server's role ID which defines
 # which people can run administrator commands.
 op_role: <role_id>
 # This is an array: you can add as many
@@ -87,16 +87,13 @@ servers:
     is_local: true
     # The full path to the server's main folder.
     local_folder_path: path/to/server_folder
-    # In milliseconds. How often the tail checks for log file changes.
-    # Only needed if it is a local server.
-    file_watch_interval: 500
-    # The folder you want the server's backups to be stored in 
+    # The folder you want the server's backups to be stored in
     backup_folder_path: path/to/backup_folder
     # If true, a backup will be automatically created on an interval
     auto_backups: false
     # The time in between automatic backups. Time in hours.
     backup_interval: 24
-    # Your server's ip. Use host.docker.internal if the server is hosted 
+    # Your server's ip. Use host.docker.internal if the server is hosted
     # on your machine and you're using docker.
     host: host.docker.internal
     # Your server's rcon port.
