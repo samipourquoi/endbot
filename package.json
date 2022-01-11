@@ -21,7 +21,7 @@
 	"scripts": {
 		"build": "tsc",
 		"dev": "tsc --watch",
-		"format": "prettier --write \"**/*.+(js|ts|json)\"",
+		"format": "prettier --write \"**/*.ts\"",
 		"lint": "eslint .",
 		"lint-fix": "yarn lint --fix",
 		"start": "node src/bot.ts"
