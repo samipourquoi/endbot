@@ -2,7 +2,6 @@
 	"complieOnSave": true,
 	"compilerOptions": {
 		"outDir": "./dist",
-		"rootDir": "./src",
 		"module": "es2020",
 		"moduleResolution": "node",
 		"target": "es2020",
