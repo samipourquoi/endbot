@@ -9,11 +9,11 @@ export class Config {
 	}
 
 	private init() {
-		const config = this.readConfigFile("config.yml");
+		const config = this.readConfigFile();
 		this.token = config.token;
 	}
 
-	private readConfigFile(file: string) {
+	private readConfigFile(file = "config.yml") {
 		try {
 			const config = readFileSync(file, "utf-8");
 			return YAML.parse(config);

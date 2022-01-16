@@ -37,6 +37,10 @@
 		"padded-blocks": ["error", "never"],
 		"quotes": ["error", "double", { "avoidEscape": true }],
 		"semi": ["error", "always"],
-		"space-infix-ops": "error"
+		"space-infix-ops": "error",
+
+		"@typescript-eslint/no-explicit-any": "off",
+		"@typescript-eslint/no-empty-function": ["error", { "allow": ["arrowFunctions"] }],
+		"@typescript-eslint/no-non-null-assertion": "off"
 	}
 }

@@ -12,7 +12,7 @@ export default {
 	// Automatically clear mock calls, instances and results before every test
 	clearMocks: true,
 	// Indicates whether the coverage information should be collected while executing the test
-	collectCoverage: true,
+	collectCoverage: false,
 	// An array of glob patterns indicating a set of files for which coverage information should be collected
 	// collectCoverageFrom: undefined,
 	// The directory where Jest should output its coverage files
@@ -36,6 +36,7 @@ export default {
 	// dependencyExtractor: undefined,
 	// Make calling deprecated APIs throw helpful error messages
 	// errorOnDeprecated: false,
+	extensionsToTreatAsEsm: [".ts"],
 	// Force coverage collection from ignored files using an array of glob patterns
 	// forceCoverageMatch: [],
 	// A path to a module which exports an async function that is triggered once before all test suites
@@ -43,7 +44,11 @@ export default {
 	// A path to a module which exports an async function that is triggered once after all test suites
 	// globalTeardown: undefined,
 	// A set of global variables that need to be available in all test environments
-	// globals: {},
+	globals: {
+		"ts-jest": {
+			useESM: true,
+		},
+	},
 	// The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
 	// maxWorkers: "50%",
 	// An array of directory names to be searched recursively up from the requiring module's location
