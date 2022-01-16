@@ -1,6 +1,7 @@
 import { Client, Intents, Message } from "discord.js";
+import { Config } from "./config.js";
 import { Endbot } from "./endbot.js";
 
-const endbot = new Endbot();
+const config = new Config();
 
-endbot.login("");
+const endbot = new Endbot(config);

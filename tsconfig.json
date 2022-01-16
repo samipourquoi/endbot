@@ -12,6 +12,7 @@
 		"declaration": true,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
+		"allowSyntheticDefaultImports": true,
 		"incremental": true,
 		"skipLibCheck": true,
 		"composite": true,

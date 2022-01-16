@@ -34,7 +34,8 @@
 		"Bot"
 	],
 	"dependencies": {
-		"discord.js": "^13.6.0"
+		"discord.js": "^13.6.0",
+		"yaml": "^1.10.2"
 	},
 	"devDependencies": {
 		"eslint": "^8.6.0",

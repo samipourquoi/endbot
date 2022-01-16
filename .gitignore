@@ -3,9 +3,7 @@ dist
 node_modules
 
 # config
-config/config.yml
-config.json
-config.template.json
+config.yml
 
 # idea
 .idea
