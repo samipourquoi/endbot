@@ -1,10 +1,10 @@
-name: Run linter and formatter on push
+name: Run tests on a push
 
 on: [push, pull_request]
 
 jobs:
-  lint:
-    name: Run linters and formatters
+  test:
+    name: Run tests
     runs-on: ubuntu-latest
 
     steps:
@@ -14,7 +14,4 @@ jobs:
           cmd: install
       - uses: borales/actions-yarn@v2.3.0
         with:
-          cmd: format
-      - uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: lint
+          cmd: test
