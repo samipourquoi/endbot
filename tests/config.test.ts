@@ -10,11 +10,6 @@ describe("Bot config", () => {
 		.spyOn(Config.prototype as any, "readConfigFile")
 		.getMockImplementation()!;
 
-	it("finds and reads the config file correctly", () => {
-		const parsedConfig = mockReadConfigFile("./tests/config.test.yml");
-		expect(parsedConfig).toMatchObject(expectedConfig);
-	});
-
 	it("exits if a config file is not found", () => {
 		const mockExit = jest
 			.spyOn(process as any, "exit")
@@ -24,15 +19,12 @@ describe("Bot config", () => {
 		expect(mockExit).toHaveBeenCalled();
 	});
 
-	it("calls init() when instantiated", () => {
+	it("sets the correct values when called", () => {
 		const mockReadConfigFile = jest.fn();
 		mockReadConfigFile.mockReturnValue(expectedConfig);
 		(Config as any).prototype.readConfigFile = mockReadConfigFile;
 
-		const initSpy = jest.spyOn(Config.prototype as any, "init");
-
 		const config = new Config();
-		expect(initSpy).toHaveBeenCalled();
 		expect(config.token).toBe(expectedConfig.token);
 	});
 });

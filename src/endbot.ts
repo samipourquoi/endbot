@@ -1,20 +1,22 @@
 import { Client, Intents, Message } from "discord.js";
-import { Config } from "./interfaces.js";
+import { IConfig } from "./interfaces";
 
 export class Endbot extends Client {
-	config: Config;
+	config: IConfig;
 
-	constructor(config: Config) {
-		super({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+	constructor(config: IConfig) {
+		super({
+			intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+		});
 
 		this.config = config;
 
-		this.login(config.token);
+		this.login(config.token).catch(console.error);
 
 		this.on("messageCreate", this.handleMessage);
 		this.once("ready", async () => {
 			console.log("ready");
-		})
+		});
 	}
 
 	handleMessage(message: Message) {
