@@ -37,6 +37,7 @@
 		"padded-blocks": ["error", "never"],
 		"quotes": ["error", "double", { "avoidEscape": true }],
 		"semi": ["error", "always"],
+		"sort-imports": "error",
 		"space-infix-ops": "error",
 
 		"@typescript-eslint/no-explicit-any": "off",

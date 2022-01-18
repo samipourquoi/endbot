@@ -1,6 +1,6 @@
-import { readFileSync } from "fs";
-import { parse } from "yaml";
 import { Config } from "../src/config";
+import { parse } from "yaml";
+import { readFileSync } from "fs";
 
 describe("Bot config", () => {
 	const testConfig = readFileSync("./tests/config.test.yml", "utf-8");
@@ -11,9 +11,7 @@ describe("Bot config", () => {
 		.getMockImplementation()!;
 
 	it("exits if a config file is not found", () => {
-		const mockExit = jest
-			.spyOn(process as any, "exit")
-			.mockImplementation(() => {});
+		const mockExit = jest.spyOn(process as any, "exit").mockImplementation(() => {});
 
 		mockReadConfigFile("nonexistent_file");
 		expect(mockExit).toHaveBeenCalled();
