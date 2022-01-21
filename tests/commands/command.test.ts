@@ -22,6 +22,7 @@ describe("Command class", () => {
 		await expect(command.run()).rejects.toThrowError("no functionality");
 	});
 
+	// The following tests are for the hasPermission() function
 	it("returns false when user doesn't have permission to run command", async () => {
 		jest.spyOn(mockMessage.member!.roles.cache, "has").mockImplementation(() => false);
 		expect(await command.hasPermission(mockMessage)).toBeFalsy();
@@ -38,6 +39,12 @@ describe("Command class", () => {
 		} as unknown as Message;
 
 		jest.spyOn(mockMessage.member!.roles.cache, "has").mockImplementation(() => false);
+		expect(await command.hasPermission(mockMessage)).toBeTruthy();
+	});
+
+	it("returns true when a command isn't limited to any roles or users", async () => {
+		command.roles_allowed = [];
+		command.users_allowed = [];
 		expect(await command.hasPermission(mockMessage)).toBeTruthy();
 	});
 });

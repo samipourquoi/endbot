@@ -6,8 +6,8 @@ export class Command {
 	aliases!: string[];
 	description!: string;
 	usage!: string;
-	private roles_allowed: string[];
-	private users_allowed: string[];
+	roles_allowed: string[];
+	users_allowed: string[];
 
 	constructor(info: ICommandInfo) {
 		this.name = info.name;
@@ -24,17 +24,14 @@ export class Command {
 
 	async hasPermission(message: Message): Promise<boolean> {
 		for (const role of this.roles_allowed) {
-			if (message.member!.roles.cache.has(role)) {
-				return true;
-			}
+			if (message.member!.roles.cache.has(role)) return true;
 		}
 
 		for (const user of this.users_allowed) {
-			if (user === message.member!.id) {
-				return true;
-			}
+			if (user === message.member!.id) return true;
 		}
 
-		return false;
+		// If no permissions are set, everyone has access to the command
+		return this.roles_allowed.length === 0 && this.users_allowed.length === 0;
 	}
 }
