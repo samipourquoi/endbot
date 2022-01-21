@@ -18,11 +18,11 @@ export class Command {
 		this.users_allowed = info.users_allowed || [];
 	}
 
-	async run() {
+	async run(): Promise<void> {
 		throw new Error("This command has no functionality!");
 	}
 
-	async hasPermission(message: Message) {
+	async hasPermission(message: Message): Promise<boolean> {
 		for (const role of this.roles_allowed) {
 			if (message.member!.roles.cache.has(role)) {
 				return true;

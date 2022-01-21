@@ -19,7 +19,7 @@ export class Endbot extends Client {
 		});
 	}
 
-	handleMessage(message: Message) {
+	handleMessage(message: Message): void {
 		if (message.author.bot) return;
 
 		console.log(message.content);
