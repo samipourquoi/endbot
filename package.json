@@ -25,7 +25,7 @@
 		"format": "prettier --write \"**/*.ts\"",
 		"lint": "eslint .",
 		"lint-fix": "yarn lint --fix",
-		"start": "node .",
+		"start": "node --experimental-specifier-resolution=node .",
 		"test": "jest --config=tests/jest.config.js"
 	},
 	"keywords": [

@@ -1,5 +1,5 @@
-import { Config } from "./config.js";
-import { Endbot } from "./endbot.js";
+import { Config } from "./config";
+import { Endbot } from "./endbot";
 
 const config = new Config();
 

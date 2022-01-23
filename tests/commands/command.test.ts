@@ -42,7 +42,7 @@ describe("Command class", () => {
 		expect(await command.hasPermission(mockMessage)).toBeTruthy();
 	});
 
-	it("returns true when a command isn't limited to any roles or users", async () => {
+	it("returns true when no permissions are set for the command", async () => {
 		command.roles_allowed = [];
 		command.users_allowed = [];
 		expect(await command.hasPermission(mockMessage)).toBeTruthy();
