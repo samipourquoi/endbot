@@ -4,7 +4,6 @@ import { Message } from "discord.js";
 import { mockMember } from "../mockDiscord";
 
 const commandInfo = {
-	name: "test command",
 	roles_allowed: ["test_role"],
 	users_allowed: ["test_user"],
 } as ICommandInfo;
