@@ -1,1 +1,11 @@
-token: "testToken"
+token: testToken
+servers:
+  - name: test_server1
+    host: host1
+    rcon_port: 1
+    rcon_password: secret password
+
+  - name: test_server2
+    host: host2
+    rcon_port: 2
+    rcon_password: very secret password

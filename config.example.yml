@@ -1,1 +1,13 @@
-token: "YOUR BOT TOKEN"
+# Your bot's token. Needs to be kept private.
+token: YOUR BOT TOKEN
+# You can add as many servers as you want (or none at all).
+# Make sure to add a hyphen before each new server entry.
+servers:
+    # Your server's name. Can be anything.
+  - name: Server
+    # Your server's ip.
+    host: localhost
+    # Your server's rcon port. Defaults to 25575 if not provided
+    rcon_port: 25575
+    # Your server's rcon password.
+    rcon_password: secret

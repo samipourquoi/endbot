@@ -1,5 +1,6 @@
 export interface IConfig {
 	token: string;
+	servers?: IServer[];
 }
 
 export interface ICommandInfo {
@@ -9,4 +10,11 @@ export interface ICommandInfo {
 	usage: string;
 	roles_allowed?: string[];
 	users_allowed?: string[];
+}
+
+export interface IServer {
+	name: string;
+	host: string;
+	rcon_port?: number;
+	rcon_password: string;
 }

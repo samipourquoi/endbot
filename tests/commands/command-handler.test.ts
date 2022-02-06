@@ -21,7 +21,7 @@ describe("discordCommand class decorator", () => {
 		}
 	}
 
-	it("calls addCommand() when called", async () => {
+	it("calls addCommand() when run", async () => {
 		const addCommand = jest.spyOn(commandHandler, "addCommand");
 		discordCommand(Test);
 		expect(addCommand).toHaveBeenCalledTimes(1);
