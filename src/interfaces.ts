@@ -18,3 +18,10 @@ export interface IServer {
 	rcon_port?: number;
 	rcon_password: string;
 }
+
+export interface IPacket {
+	size: number;
+	id: number;
+	type: number;
+	body: string;
+}
