@@ -23,7 +23,12 @@ export class Rcon {
 	}
 
 	async auth(): Promise<void> {
-		this.send(this.server.rcon_password, PacketType.AUTH);
+		try {
+			await this.send(this.server.rcon_password, PacketType.AUTH);
+			console.log(`Connected to ${this.server.name}`);
+		} catch {
+			console.log(`Failed to connect to ${this.server.name}`);
+		}
 	}
 
 	async send(data: string, type = PacketType.COMMAND): Promise<string> {
@@ -39,13 +44,18 @@ export class Rcon {
 					packet = await this.listenForMultiplePackets(data);
 				}
 
+				// Authentication failed
+				if (packet.id === -1) {
+					reject(`Not connected to ${this.server.name}`);
+				}
+
 				this.socket.removeAllListeners("data");
 				resolve(packet.body);
 			});
 
 			setTimeout(() => {
 				this.socket.removeAllListeners("data");
-				reject(new Error(`Timeout exceeded on ${this.server.name}`));
+				reject(`Timeout exceeded on ${this.server.name}`);
 			}, this.timeout);
 		});
 	}
@@ -78,6 +88,6 @@ export class Rcon {
 	}
 
 	private async end(): Promise<void> {
-		console.log(`Disconnected from: '${this.server.name}'`);
+		console.log(`Disconnected from '${this.server.name}'`);
 	}
 }
