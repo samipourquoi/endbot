@@ -1,28 +1,31 @@
 import { IPacket, IServer } from "../../interfaces";
 import { Packet, PacketType } from "./packet";
 import { Buffer } from "buffer";
+import { Queue } from "./queue";
 import net from "net";
 
 export class Rcon {
 	private socket!: net.Socket;
 	private server!: IServer;
 	private timeout = 2000;
+	private queue: Queue;
 
 	constructor(server: IServer) {
 		this.server = server;
+		this.queue = new Queue();
 		this.connect();
 
 		this.socket.once("connect", () => this.auth());
 		this.socket.once("end", () => this.end());
 		// TODO: Add better handling of errors. I'm not quite sure what some errors are yet
-		this.socket.on("error", (error: Error) => console.log(error));
+		this.socket.on("error", (error: Error) => console.log(`Error: ${error}`));
 	}
 
 	async connect(): Promise<void> {
 		this.socket = net.connect(this.server.rcon_port!, this.server.host);
 	}
 
-	async auth(): Promise<void> {
+	private async auth(): Promise<void> {
 		try {
 			await this.send(this.server.rcon_password, PacketType.AUTH);
 			console.log(`Connected to ${this.server.name}`);
@@ -31,33 +34,41 @@ export class Rcon {
 		}
 	}
 
-	async send(data: string, type = PacketType.COMMAND): Promise<string> {
+	async send(data: string, type = PacketType.COMMAND): Promise<void> {
 		const packet = await Packet.create(data, type);
-		this.socket.write(packet);
 
-		return new Promise((resolve, reject) => {
-			this.socket.once("data", async (data: Buffer) => {
-				let packet = await Packet.read(data);
+		// This function is added to the queue each time send() is called. This
+		// allows for control over when to write the data so multiple requests
+		// aren't responding at the same time, effectively returning the wrong data
+		const getData = (): Promise<string> => {
+			this.socket.write(packet);
 
-				// If the data received is large, there is a possibility that the response could be multiple packets
-				if (packet.size >= 3500) {
-					packet = await this.listenForMultiplePackets(data);
-				}
+			return new Promise((resolve, reject) => {
+				this.socket.once("data", async (data: Buffer) => {
+					let packet = await Packet.read(data);
 
-				// Authentication failed
-				if (packet.id === -1) {
-					reject(`Not connected to ${this.server.name}`);
-				}
+					// If the data received is large, there is a possibility that the response could be multiple packets
+					if (packet.size >= 3500) {
+						packet = await this.listenForMultiplePackets(data);
+					}
 
-				this.socket.removeAllListeners("data");
-				resolve(packet.body);
+					// Authentication failed
+					if (packet.id === -1) {
+						reject(`Not connected to ${this.server.name}`);
+					}
+
+					this.socket.removeAllListeners("data");
+					resolve(packet.body);
+				});
+
+				setTimeout(() => {
+					this.socket.removeAllListeners("data");
+					reject(`Timeout exceeded on ${this.server.name}`);
+				}, this.timeout);
 			});
+		};
 
-			setTimeout(() => {
-				this.socket.removeAllListeners("data");
-				reject(`Timeout exceeded on ${this.server.name}`);
-			}, this.timeout);
-		});
+		return await this.queue.add(getData);
 	}
 
 	private async listenForMultiplePackets(data: Buffer): Promise<IPacket> {

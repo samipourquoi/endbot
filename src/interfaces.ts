@@ -25,3 +25,9 @@ export interface IPacket {
 	type: number;
 	body: string;
 }
+
+export interface QueueItem {
+	getData: () => Promise<string>;
+	resolve: (value: any) => void;
+	reject: (reason?: any) => void;
+}
