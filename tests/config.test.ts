@@ -1,12 +1,17 @@
 import { Config } from "../src/config";
+import { IConfig } from "../src/interfaces";
 import YAML from "yaml";
 import { readFileSync } from "fs";
+
+export function readConfig(): IConfig {
+	const testConfig = readFileSync("./tests/config.test.yml", "utf-8");
+	return YAML.parse(testConfig);
+}
 
 describe("Config Class", () => {
 	let config;
 
-	const testConfig = readFileSync("./tests/config.test.yml", "utf-8");
-	const expectedConfig = YAML.parse(testConfig);
+	const expectedConfig = readConfig();
 
 	const mockReadConfigFile = jest
 		.spyOn(Config.prototype as any, "readConfigFile")
@@ -27,7 +32,7 @@ describe("Config Class", () => {
 
 	it("exits if a config file is not found", () => {
 		// Don't print out the error message when running the test
-		jest.spyOn(console as any, "log").mockImplementationOnce(() => {});
+		jest.spyOn(console, "log").mockImplementationOnce(() => {});
 		const mockExit = jest.spyOn(process as any, "exit").mockImplementationOnce(() => {});
 
 		mockReadConfigFile("nonexistent_file");
@@ -35,7 +40,7 @@ describe("Config Class", () => {
 	});
 
 	it("sets default server configurations if they aren't explicitly provided", () => {
-		const minimalServerConfig = expectedConfig.servers[0];
+		const minimalServerConfig = expectedConfig.servers![0];
 		delete minimalServerConfig.rcon_port;
 
 		config = new Config();
@@ -45,7 +50,7 @@ describe("Config Class", () => {
 	it("doesn't try to set up servers if none are provided", () => {
 		const noServerConfig = expectedConfig;
 
-		noServerConfig.servers = null;
+		noServerConfig.servers = undefined;
 		config = new Config();
 		expect(config.servers).toStrictEqual([]);
 
