@@ -1,18 +1,18 @@
 # RCON
-___
+
 EndBot uses the RCON protocol to communicate to a Minecraft server. The protocol is used to send commands and receive the commands' responses.
 
 ## Why It Is Implemented Directly
-___
+
 There are a few reasons why EndBot implements its own functionality for RCON instead of using another developer's library:
-1. The library used in version four ([rcon-client][2]) did not handle multi-packet responses. This made \
+- The library used in version four ([rcon-client][2]) did not handle multi-packet responses. This made \
    it impossible to get full responses back for a command, such as every player tracked on the \
    server scoreboards.
-2. The implementation allows for better control and abstraction within the code.
-3. No npm library currently accommodates all the desired features.
+- The implementation allows for better control and abstraction within the code.
+- No npm library currently accommodates all the desired features.
 
 ## How It Works
-___
+
 #### Connecting:
 
 On initialization, the RCON will attempt to connect to the provided host and port. After receiving \
@@ -45,7 +45,7 @@ dummy packet response is received. When this happens, all previous response pack
 combined and the text from those packets is sent back to the user as one response.
 
 ## Other Resources
-___
+
 - **[Source RCON protocol][1]** - A wiki page that describes the RCON protocol in detail and contains examples of implementation for different languages
 - **[node-rcon][3]** - A npm library with similar implementation
 - **[rcon-client][2]** - Another npm library with similar implementation
