@@ -44,11 +44,7 @@ export default {
 	// A path to a module which exports an async function that is triggered once after all test suites
 	// globalTeardown: undefined,
 	// A set of global variables that need to be available in all test environments
-	globals: {
-		"ts-jest": {
-			useESM: true,
-		},
-	},
+	// globals: {},
 	// The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
 	// maxWorkers: "50%",
 	// An array of directory names to be searched recursively up from the requiring module's location
@@ -129,7 +125,7 @@ export default {
 	// timers: "real",
 	// A map from regular expressions to paths to transformers
 	transform: {
-		"^.+\\.tsx?$": "ts-jest",
+		"^.+\\.tsx?$": "@swc/jest",
 	},
 	// An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
 	// transformIgnorePatterns: [
