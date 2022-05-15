@@ -2,7 +2,8 @@ version: "3.9"
 
 services:
   bot:
-    build: .
+    build:
+      target: prod
     volumes:
       - ./src:/endbot/src
     ports:
