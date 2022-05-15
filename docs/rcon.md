@@ -22,9 +22,10 @@ If the authentication succeeds, the RCON will be able to send commands to the se
 #### Sending:
 
 When sending a command to the server, the RCON will first create a packet and then add the \
-request packet to a queue. The queue is then drained. This is done to ensure the bot does not lose connection with the \
-Minecraft server if packets are sent in quick succession of one another (~100 ms; a problem with \
-Minecraft). It also ensures the responses are matched with their respective requests.
+request packet to a queue. The queue is then drained. This is done to ensure the bot does not lose \
+connection with the Minecraft server if packets are sent in quick succession of one another \
+(~100 ms; a problem with Minecraft). It also ensures the responses are matched with their \
+respective requests.
 
 #### Receiving:
 

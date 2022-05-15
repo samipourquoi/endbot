@@ -87,7 +87,7 @@ export class Rcon {
 				let packet = await Packet.read(data);
 
 				if (packet.id === 0) {
-					// The empty packet's response has been received, so we are done. Now, we combine all the packets into one and return it
+					// The empty packet's response has been received so we are done. Now we combine all the packets into one and return it
 					data = Buffer.concat(packets);
 					packet = await Packet.read(data);
 					resolve(packet);
