@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-export const mockMember = (id = "") => ({
-	id: id,
+export const mockMember = () => ({
 	roles: {
 		cache: {
 			has: jest.fn(),

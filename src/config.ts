@@ -12,9 +12,9 @@ export class Config {
 		this.token = config.token;
 	}
 
-	private readConfigFile(file = "config.yml"): IConfig {
+	private readConfigFile(): IConfig {
 		try {
-			const config = readFileSync(file, "utf-8");
+			const config = readFileSync("config.yml", "utf-8");
 			return YAML.parse(config);
 		} catch {
 			// TODO: Specify if file was not found or there was a syntax error

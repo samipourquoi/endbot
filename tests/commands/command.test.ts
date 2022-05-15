@@ -11,7 +11,7 @@ const commandInfo = {
 const command = new Command(commandInfo);
 
 describe("Command class", () => {
-	let mockMessage = {
+	const mockMessage = {
 		member: mockMember(),
 	} as unknown as Message;
 
@@ -33,9 +33,7 @@ describe("Command class", () => {
 		expect(await command.hasPermission(mockMessage)).toBeTruthy();
 
 		// The second test is if the member has a permitted user id
-		mockMessage = {
-			member: mockMember("test_user"),
-		} as unknown as Message;
+		(mockMessage as any).member.id = "test_user";
 
 		jest.spyOn(mockMessage.member!.roles.cache, "has").mockImplementation(() => false);
 		expect(await command.hasPermission(mockMessage)).toBeTruthy();

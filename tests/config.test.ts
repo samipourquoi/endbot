@@ -1,10 +1,10 @@
 import { Config } from "../src/config";
 import { IConfig } from "../src/interfaces";
 import YAML from "yaml";
-import { readFileSync } from "fs";
+import fs from "fs";
 
 export function readConfig(): IConfig {
-	const testConfig = readFileSync("./tests/config.test.yml", "utf-8");
+	const testConfig = fs.readFileSync("./tests/config.test.yml", "utf-8");
 	return YAML.parse(testConfig);
 }
 
@@ -26,16 +26,25 @@ describe("Config Class", () => {
 	});
 
 	it("finds and reads the config file correctly", () => {
-		const parsedConfig = mockReadConfigFile("./tests/config.test.yml");
+		// Make readFileSync read the test config instead of the actual config
+		jest.spyOn(fs, "readFileSync").mockReturnValueOnce(
+			fs.readFileSync("./tests/config.test.yml", "utf-8")
+		);
+		const parsedConfig = mockReadConfigFile();
 		expect(parsedConfig).toStrictEqual(expectedConfig);
 	});
 
 	it("exits if a config file is not found", () => {
 		// Don't print out the error message when running the test
 		jest.spyOn(console, "log").mockImplementationOnce(() => {});
-		const mockExit = jest.spyOn(process as any, "exit").mockImplementationOnce(() => {});
 
-		mockReadConfigFile("nonexistent_file");
+		// Throw an error internally to make sure it is caught properly
+		jest.spyOn(fs, "readFileSync").mockImplementationOnce(() => {
+			throw new Error();
+		});
+
+		const mockExit = jest.spyOn(process as any, "exit").mockImplementationOnce(() => {});
+		mockReadConfigFile();
 		expect(mockExit).toHaveBeenCalled();
 	});
 
