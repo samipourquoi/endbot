@@ -1,4 +1,4 @@
-import { commandHandler, discordCommand } from "../../src/command-handler.js";
+import { CommandHandler, commandHandler, discordCommand } from "../../src/command-handler.js";
 import { Command } from "../../src/lib/command.js";
 import { ICommandInfo } from "../../src/interfaces.js";
 
@@ -7,6 +7,7 @@ const commandInfo = {} as ICommandInfo;
 describe("CommandHandler class", () => {
 	it("adds a command when addCommand() is called", async () => {
 		const command = new Command(commandInfo);
+		const commandHandler = new CommandHandler();
 		commandHandler.addCommand(command);
 		expect(commandHandler.commands.length).toBe(1);
 		expect(commandHandler.commands[0]).toBe(command);

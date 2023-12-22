@@ -75,9 +75,15 @@ describe("RCON class", () => {
 	});
 
 	it("sends an empty packet when listening for multiple packets", async () => {
-		const mockTimeout = jest.spyOn(global, "setTimeout").mockImplementation();
+		const mockSocketOn = jest.spyOn(rcon["socket"], "on");
+		const mockSocketWrite = jest.spyOn(rcon["socket"], "write");
 		(rcon as any).listenForMultiplePackets(Buffer.alloc(0));
 
-		expect(mockTimeout).toHaveBeenCalled();
+		// Only expect it to be called after the timer has finished
+		expect(mockSocketWrite).not.toHaveBeenCalled();
+		jest.advanceTimersByTime(100);
+
+		expect(mockSocketOn).toHaveBeenCalledTimes(1);
+		expect(await mockSocketWrite).toHaveBeenCalledTimes(1);
 	});
 });

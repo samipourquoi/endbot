@@ -60,8 +60,13 @@ describe("Queue class", () => {
 	});
 
 	it("doesn't try to drain the queue if the queue is currently being drained", async () => {
+		// Add a packet to the queue
+		new Promise((resolve, reject) => {
+			queue["queue"].push({ getData: testFunction, resolve, reject });
+		});
+
 		const mockDrain = jest.spyOn(Queue.prototype as any, "drain");
-		queue["draining"] = false;
+		queue["draining"] = true;
 		await (queue as any).drain();
 
 		expect(mockDrain).toHaveBeenCalledTimes(1);
