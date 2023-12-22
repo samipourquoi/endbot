@@ -1,5 +1,5 @@
 # First create the base image
-FROM node:21.5.0 as base
+FROM node:21.5.0-slim as base
 
 WORKDIR /endbot
 

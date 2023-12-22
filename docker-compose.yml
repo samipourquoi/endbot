@@ -4,9 +4,6 @@ services:
       target: prod
     volumes:
       - ./src:/endbot/src
-    ports:
-      - 34345:34345
-    network_mode: host
     environment:
       ENV: "production"
     user: node
