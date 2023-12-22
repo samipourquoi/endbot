@@ -1,50 +1,50 @@
 {
-	"root": true,
-	"env": {
-		"es2024": true,
-		"node": true
-	},
-	"extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
-	"parser": "@typescript-eslint/parser",
-	"parserOptions": {
-		"ecmaVersion": 2024,
-		"sourceType": "module"
-	},
-	"plugins": ["@typescript-eslint", "prettier"],
-	"ignorePatterns": ["dist/*"],
-	"rules": {
-		"no-duplicate-imports": ["error", { "includeExports": true }],
-		"no-unreachable-loop": "error",
+    "root": true,
+    "env": {
+        "es2024": true,
+        "node": true
+    },
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 2024,
+        "sourceType": "module"
+    },
+    "plugins": ["@typescript-eslint", "prettier"],
+    "ignorePatterns": ["dist/*"],
+    "rules": {
+        "no-duplicate-imports": ["error", { "includeExports": true }],
+        "no-unreachable-loop": "error",
 
-		"brace-style": ["error", "1tbs", { "allowSingleLine": true }],
-		"comma-dangle": [
-			"error",
-			{
-				"arrays": "always-multiline",
-				"objects": "always-multiline",
-				"imports": "always-multiline",
-				"exports": "always-multiline",
-				"functions": "only-multiline"
-			}
-		],
-		"eol-last": ["error", "always"],
-		"function-call-argument-newline": ["error", "consistent"],
-		"indent": ["error", "tab"],
-		"line-comment-position": "off",
-		"linebreak-style": ["error", "unix"],
-		"max-len": ["error", { "code": 100 }],
-		"max-statements-per-line": ["error", { "max": 1 }],
-		"multiline-ternary": ["error", "always-multiline"],
-		"no-whitespace-before-property": "error",
-		"padded-blocks": ["error", "never"],
-		"quotes": ["error", "double", { "avoidEscape": true }],
-		"semi": ["error", "always"],
-		"sort-imports": "error",
-		"space-infix-ops": "error",
+        "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+        "comma-dangle": [
+            "error",
+            {
+                "arrays": "always-multiline",
+                "objects": "always-multiline",
+                "imports": "always-multiline",
+                "exports": "always-multiline",
+                "functions": "only-multiline"
+            }
+        ],
+        "eol-last": ["error", "always"],
+        "function-call-argument-newline": ["error", "consistent"],
+        "indent": ["error", 4],
+        "line-comment-position": "off",
+        "linebreak-style": ["error", "unix"],
+        "max-len": ["error", { "code": 100 }],
+        "max-statements-per-line": ["error", { "max": 1 }],
+        "multiline-ternary": ["error", "always-multiline"],
+        "no-whitespace-before-property": "error",
+        "padded-blocks": ["error", "never"],
+        "quotes": ["error", "double", { "avoidEscape": true }],
+        "semi": ["error", "always"],
+        "sort-imports": "error",
+        "space-infix-ops": "error",
 
-		"@typescript-eslint/explicit-function-return-type": "error",
-		"@typescript-eslint/no-explicit-any": "off",
-		"@typescript-eslint/no-empty-function": ["error", { "allow": ["arrowFunctions"] }],
-		"@typescript-eslint/no-non-null-assertion": "off"
-	}
+        "@typescript-eslint/explicit-function-return-type": "error",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-empty-function": ["error", { "allow": ["arrowFunctions"] }],
+        "@typescript-eslint/no-non-null-assertion": "off"
+    }
 }

@@ -1,33 +1,33 @@
 export interface IConfig {
-	token: string;
-	servers?: IServer[];
+    token: string;
+    servers?: IServer[];
 }
 
 export interface ICommandInfo {
-	name: string;
-	aliases?: string[];
-	description: string;
-	usage: string;
-	roles_allowed?: string[];
-	users_allowed?: string[];
+    name: string;
+    aliases?: string[];
+    description: string;
+    usage: string;
+    roles_allowed?: string[];
+    users_allowed?: string[];
 }
 
 export interface IServer {
-	name: string;
-	host: string;
-	rcon_port?: number;
-	rcon_password: string;
+    name: string;
+    host: string;
+    rcon_port?: number;
+    rcon_password: string;
 }
 
 export interface IPacket {
-	size: number;
-	id: number;
-	type: number;
-	body: string;
+    size: number;
+    id: number;
+    type: number;
+    body: string;
 }
 
 export interface QueueItem {
-	getData: () => Promise<string>;
-	resolve: (value: any) => void;
-	reject: (reason?: any) => void;
+    getData: () => Promise<string>;
+    resolve: (value: any) => void;
+    reject: (reason?: any) => void;
 }

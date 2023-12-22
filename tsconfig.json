@@ -1,23 +1,23 @@
 {
-	"complieOnSave": true,
-	"compilerOptions": {
-		"outDir": "./dist",
-		"module": "nodenext",
-		"moduleResolution": "nodenext",
-		"target": "esnext",
-		"strict": true,
-		"alwaysStrict": true,
-		"sourceMap": true,
-		"declaration": true,
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
-		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true,
-		"incremental": true,
-		"skipLibCheck": true,
-		"composite": true,
-		"resolveJsonModule": true
-	},
-	"include": ["**/*"],
-	"exclude": ["node_modules", "dist"]
+    "complieOnSave": true,
+    "compilerOptions": {
+        "outDir": "./dist",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "target": "esnext",
+        "strict": true,
+        "alwaysStrict": true,
+        "sourceMap": true,
+        "declaration": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "incremental": true,
+        "skipLibCheck": true,
+        "composite": true,
+        "resolveJsonModule": true
+    },
+    "include": ["**/*"],
+    "exclude": ["node_modules", "dist"]
 }
