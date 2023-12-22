@@ -1,4 +1,4 @@
-import { CommandHandler, commandHandler, discordCommand } from "../../src/command-handler.js";
+import { CommandHandler, commandHandler, discordCommand } from "../../src/commandHandler.js";
 import { Command } from "../../src/lib/command.js";
 import { ICommandInfo } from "../../src/interfaces.js";
 
