@@ -1,10 +1,12 @@
 import { Client, GatewayIntentBits, Message } from "discord.js";
-import { IConfig } from "./interfaces.js";
+import { Config } from "./config.js";
+import { MinecraftServer } from "./minecraftServer.js";
 
 export class Endbot extends Client {
-    config: IConfig;
+    config: Config;
+    minecraftServers: MinecraftServer[] = [];
 
-    constructor(config: IConfig) {
+    constructor() {
         super({
             intents: [
                 GatewayIntentBits.Guilds,
@@ -13,18 +15,37 @@ export class Endbot extends Client {
             ],
         });
 
-        this.config = config;
-        this.login(config.token).catch(console.error);
+        this.config = new Config();
+        // TODO: Handle failed logins better
+        this.login(this.config.token).catch(console.error);
 
-        this.on("messageCreate", this.handleMessage);
+        this.on("messageCreate", this.handleDiscordMessage);
         this.once("ready", async () => {
             console.log("ready");
+            this.initMinecraftServers();
         });
     }
 
-    handleMessage(message: Message): void {
+    private initMinecraftServers(): void {
+        for (const serverConfig of this.config.servers) {
+            const server = new MinecraftServer(serverConfig);
+            server.connect();
+            this.minecraftServers.push(server);
+        }
+    }
+
+    private handleDiscordMessage(message: Message): void {
         if (message.author.bot) return;
 
+        this.sendMessageToMinecraft(message);
         console.log(message.content);
+    }
+
+    private sendMessageToMinecraft(message: Message): void {
+        for (const server of this.minecraftServers) {
+            if (server.channelId === message.channelId) {
+                server.sendMessage(message);
+            }
+        }
     }
 }

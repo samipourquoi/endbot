@@ -1,7 +1,7 @@
 import { Buffer } from "buffer";
 import { Rcon } from "../../src/lib/rcon/rcon.js";
 import net from "net";
-import { readConfig } from "../config.test.js";
+import { readConfig } from "../mockHelpers.js";
 
 jest.mock("net");
 
@@ -12,31 +12,22 @@ describe("RCON class", () => {
     // Don't actually run setTimeout()'s timer to not slow down the test
     jest.useFakeTimers();
 
-    let rcon: Rcon;
-
     const server = readConfig().servers![0];
+    const rcon = new Rcon(server);
     (net as any).connect.mockReturnValue(new net.Socket());
-
-    it("sets the connection on initialization", async () => {
-        const mockConnect = jest.spyOn(Rcon.prototype as any, "connect");
-        rcon = new Rcon(server);
-
-        expect(rcon["server"]).toBe(server);
-        expect(rcon["queue"]).toBeDefined();
-        expect(rcon["socket"]).toBeDefined();
-        expect(mockConnect).toHaveBeenCalled();
-
-        // Check if event emitters have been set up correctly
-        expect(rcon["socket"].once).toBeCalledWith("connect", expect.any(Function));
-        expect(rcon["socket"].once).toBeCalledWith("end", expect.any(Function));
-        expect(rcon["socket"].on).toBeCalledWith("error", expect.any(Function));
-    });
 
     it("sets up a connection when calling connect()", async () => {
         const mockNetConnect = jest.spyOn(net, "connect");
         await rcon.connect();
 
         expect(mockNetConnect).toHaveBeenCalledWith(server.rcon_port, server.host);
+
+        expect(rcon["socket"]).toBeDefined();
+
+        // Check if event emitters have been set up correctly
+        expect(rcon["socket"].once).toBeCalledWith("connect", expect.any(Function));
+        expect(rcon["socket"].once).toBeCalledWith("end", expect.any(Function));
+        expect(rcon["socket"].on).toBeCalledWith("error", expect.any(Function));
     });
 
     it("sends an authentication packet when trying to authenticate", async () => {

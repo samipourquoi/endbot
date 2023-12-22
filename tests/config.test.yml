@@ -4,8 +4,10 @@ servers:
     host: host1
     rcon_port: 1
     rcon_password: secret password
+    channel_id: "1"
 
   - name: test_server2
     host: host2
     rcon_port: 2
     rcon_password: very secret password
+    channel_id: "2"

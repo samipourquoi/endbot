@@ -11,3 +11,5 @@ servers:
     rcon_port: 25575
     # Your server's rcon password.
     rcon_password: secret
+    # The ID of the Discord channel your server will link to
+    channel_id: "discord_channel_id"

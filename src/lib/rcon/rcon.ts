@@ -7,22 +7,21 @@ import net from "net";
 export class Rcon {
     private socket!: net.Socket;
     private server!: IServer;
-    private timeout = 2000;
+    private timeout = 2000; // In milliseconds
     private queue: Queue;
 
     constructor(server: IServer) {
         this.server = server;
         this.queue = new Queue();
-        this.connect();
+    }
+
+    async connect(): Promise<void> {
+        this.socket = net.connect(this.server.rcon_port!, this.server.host);
 
         this.socket.once("connect", () => this.auth());
         this.socket.once("end", () => this.end());
         // TODO: Add better handling of errors. I'm not quite sure what some errors are yet
         this.socket.on("error", (error: Error) => console.log(`Error: ${error}`));
-    }
-
-    async connect(): Promise<void> {
-        this.socket = net.connect(this.server.rcon_port!, this.server.host);
     }
 
     private async auth(): Promise<void> {

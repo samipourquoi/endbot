@@ -1,18 +1,11 @@
 import { Config } from "../src/config.js";
-import { IConfig } from "../src/interfaces.js";
-import YAML from "yaml";
 import fs from "fs";
+import { readConfig } from "./mockHelpers.js";
 
-export function readConfig(): IConfig {
-    const testConfig = fs.readFileSync("./tests/config.test.yml", "utf-8");
-    return YAML.parse(testConfig);
-}
-
-describe("Config Class", () => {
+describe("Config class", () => {
     let config;
 
     const expectedConfig = readConfig();
-
     const mockReadConfigFile = jest
         .spyOn(Config.prototype as any, "readConfigFile")
         .getMockImplementation()!;
