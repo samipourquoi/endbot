@@ -1,5 +1,5 @@
-import { Config } from "../src/config";
-import { IConfig } from "../src/interfaces";
+import { Config } from "../src/config.js";
+import { IConfig } from "../src/interfaces.js";
 import YAML from "yaml";
 import fs from "fs";
 
@@ -28,7 +28,7 @@ describe("Config Class", () => {
 	it("finds and reads the config file correctly", () => {
 		// Make readFileSync read the test config instead of the actual config
 		jest.spyOn(fs, "readFileSync").mockReturnValueOnce(
-			fs.readFileSync("./tests/config.test.yml", "utf-8")
+			fs.readFileSync("./tests/config.test.yml", "utf-8"),
 		);
 		const parsedConfig = mockReadConfigFile();
 		expect(parsedConfig).toStrictEqual(expectedConfig);

@@ -1,4 +1,4 @@
-import { Queue } from "../../src/lib/rcon/queue";
+import { Queue } from "../../src/lib/rcon/queue.js";
 
 describe("Queue class", () => {
 	let queue: Queue;

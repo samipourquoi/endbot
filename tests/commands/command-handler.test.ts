@@ -1,6 +1,6 @@
-import { commandHandler, discordCommand } from "../../src/command-handler";
-import { Command } from "../../src/lib/command";
-import { ICommandInfo } from "../../src/interfaces";
+import { commandHandler, discordCommand } from "../../src/command-handler.js";
+import { Command } from "../../src/lib/command.js";
+import { ICommandInfo } from "../../src/interfaces.js";
 
 const commandInfo = {} as ICommandInfo;
 

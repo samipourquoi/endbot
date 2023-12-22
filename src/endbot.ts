@@ -1,12 +1,16 @@
-import { Client, Intents, Message } from "discord.js";
-import { IConfig } from "./interfaces";
+import { Client, GatewayIntentBits, Message } from "discord.js";
+import { IConfig } from "./interfaces.js";
 
 export class Endbot extends Client {
 	config: IConfig;
 
 	constructor(config: IConfig) {
 		super({
-			intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+			intents: [
+				GatewayIntentBits.Guilds,
+				GatewayIntentBits.GuildMessages,
+				GatewayIntentBits.MessageContent,
+			],
 		});
 
 		this.config = config;

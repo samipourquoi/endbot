@@ -1,4 +1,4 @@
-import { ICommandInfo } from "../interfaces";
+import { ICommandInfo } from "../interfaces.js";
 import { Message } from "discord.js";
 
 export class Command {

@@ -2,9 +2,9 @@
 	"complieOnSave": true,
 	"compilerOptions": {
 		"outDir": "./dist",
-		"module": "es2020",
-		"moduleResolution": "node",
-		"target": "es2020",
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		"target": "esnext",
 		"strict": true,
 		"alwaysStrict": true,
 		"sourceMap": true,

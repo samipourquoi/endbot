@@ -1,4 +1,4 @@
-import { Command } from "./lib/command";
+import { Command } from "./lib/command.js";
 
 export class CommandHandler {
 	commands: Command[] = [];

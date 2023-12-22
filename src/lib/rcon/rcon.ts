@@ -1,7 +1,7 @@
-import { IPacket, IServer } from "../../interfaces";
-import { Packet, PacketType } from "./packet";
+import { IPacket, IServer } from "../../interfaces.js";
+import { Packet, PacketType } from "./packet.js";
 import { Buffer } from "buffer";
-import { Queue } from "./queue";
+import { Queue } from "./queue.js";
 import net from "net";
 
 export class Rcon {
@@ -47,7 +47,8 @@ export class Rcon {
 				this.socket.once("data", async (data: Buffer) => {
 					let packet = await Packet.read(data);
 
-					// If the data received is large, there is a possibility that the response could be multiple packets
+					// If the data received is large, there is a possibility that the response could
+					// be multiple packets
 					if (packet.size >= 3500) {
 						packet = await this.listenForMultiplePackets(data);
 					}
@@ -74,9 +75,10 @@ export class Rcon {
 	private async listenForMultiplePackets(data: Buffer): Promise<IPacket> {
 		const packets = [data];
 
-		// An empty packet is sent. When the response to this packet is received, we know the server has
-		// sent the full response to the original command. However, we need to wait before sending the empty packet
-		// because TCP might combine the last two packets and we wouldn't be able to detect the last packet easily
+		// An empty packet is sent. When the response to this packet is received, we know the server
+		// has sent the full response to the original command. However, we need to wait before
+		// sending the empty packet because TCP might combine the last two packets and we wouldn't
+		// be able to detect the last packet easily.
 		setTimeout(async () => {
 			const emptyPacket = await Packet.create("", PacketType.COMMAND, 0);
 			this.socket.write(emptyPacket);
@@ -87,7 +89,8 @@ export class Rcon {
 				let packet = await Packet.read(data);
 
 				if (packet.id === 0) {
-					// The empty packet's response has been received so we are done. Now we combine all the packets into one and return it
+					// The empty packet's response has been received so we are done. Now we combine
+					// all the packets into one and return it
 					data = Buffer.concat(packets);
 					packet = await Packet.read(data);
 					resolve(packet);

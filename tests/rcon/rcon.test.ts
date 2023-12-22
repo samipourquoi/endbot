@@ -1,7 +1,7 @@
 import { Buffer } from "buffer";
-import { Rcon } from "../../src/lib/rcon/rcon";
+import { Rcon } from "../../src/lib/rcon/rcon.js";
 import net from "net";
-import { readConfig } from "../config.test";
+import { readConfig } from "../config.test.js";
 
 jest.mock("net");
 

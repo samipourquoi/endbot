@@ -1,5 +1,5 @@
-import { IPacket } from "../../src/interfaces";
-import { Packet } from "../../src/lib/rcon/packet";
+import { IPacket } from "../../src/interfaces.js";
+import { Packet } from "../../src/lib/rcon/packet.js";
 
 describe("Packet class", () => {
 	const data = "test";

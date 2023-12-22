@@ -1,7 +1,7 @@
-import { Command } from "../../src/lib/command";
-import { ICommandInfo } from "../../src/interfaces";
+import { Command } from "../../src/lib/command.js";
+import { ICommandInfo } from "../../src/interfaces.js";
 import { Message } from "discord.js";
-import { mockMember } from "../mockDiscord";
+import { mockMember } from "../mockDiscord.js";
 
 const commandInfo = {
 	roles_allowed: ["test_role"],
