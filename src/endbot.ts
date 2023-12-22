@@ -10,7 +10,6 @@ export class Endbot extends Client {
 		});
 
 		this.config = config;
-
 		this.login(config.token).catch(console.error);
 
 		this.on("messageCreate", this.handleMessage);
