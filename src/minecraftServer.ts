@@ -1,5 +1,6 @@
 import { IServer } from "./interfaces.js";
 import { Message } from "discord.js";
+import { MinecraftMessage } from "./lib/messages.js";
 import { Rcon } from "./lib/rcon/rcon.js";
 
 export class MinecraftServer {
@@ -17,6 +18,7 @@ export class MinecraftServer {
 
     async sendMessage(message: Message): Promise<void> {
         // TODO: Handle errors in send
-        await this.rcon.send(`tellraw @a {"text": "${message.content}"}`);
+        const minecraftMsg = MinecraftMessage.format(message);
+        await this.rcon.send(`tellraw @a ${minecraftMsg}`);
     }
 }
