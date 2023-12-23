@@ -4,7 +4,7 @@ import { mockMember } from "./mockHelpers.js";
 
 describe("MinecraftMessage class", () => {
     const member = mockMember();
-    member.roles.highest = { hexColor: "#000000" };
+    (member as any).roles.highest = { hexColor: "#000000" };
 
     const members = {
         cache: [
@@ -26,11 +26,11 @@ describe("MinecraftMessage class", () => {
     };
 
     it("Formats a simple message correctly", () => {
-        const mockMessage = { content: "simple", member: member } as Message;
+        const mockMessage = { content: "simple", member: member } as unknown as Message;
         const msg = MinecraftMessage.format(mockMessage);
 
         expect(msg).toContain("simple");
-        expect(msg).toContain(member.roles.highest.hexColor);
+        expect(msg).toContain((member as any).roles.highest.hexColor);
     });
 
     it("Formats a message with user", () => {
@@ -41,7 +41,7 @@ describe("MinecraftMessage class", () => {
                 roles: { cache: [] },
             },
             member: member,
-        } as Message;
+        } as unknown as Message;
         const msg = MinecraftMessage.format(mockMessage);
 
         expect(msg).toContain("channel @user2");
@@ -55,7 +55,7 @@ describe("MinecraftMessage class", () => {
                 roles: roles,
             },
             member: member,
-        } as Message;
+        } as unknown as Message;
         const msg = MinecraftMessage.format(mockMessage);
 
         expect(msg).toContain("channel @role2");
@@ -68,7 +68,7 @@ describe("MinecraftMessage class", () => {
                 channels: channels,
             },
             member: member,
-        } as Message;
+        } as unknown as Message;
         const msg = MinecraftMessage.format(mockMessage);
 
         expect(msg).toContain("channel #channel2");
@@ -83,7 +83,7 @@ describe("MinecraftMessage class", () => {
                 roles: roles,
             },
             member: member,
-        } as Message;
+        } as unknown as Message;
         const msg = MinecraftMessage.format(mockMessage);
 
         expect(msg).toContain(

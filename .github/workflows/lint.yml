@@ -10,14 +10,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: borales/actions-yarn@v4
+        name: Install
         with:
           cmd: install
       - uses: borales/actions-yarn@v4
+        name: Build
         with:
           cmd: build
       - uses: borales/actions-yarn@v4
+        name: Format
         with:
           cmd: format
       - uses: borales/actions-yarn@v4
+        name: Lint
         with:
           cmd: lint
