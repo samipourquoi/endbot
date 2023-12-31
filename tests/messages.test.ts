@@ -4,7 +4,6 @@ import { mockMember } from "./mockHelpers.js";
 
 describe("MinecraftMessage class", () => {
     const member = mockMember();
-    (member as any).roles.highest = { hexColor: "#000000" };
 
     const members = {
         cache: [

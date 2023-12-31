@@ -36,6 +36,7 @@
     ],
     "dependencies": {
         "discord.js": "^14.14.1",
+        "tail": "^2.2.6",
         "typescript": "^5.3.3",
         "yaml": "^2.3.4"
     },
@@ -47,6 +48,7 @@
         "@swc/jest": "^0.2.29",
         "@types/jest": "^29.5.11",
         "@types/node": "^20.10.5",
+        "@types/tail": "^2.2.3",
         "@typescript-eslint/eslint-plugin": "^6.15.0",
         "@typescript-eslint/parser": "^6.15.0",
         "babel-jest": "^29.7.0",

@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, Message } from "discord.js";
+import { Client, GatewayIntentBits, Message, TextChannel } from "discord.js";
 import { Bridge } from "./bridge.js";
 import { Config } from "./config.js";
 
@@ -28,7 +28,16 @@ export class Endbot extends Client {
 
     private initBridges(): void {
         for (const serverConfig of this.config.servers) {
-            const bridge = new Bridge(serverConfig);
+            const channel = this.channels.cache.get(serverConfig.channel_id);
+            if (channel === undefined || !(channel instanceof TextChannel)) {
+                // TODO: Handle better
+                console.log(
+                    "Discord channel doesn't exist or is not a text channel for " +
+                        serverConfig.name,
+                );
+                continue;
+            }
+            const bridge = new Bridge(serverConfig, channel);
             bridge.connect();
             this.bridges.push(bridge);
         }
@@ -43,7 +52,7 @@ export class Endbot extends Client {
 
     private sendMessageToMinecraft(message: Message): void {
         for (const bridge of this.bridges) {
-            if (bridge.channelId === message.channelId) {
+            if (bridge.channel.id === message.channelId) {
                 bridge.sendToMinecraft(message);
             }
         }

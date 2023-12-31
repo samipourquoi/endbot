@@ -18,6 +18,7 @@ export interface IServer {
     rcon_port?: number;
     rcon_password: string;
     channel_id: string;
+    folder_path: string;
 }
 
 export interface IPacket {

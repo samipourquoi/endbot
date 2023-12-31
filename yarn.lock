@@ -1860,6 +1860,11 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.1.tgz#20f18294f797f2209b5f65c8e3b5c8e8261d127c"
   integrity sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==
 
+"@types/tail@^2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@types/tail/-/tail-2.2.3.tgz#e7701ae040d0aacf2d78d7cbb71e016f304bc446"
+  integrity sha512-Hnf352egOlDR4nVTaGX0t/kmTNXHMdovF2C7PVDFtHTHJPFmIspOI1b86vEOxU7SfCq/dADS7ptbqgG/WGGxnA==
+
 "@types/ws@8.5.9":
   version "8.5.9"
   resolved "https://registry.yarnpkg.com/@types/ws/-/ws-8.5.9.tgz#384c489f99c83225a53f01ebc3eddf3b8e202a8c"
@@ -4231,6 +4236,11 @@ synckit@^0.8.5:
   dependencies:
     "@pkgr/utils" "^2.4.2"
     tslib "^2.6.2"
+
+tail@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/tail/-/tail-2.2.6.tgz#24abd701963639b896c42496d5f416216ec0b558"
+  integrity sha512-IQ6G4wK/t8VBauYiGPLx+d3fA5XjSVagjWV5SIYzvEvglbQjwEcukeYI68JOPpdydjxhZ9sIgzRlSmwSpphHyw==
 
 test-exclude@^6.0.0:
   version "6.0.0"

@@ -5,9 +5,8 @@ import fs from "fs";
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 export const mockMember = () => ({
     roles: {
-        cache: {
-            has: jest.fn(),
-        },
+        cache: { has: jest.fn() },
+        highest: { hexColor: "#000000" },
     },
 });
 

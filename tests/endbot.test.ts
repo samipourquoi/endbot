@@ -1,7 +1,7 @@
+import { Message, TextChannel } from "discord.js";
 import { Bridge } from "../src/bridge.js";
 import { Config } from "../src/config.js";
 import { Endbot } from "../src/endbot.js";
-import { Message } from "discord.js";
 import { readConfig } from "./mockHelpers.js";
 
 describe("Endbot class", () => {
@@ -12,6 +12,12 @@ describe("Endbot class", () => {
     const bot = new Endbot();
 
     it("Initializes all server bridges in config", () => {
+        jest.spyOn(bot.channels.cache, "get").mockImplementation((channelId: string) => {
+            // The Object class needs to be used because jest doesn't work well with the
+            // `instanceof` operator: https://github.com/jestjs/jest/issues/2549
+            const channel = Object.create(TextChannel.prototype);
+            return Object.assign(channel, { id: channelId });
+        });
         const mockConnect = jest.spyOn(Bridge.prototype, "connect").mockImplementation();
         (bot as any).initBridges();
         expect(mockConnect).toHaveBeenCalledTimes(2);
@@ -41,7 +47,12 @@ describe("Endbot class", () => {
 
     it("Only sends messages to Minecraft servers with the channel ID", () => {
         const mockMessage = { channelId: "2" } as Message;
-        bot.bridges = [new Bridge(bot.config.servers[0]), new Bridge(bot.config.servers[1])];
+        const channel1 = { id: "1" } as TextChannel;
+        const channel2 = { id: "2" } as TextChannel;
+        bot.bridges = [
+            new Bridge(bot.config.servers[0], channel1),
+            new Bridge(bot.config.servers[1], channel2),
+        ];
 
         const mockSend1 = jest
             .spyOn(bot.bridges[0] as any, "sendToMinecraft")
