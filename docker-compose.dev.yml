@@ -4,5 +4,6 @@ services:
       target: dev
     volumes:
       - ./src:/endbot/src
+    network_mode: host
     environment:
       ENV: "development"

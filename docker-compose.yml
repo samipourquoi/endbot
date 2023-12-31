@@ -2,8 +2,7 @@ services:
   bot:
     build:
       target: prod
-    volumes:
-      - ./src:/endbot/src
+    network_mode: host
     environment:
       ENV: "production"
     user: node
