@@ -4,20 +4,20 @@ import { MinecraftMessage } from "./lib/messages.js";
 import { PacketTooBigError } from "./lib/rcon/packet.js";
 import { Rcon } from "./lib/rcon/rcon.js";
 
-export class MinecraftServer {
+export class Bridge {
     channelId: string;
     rcon: Rcon;
 
-    constructor(server: IServer) {
-        this.channelId = server.channel_id;
-        this.rcon = new Rcon(server);
+    constructor(serverConfig: IServer) {
+        this.channelId = serverConfig.channel_id;
+        this.rcon = new Rcon(serverConfig);
     }
 
     connect(): void {
         this.rcon.connect();
     }
 
-    async sendMessage(message: Message): Promise<void> {
+    async sendToMinecraft(message: Message): Promise<void> {
         // TODO: Handle errors in send
         const minecraftMsg = MinecraftMessage.format(message);
         try {

@@ -1,7 +1,7 @@
+import { Bridge } from "../src/bridge.js";
 import { Config } from "../src/config.js";
 import { Endbot } from "../src/endbot.js";
 import { Message } from "discord.js";
-import { MinecraftServer } from "../src/minecraftServer.js";
 import { readConfig } from "./mockHelpers.js";
 
 describe("Endbot class", () => {
@@ -11,11 +11,11 @@ describe("Endbot class", () => {
 
     const bot = new Endbot();
 
-    it("Initializes all Minecraft servers in config", () => {
-        const mockConnect = jest.spyOn(MinecraftServer.prototype, "connect").mockImplementation();
-        (bot as any).initMinecraftServers();
+    it("Initializes all server bridges in config", () => {
+        const mockConnect = jest.spyOn(Bridge.prototype, "connect").mockImplementation();
+        (bot as any).initBridges();
         expect(mockConnect).toHaveBeenCalledTimes(2);
-        expect(bot.minecraftServers.length).toEqual(2);
+        expect(bot.bridges.length).toEqual(2);
     });
 
     it("Sends Discord message to Minecraft", () => {
@@ -41,16 +41,13 @@ describe("Endbot class", () => {
 
     it("Only sends messages to Minecraft servers with the channel ID", () => {
         const mockMessage = { channelId: "2" } as Message;
-        bot.minecraftServers = [
-            new MinecraftServer(bot.config.servers[0]),
-            new MinecraftServer(bot.config.servers[1]),
-        ];
+        bot.bridges = [new Bridge(bot.config.servers[0]), new Bridge(bot.config.servers[1])];
 
         const mockSend1 = jest
-            .spyOn(bot.minecraftServers[0] as any, "sendMessage")
+            .spyOn(bot.bridges[0] as any, "sendToMinecraft")
             .mockImplementationOnce(() => {});
         const mockSend2 = jest
-            .spyOn(bot.minecraftServers[1] as any, "sendMessage")
+            .spyOn(bot.bridges[1] as any, "sendToMinecraft")
             .mockImplementationOnce(() => {});
 
         (bot as any).sendMessageToMinecraft(mockMessage);

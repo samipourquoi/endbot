@@ -1,10 +1,10 @@
 import { Client, GatewayIntentBits, Message } from "discord.js";
+import { Bridge } from "./bridge.js";
 import { Config } from "./config.js";
-import { MinecraftServer } from "./minecraftServer.js";
 
 export class Endbot extends Client {
     config: Config;
-    minecraftServers: MinecraftServer[] = [];
+    bridges: Bridge[] = [];
 
     constructor() {
         super({
@@ -22,15 +22,15 @@ export class Endbot extends Client {
         this.on("messageCreate", this.handleDiscordMessage);
         this.once("ready", async () => {
             console.log("ready");
-            this.initMinecraftServers();
+            this.initBridges();
         });
     }
 
-    private initMinecraftServers(): void {
+    private initBridges(): void {
         for (const serverConfig of this.config.servers) {
-            const server = new MinecraftServer(serverConfig);
-            server.connect();
-            this.minecraftServers.push(server);
+            const bridge = new Bridge(serverConfig);
+            bridge.connect();
+            this.bridges.push(bridge);
         }
     }
 
@@ -42,9 +42,9 @@ export class Endbot extends Client {
     }
 
     private sendMessageToMinecraft(message: Message): void {
-        for (const server of this.minecraftServers) {
-            if (server.channelId === message.channelId) {
-                server.sendMessage(message);
+        for (const bridge of this.bridges) {
+            if (bridge.channelId === message.channelId) {
+                bridge.sendToMinecraft(message);
             }
         }
     }
