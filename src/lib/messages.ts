@@ -19,15 +19,17 @@ export class MinecraftMessage {
     private static formatUsersAndRoles(message: Message, content: string): string {
         const members = message.guild!.members.cache;
         members.forEach((member) => {
-            if (content.includes(member.id)) {
-                content = content.replaceAll("<@" + member.id + ">", "@" + member.displayName);
+            const memberId = "<@" + member.id + ">";
+            if (content.includes(memberId)) {
+                content = content.replaceAll(memberId, "@" + member.displayName);
             }
         });
 
         const roles = message.guild!.roles.cache;
         roles.forEach((role) => {
-            if (content.includes(role.id)) {
-                content = content.replaceAll("<@&" + role.id + ">", "@" + role.name);
+            const roleId = "<@&" + role.id + ">";
+            if (content.includes(roleId)) {
+                content = content.replaceAll(roleId, "@" + role.name);
             }
         });
 
@@ -37,8 +39,9 @@ export class MinecraftMessage {
     private static formatChannels(message: Message, content: string): string {
         const channels = message.guild!.channels.cache;
         channels.forEach((channel) => {
-            if (content.includes(channel.id)) {
-                content = content.replaceAll("<#" + channel.id + ">", "#" + channel.name);
+            const channelId = "<#" + channel.id + ">";
+            if (content.includes(channelId)) {
+                content = content.replaceAll(channelId, "#" + channel.name);
             }
         });
 
