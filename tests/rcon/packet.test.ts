@@ -1,5 +1,5 @@
+import { MAX_PACKET_SIZE, Packet, PacketTooBigError } from "../../src/lib/rcon/packet.js";
 import { IPacket } from "../../src/interfaces.js";
-import { Packet } from "../../src/lib/rcon/packet.js";
 
 describe("Packet class", () => {
     const data = "test";
@@ -39,5 +39,12 @@ describe("Packet class", () => {
         const decodedPacket = await Packet.read(packet);
 
         expect(decodedPacket).toStrictEqual(expectedPacket);
+    });
+
+    it("raises an error when packet size exceeds maximum packet length", async () => {
+        jest.spyOn(Buffer, "byteLength").mockImplementationOnce(() => {
+            return MAX_PACKET_SIZE + 1;
+        });
+        await expect(Packet.create(data, type, id)).rejects.toThrow(PacketTooBigError);
     });
 });
