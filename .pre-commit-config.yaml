@@ -1,0 +1,14 @@
+repos:
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.6
+    hooks:
+      - id: codespell
+        args: [--skip="./node_modules/*, ./dist/*, ./coverage/*, ./yarn.lock"]
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v4.0.0-alpha.8
+    hooks:
+      - id: prettier
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v9.0.0-alpha.0
+    hooks:
+      - id: eslint

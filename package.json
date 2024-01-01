@@ -22,7 +22,7 @@
     "scripts": {
         "build": "tsc",
         "dev": "tsc-watch --onSuccess \"yarn start\"",
-        "format": "prettier --write \"**/*.ts\"",
+        "format": "prettier --write \"**/*.ts\" --cache",
         "lint": "eslint .",
         "lint-fix": "yarn lint --fix",
         "start": "node --disable-warning=ExperimentalWarning .",
