@@ -18,6 +18,6 @@
         "composite": true,
         "resolveJsonModule": true
     },
-    "include": ["**/*"],
+    "include": ["**/*", "assets/*.json"],
     "exclude": ["node_modules", "dist"]
 }
