@@ -1,11 +1,11 @@
+import { EmbedBuilder, GuildMember } from "discord.js";
 import { ICommandInfo } from "../interfaces.js";
-import { Message } from "discord.js";
 
 export class Command {
-    name!: string;
-    aliases!: string[];
-    description!: string;
-    usage!: string;
+    name: string;
+    aliases: string[];
+    description: string;
+    usage: string;
     roles_allowed: string[];
     users_allowed: string[];
 
@@ -18,17 +18,18 @@ export class Command {
         this.users_allowed = info.users_allowed || [];
     }
 
-    async run(): Promise<void> {
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+    async run(args: string[]): Promise<EmbedBuilder> {
         throw new Error("This command has no functionality!");
     }
 
-    async hasPermission(message: Message): Promise<boolean> {
+    async hasPermission(member: GuildMember): Promise<boolean> {
         for (const role of this.roles_allowed) {
-            if (message.member!.roles.cache.has(role)) return true;
+            if (member.roles.cache.has(role)) return true;
         }
 
         for (const user of this.users_allowed) {
-            if (user === message.member!.id) return true;
+            if (user === member.id) return true;
         }
 
         // If no permissions are set, everyone has access to the command

@@ -1,4 +1,5 @@
 token: testToken
+prefixes: ["!", "$"]
 servers:
   - name: test_server1
     host: host1

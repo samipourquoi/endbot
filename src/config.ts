@@ -3,13 +3,15 @@ import YAML from "yaml";
 import { readFileSync } from "fs";
 
 export class Config {
-    token!: string;
+    token: string;
+    prefixes: string[] = [];
     servers: IServer[] = [];
 
     constructor() {
         const config = this.readConfigFile();
         this.setServerConfig(config);
         this.token = config.token;
+        this.prefixes = config.prefixes;
     }
 
     private readConfigFile(): IConfig {

@@ -1,5 +1,6 @@
 export interface IConfig {
     token: string;
+    prefixes: string[];
     servers?: IServer[];
 }
 

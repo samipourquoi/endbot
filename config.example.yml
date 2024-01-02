@@ -1,5 +1,7 @@
 # Your bot's token. Needs to be kept private.
 token: YOUR BOT TOKEN
+# Prefixes your bot uses for commands. Each prefix must be one character
+prefixes: ["!"]
 # You can add as many servers as you want (or none at all).
 # Make sure to add a hyphen before each new server entry.
 servers:
