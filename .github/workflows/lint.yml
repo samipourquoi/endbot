@@ -1,4 +1,4 @@
-name: Run linter and formatter on push
+name: Run linter and formatter
 
 on: [push, pull_request]
 
