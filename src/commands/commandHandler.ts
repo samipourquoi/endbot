@@ -1,6 +1,6 @@
-import { CommandNotFoundEmbed, InvalidPermissionsEmbed } from "./lib/embeds.js";
+import { CommandNotFoundEmbed, InvalidPermissionsEmbed } from "../lib/embeds.js";
 import { EmbedBuilder, GuildMember } from "discord.js";
-import { Command } from "./lib/command.js";
+import { Command } from "./command.js";
 
 export class CommandHandler {
     private commands: Command[] = [];

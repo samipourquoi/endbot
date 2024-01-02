@@ -1,6 +1,6 @@
 import { DiscordMessage, MinecraftMessage } from "./lib/messages.js";
 import { Message, TextChannel } from "discord.js";
-import { IServer } from "./interfaces.js";
+import { IServer } from "./lib/interfaces.js";
 import { PacketTooBigError } from "./lib/rcon/packet.js";
 import { Rcon } from "./lib/rcon/rcon.js";
 import { Tail } from "tail";

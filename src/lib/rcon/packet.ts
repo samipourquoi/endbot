@@ -1,5 +1,5 @@
 import { Buffer } from "buffer";
-import { IPacket } from "../../interfaces.js";
+import { IPacket } from "../interfaces.js";
 
 export const PacketType = {
     AUTH: 3,

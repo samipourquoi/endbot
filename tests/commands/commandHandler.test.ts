@@ -1,8 +1,12 @@
-import { CommandHandler, commandHandler, discordCommand } from "../../src/commandHandler.js";
+import {
+    CommandHandler,
+    commandHandler,
+    discordCommand,
+} from "../../src/commands/commandHandler.js";
 import { CommandNotFoundEmbed, InvalidPermissionsEmbed } from "../../src/lib/embeds.js";
 import { EmbedBuilder, GuildMember } from "discord.js";
-import { Command } from "../../src/lib/command.js";
-import { ICommandInfo } from "../../src/interfaces.js";
+import { Command } from "../../src/commands/command.js";
+import { ICommandInfo } from "../../src/lib/interfaces.js";
 import { mockMember } from "../mockHelpers.js";
 
 const commandInfo = { name: "test" } as ICommandInfo;

@@ -1,4 +1,4 @@
-import { IConfig, IServer } from "./interfaces.js";
+import { IConfig, IServer } from "./lib/interfaces.js";
 import YAML from "yaml";
 import { readFileSync } from "fs";
 

@@ -1,6 +1,6 @@
-import { Command } from "../../src/lib/command.js";
+import { Command } from "../../src/commands/command.js";
 import { GuildMember } from "discord.js";
-import { ICommandInfo } from "../../src/interfaces.js";
+import { ICommandInfo } from "../../src/lib/interfaces.js";
 import { mockMember } from "../mockHelpers.js";
 
 const commandInfo = {

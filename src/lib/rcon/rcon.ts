@@ -1,4 +1,4 @@
-import { IPacket, IServer } from "../../interfaces.js";
+import { IPacket, IServer } from "../interfaces.js";
 import { Packet, PacketType } from "./packet.js";
 import { Buffer } from "buffer";
 import { Queue } from "./queue.js";

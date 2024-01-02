@@ -1,4 +1,4 @@
-import { IConfig } from "../src/interfaces.js";
+import { IConfig } from "../src/lib/interfaces.js";
 import YAML from "yaml";
 import fs from "fs";
 

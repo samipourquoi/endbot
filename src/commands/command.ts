@@ -1,5 +1,5 @@
 import { EmbedBuilder, GuildMember } from "discord.js";
-import { ICommandInfo } from "../interfaces.js";
+import { ICommandInfo } from "../lib/interfaces.js";
 
 export class Command {
     name: string;

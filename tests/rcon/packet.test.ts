@@ -1,5 +1,5 @@
 import { MAX_PACKET_SIZE, Packet, PacketTooBigError } from "../../src/lib/rcon/packet.js";
-import { IPacket } from "../../src/interfaces.js";
+import { IPacket } from "../../src/lib/interfaces.js";
 
 describe("Packet class", () => {
     const data = "test";

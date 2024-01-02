@@ -1,4 +1,4 @@
-import { QueueItem } from "../../interfaces.js";
+import { QueueItem } from "../interfaces.js";
 
 // The following code is from the queue implemented by
 // https://github.com/janispritzkau/rcon-client

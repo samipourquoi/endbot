@@ -1,6 +1,6 @@
 import { Client, GatewayIntentBits, Message, TextChannel } from "discord.js";
 import { Bridge } from "./bridge.js";
-import { CommandHandler } from "./commandHandler.js";
+import { CommandHandler } from "./commands/commandHandler.js";
 import { Config } from "./config.js";
 
 export class Endbot extends Client {
