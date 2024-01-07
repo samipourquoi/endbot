@@ -1,9 +1,10 @@
-import { EmbedBuilder, GuildMember } from "discord.js";
-import { ICommandInfo } from "../lib/interfaces.js";
+import { ICommandContext, ICommandInfo } from "../lib/interfaces.js";
+import { GuildMember } from "discord.js";
 
 export class Command {
     name: string;
     aliases: string[];
+    short_description: string;
     description: string;
     usage: string;
     roles_allowed: string[];
@@ -12,6 +13,7 @@ export class Command {
     constructor(info: ICommandInfo) {
         this.name = info.name;
         this.aliases = info.aliases || [];
+        this.short_description = info.short_description;
         this.description = info.description;
         this.usage = info.usage;
         this.roles_allowed = info.roles_allowed || [];
@@ -19,7 +21,7 @@ export class Command {
     }
 
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-    async run(args: string[]): Promise<EmbedBuilder> {
+    async run(cmdContext: ICommandContext): Promise<void> {
         throw new Error("This command has no functionality!");
     }
 

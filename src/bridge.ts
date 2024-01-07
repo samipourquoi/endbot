@@ -9,8 +9,9 @@ import { existsSync } from "fs";
 export class Bridge {
     channel: TextChannel;
     name: string;
-    rcon: Rcon;
-    serverLogPath: string;
+
+    private rcon: Rcon;
+    private serverLogPath: string;
 
     constructor(server: IServer, channel: TextChannel) {
         this.channel = channel;
@@ -48,16 +49,22 @@ export class Bridge {
     }
 
     async sendToMinecraft(message: Message): Promise<void> {
-        // TODO: Handle errors in send
         const minecraftMsg = MinecraftMessage.format(message);
+        await this.sendMinecraftCommand(`tellraw @a ${minecraftMsg}`);
+    }
+
+    async sendMinecraftCommand(command: string): Promise<string> {
         try {
-            await this.rcon.send(`tellraw @a ${minecraftMsg}`);
+            // TODO: Handle errors in send
+            return await this.rcon.send(command);
         } catch (e) {
             if (e instanceof PacketTooBigError) {
                 console.error("Input too big to send to Minecraft. Skipping...");
             } else {
-                console.error("Unknown error while sending message to Minecraft: " + e);
+                console.error("Unknown error while sending command to Minecraft: " + e);
             }
         }
+
+        return "";
     }
 }

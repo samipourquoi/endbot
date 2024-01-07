@@ -33,7 +33,7 @@ export class Rcon {
         }
     }
 
-    async send(data: string, type = PacketType.COMMAND): Promise<void> {
+    async send(data: string, type = PacketType.COMMAND): Promise<string> {
         const packet = await Packet.create(data, type);
 
         // This function is added to the queue each time send() is called. This

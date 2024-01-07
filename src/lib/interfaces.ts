@@ -1,12 +1,24 @@
+import { GuildMember, TextChannel } from "discord.js";
+import { Bridge } from "../bridge.js";
+
 export interface IConfig {
     token: string;
     prefixes: string[];
     servers?: IServer[];
 }
 
+export interface ICommandContext {
+    cmdName: string;
+    args: string[];
+    author: GuildMember;
+    bridges: Bridge[];
+    channel: TextChannel;
+}
+
 export interface ICommandInfo {
     name: string;
     aliases?: string[];
+    short_description: string;
     description: string;
     usage: string;
     roles_allowed?: string[];

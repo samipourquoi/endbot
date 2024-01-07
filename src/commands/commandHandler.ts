@@ -1,6 +1,6 @@
-import { CommandNotFoundEmbed, InvalidPermissionsEmbed } from "../lib/embeds.js";
-import { EmbedBuilder, GuildMember } from "discord.js";
+import { CommandNotFoundEmbed, ErrorEmbed, InvalidPermissionsEmbed } from "../lib/embeds.js";
 import { Command } from "./command.js";
+import { ICommandContext } from "../lib/interfaces.js";
 
 export class CommandHandler {
     private commands: Command[] = [];
@@ -9,20 +9,30 @@ export class CommandHandler {
         this.commands.push(command);
     }
 
-    async runCommand(
-        commandName: string,
-        args: string[],
-        author: GuildMember,
-    ): Promise<EmbedBuilder> {
+    async handleCommand(cmdContext: ICommandContext): Promise<void> {
+        const cmdName = cmdContext.cmdName;
         for (const command of this.commands) {
-            if (command.name === commandName || command.aliases.includes(commandName)) {
-                return (await command.hasPermission(author))
-                    ? await command.run(args)
-                    : new InvalidPermissionsEmbed(commandName);
+            if (command.name === cmdName || command.aliases.includes(cmdName)) {
+                await this.runCommand(command, cmdContext);
+                return;
             }
         }
 
-        return new CommandNotFoundEmbed(commandName);
+        cmdContext.channel.send({ embeds: [new CommandNotFoundEmbed(cmdName)] });
+    }
+
+    private async runCommand(command: Command, cmdContext: ICommandContext): Promise<void> {
+        if (!(await command.hasPermission(cmdContext.author))) {
+            cmdContext.channel.send({ embeds: [new InvalidPermissionsEmbed(command.name)] });
+            return;
+        }
+
+        try {
+            await command.run(cmdContext);
+        } catch (e: any) {
+            const errorMsg = `Error running command '${command.name}': ${e.message}`;
+            cmdContext.channel.send({ embeds: [new ErrorEmbed(errorMsg)] });
+        }
     }
 }
 

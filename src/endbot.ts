@@ -1,7 +1,8 @@
 import { Client, GatewayIntentBits, Message, TextChannel } from "discord.js";
+import { CommandHandler, commandHandler } from "./commands/commandHandler.js";
 import { Bridge } from "./bridge.js";
-import { CommandHandler } from "./commands/commandHandler.js";
 import { Config } from "./config.js";
+import { ICommandContext } from "./lib/interfaces.js";
 
 export class Endbot extends Client {
     private bridges: Bridge[] = [];
@@ -19,7 +20,7 @@ export class Endbot extends Client {
         });
 
         this.config = new Config();
-        this.handler = new CommandHandler();
+        this.handler = commandHandler;
         // TODO: Handle failed logins better
         this.login(this.config.token).catch(console.error);
 
@@ -48,15 +49,18 @@ export class Endbot extends Client {
     }
 
     private async handleDiscordMessage(message: Message): Promise<void> {
-        if (message.author.bot) return;
+        if (this.isInvalidMessage(message) || this.bridges.length === 0) return;
 
         this.sendMessageToMinecraft(message);
 
-        const { cmdName, args } = this.extractCommand(message.content);
-        if (cmdName) {
-            const resultEmbed = await this.handler.runCommand(cmdName, args, message.member!);
-            message.channel.send({ embeds: [resultEmbed] });
+        const cmdContext = this.createCmdContext(message);
+        if (cmdContext.cmdName) {
+            await this.handler.handleCommand(cmdContext);
         }
+    }
+
+    private isInvalidMessage(message: Message): boolean {
+        return message.author.bot || !message.member || !(message.channel instanceof TextChannel);
     }
 
     private sendMessageToMinecraft(message: Message): void {
@@ -67,12 +71,23 @@ export class Endbot extends Client {
         }
     }
 
-    private extractCommand(content: string): { cmdName: string; args: string[] } {
-        if (!this.config.prefixes.includes(content[0])) {
-            return { cmdName: "", args: [] };
+    private createCmdContext(message: Message): ICommandContext {
+        let cmdName = "";
+        let args: string[] = [];
+        if (this.config.prefixes.includes(message.content[0])) {
+            // This message is a valid command
+            const words = message.content.split(" ");
+            cmdName = words[0].slice(1);
+            args = words.slice(1);
         }
 
-        const words = content.split(" ");
-        return { cmdName: words[0].slice(1), args: words.slice(1) };
+        return {
+            cmdName: cmdName,
+            args: args,
+            author: message.member!,
+            bridges: this.bridges,
+            // Will always be a TextChannel as the isInvalidMessage check passed
+            channel: message.channel as TextChannel,
+        };
     }
 }

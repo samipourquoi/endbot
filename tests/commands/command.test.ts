@@ -1,6 +1,5 @@
+import { ICommandContext, ICommandInfo } from "../../src/lib/interfaces.js";
 import { Command } from "../../src/commands/command.js";
-import { GuildMember } from "discord.js";
-import { ICommandInfo } from "../../src/lib/interfaces.js";
 import { mockMember } from "../mockHelpers.js";
 
 const commandInfo = {
@@ -11,17 +10,18 @@ const commandInfo = {
 const command = new Command(commandInfo);
 
 describe("Command class", () => {
-    const member = mockMember() as unknown as GuildMember;
+    const member = mockMember();
 
     it("Throws an error when run() is called", async () => {
         // If the parent run() function is called, it means the child command
         // run() function is not implemented
-        await expect(command.run([])).rejects.toThrowError("no functionality");
+        const cmdContext = {} as unknown as ICommandContext;
+        await expect(command.run(cmdContext)).rejects.toThrowError("no functionality");
     });
 
     // The following tests are for the hasPermission() function
     it("Returns false when user doesn't have permission to run command", async () => {
-        jest.spyOn(member.roles.cache, "has").mockImplementation(() => false);
+        jest.spyOn(member.roles.cache, "has").mockImplementationOnce(() => false);
         expect(await command.hasPermission(member)).toBeFalsy();
     });
 
@@ -33,7 +33,7 @@ describe("Command class", () => {
         // The second test is if the member has a permitted user id
         (member as any).id = "test_user";
 
-        jest.spyOn(member.roles.cache, "has").mockImplementation(() => false);
+        jest.spyOn(member.roles.cache, "has").mockImplementationOnce(() => false);
         expect(await command.hasPermission(member)).toBeTruthy();
     });
 

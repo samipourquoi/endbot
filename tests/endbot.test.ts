@@ -1,8 +1,8 @@
 import { Message, TextChannel } from "discord.js";
+import { mockChannel, mockMember, readConfig } from "./mockHelpers.js";
 import { Bridge } from "../src/bridge.js";
 import { Config } from "../src/config.js";
 import { Endbot } from "../src/endbot.js";
-import { readConfig } from "./mockHelpers.js";
 
 describe("Endbot class", () => {
     const expectedConfig = readConfig();
@@ -24,8 +24,38 @@ describe("Endbot class", () => {
         expect((bot as any).bridges.length).toEqual(2);
     });
 
+    it("Does not send a Discord message to Minecraft that is invalid", () => {
+        jest.spyOn(bot as any, "isInvalidMessage").mockImplementationOnce(() => {
+            return true;
+        });
+
+        const mockSend = jest.spyOn(bot as any, "sendMessageToMinecraft");
+
+        (bot as any).handleDiscordMessage({});
+        expect(mockSend).not.toHaveBeenCalled();
+    });
+
+    it("Does not send a Discord message to Minecraft if no bridges are configured", () => {
+        const bridges = (bot as any).bridges;
+        (bot as any).bridges = [];
+        jest.spyOn(bot as any, "isInvalidMessage").mockImplementationOnce(() => {
+            return false;
+        });
+
+        const mockSend = jest.spyOn(bot as any, "sendMessageToMinecraft");
+
+        (bot as any).handleDiscordMessage({});
+        expect(mockSend).not.toHaveBeenCalled();
+
+        (bot as any).bridges = bridges; // Restore
+    });
+
     it("Sends Discord message to Minecraft", () => {
-        const mockRunCommand = jest.spyOn((bot as any).handler, "runCommand");
+        jest.spyOn(bot as any, "isInvalidMessage").mockImplementationOnce(() => {
+            return false;
+        });
+
+        const mockRunCommand = jest.spyOn((bot as any).handler, "handleCommand");
         const mockSend = jest
             .spyOn(bot as any, "sendMessageToMinecraft")
             .mockImplementationOnce(() => {});
@@ -38,28 +68,36 @@ describe("Endbot class", () => {
     });
 
     it("Runs a command with the correct prefix", () => {
+        jest.spyOn(bot as any, "isInvalidMessage").mockImplementationOnce(() => {
+            return false;
+        });
+
         const mockRunCommand = jest
-            .spyOn((bot as any).handler, "runCommand")
+            .spyOn((bot as any).handler, "handleCommand")
             .mockImplementationOnce(() => {});
         jest.spyOn(bot as any, "sendMessageToMinecraft").mockImplementationOnce(() => {});
-        const mockSend = jest.fn();
 
         const mockMessage = {
             author: { bot: false },
             content: "!test",
-            channel: { send: mockSend },
+            channel: {},
+            member: {},
         } as unknown as Message;
 
         (bot as any).handleDiscordMessage(mockMessage);
         expect(mockRunCommand).toHaveBeenCalledTimes(1);
     });
 
-    it("Does not send Discord message to Minecraft if the author is a bot", () => {
-        const mockMessage = { author: { bot: true } } as Message;
-        const mockSend = jest.spyOn(bot as any, "sendMessageToMinecraft");
-
-        (bot as any).handleDiscordMessage(mockMessage);
-        expect(mockSend).not.toHaveBeenCalled();
+    it("Recognizes invalid Discord messages", () => {
+        const messages = [
+            { author: { bot: true }, member: mockMember(), channel: mockChannel() },
+            { author: { bot: false }, member: null, channel: mockChannel() },
+            { author: { bot: false }, member: mockMember(), channel: null },
+        ];
+        for (const message of messages) {
+            const isInvalid = (bot as any).isInvalidMessage(message);
+            expect(isInvalid).toBeTruthy();
+        }
     });
 
     it("Only sends messages to Minecraft servers with the channel ID", () => {
@@ -68,12 +106,10 @@ describe("Endbot class", () => {
         const channel2 = { id: "2" } as TextChannel;
         (bot as any).bridges = [
             new Bridge((bot as any).config.servers[0], channel1),
-            new Bridge(((bot as any).config as any).servers[1], channel2),
+            new Bridge((bot as any).config.servers[1], channel2),
         ];
 
-        const mockSend1 = jest
-            .spyOn((bot as any).bridges[0] as any, "sendToMinecraft")
-            .mockImplementationOnce(() => {});
+        const mockSend1 = jest.spyOn((bot as any).bridges[0] as any, "sendToMinecraft");
         const mockSend2 = jest
             .spyOn((bot as any).bridges[1] as any, "sendToMinecraft")
             .mockImplementationOnce(() => {});
@@ -81,27 +117,5 @@ describe("Endbot class", () => {
         (bot as any).sendMessageToMinecraft(mockMessage);
         expect(mockSend1).not.toHaveBeenCalled();
         expect(mockSend2).toHaveBeenCalledTimes(1);
-    });
-
-    it("Does not extract a command when no prefix is used", () => {
-        const messages = ["test message", "!"];
-        for (const message of messages) {
-            const result = (bot as any).extractCommand(message);
-            expect(result).toEqual({ cmdName: "", args: [] });
-        }
-        const result = (bot as any).extractCommand("test message");
-        expect(result).toEqual({ cmdName: "", args: [] });
-    });
-
-    it("Extracts a command and its arguments when a valid prefix is used", () => {
-        const commands = {
-            "!test arg1 arg2": { cmdName: "test", args: ["arg1", "arg2"] },
-            $test: { cmdName: "test", args: [] },
-        };
-
-        for (const [message, expected] of Object.entries(commands)) {
-            const result = (bot as any).extractCommand(message);
-            expect(result).toEqual(expected);
-        }
     });
 });

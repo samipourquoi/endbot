@@ -6,7 +6,7 @@ export class Queue {
     private queue: QueueItem[] = [];
     private draining = false;
 
-    async add(getData: () => Promise<string>): Promise<void> {
+    async add(getData: () => Promise<string>): Promise<string> {
         return new Promise((resolve, reject) => {
             this.queue.push({ getData, resolve, reject });
             this.drain();

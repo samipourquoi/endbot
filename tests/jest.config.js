@@ -18,6 +18,9 @@ export default {
     roots: ["src", "tests"],
     // A map from regular expressions to paths to transformers
     transform: {
-        "^.+\\.tsx?$": "@swc/jest",
+        "^.+\\.tsx?$": [
+            "@swc/jest",
+            { jsc: { parser: { syntax: "typescript", decorators: true } } },
+        ],
     },
 };

@@ -3,16 +3,25 @@ import {
     commandHandler,
     discordCommand,
 } from "../../src/commands/commandHandler.js";
-import { CommandNotFoundEmbed, InvalidPermissionsEmbed } from "../../src/lib/embeds.js";
-import { EmbedBuilder, GuildMember } from "discord.js";
+import { CommandNotFoundEmbed, ErrorEmbed, InvalidPermissionsEmbed } from "../../src/lib/embeds.js";
+import { ICommandContext, ICommandInfo } from "../../src/lib/interfaces.js";
+import { mockChannel, mockMember } from "../mockHelpers.js";
 import { Command } from "../../src/commands/command.js";
-import { ICommandInfo } from "../../src/lib/interfaces.js";
-import { mockMember } from "../mockHelpers.js";
 
 const commandInfo = { name: "test" } as ICommandInfo;
 
 describe("CommandHandler class", () => {
-    const member = mockMember() as unknown as GuildMember;
+    let cmdContext: ICommandContext;
+
+    beforeEach(() => {
+        cmdContext = {
+            cmdName: "test",
+            args: [],
+            author: mockMember(),
+            bridges: [],
+            channel: mockChannel(),
+        } as ICommandContext;
+    });
 
     it("Adds a command when addCommand() is called", async () => {
         const command = new Command(commandInfo);
@@ -22,36 +31,65 @@ describe("CommandHandler class", () => {
         expect((commandHandler as any).commands[0]).toBe(command);
     });
 
-    it("Returns CommandNotFoundEmbed when a matching command is not found", async () => {
+    it("Sends CommandNotFoundEmbed when a matching command is not found", async () => {
         const commandHandler = new CommandHandler();
-        const resultEmbed = await commandHandler.runCommand("test", [], member);
+        await commandHandler.handleCommand(cmdContext);
+
+        const mockSend = cmdContext.channel.send as jest.Mock;
+        expect(mockSend).toHaveBeenCalledTimes(1);
+
+        const resultEmbed = mockSend.mock.calls[0][0]["embeds"][0];
         expect(resultEmbed).toBeInstanceOf(CommandNotFoundEmbed);
     });
 
-    it("Returns InvalidPermissionsEmbed when author has no permission to run command", async () => {
+    it("Sends InvalidPermissionsEmbed when author has no permission to run command", async () => {
         const cmdInfo = { name: "test", users_allowed: ["admin1234"] } as ICommandInfo;
         const command = new Command(cmdInfo);
         const commandHandler = new CommandHandler();
         commandHandler.addCommand(command);
 
-        const resultEmbed = await commandHandler.runCommand("test", [], member);
+        await commandHandler.handleCommand(cmdContext);
+
+        const mockSend = cmdContext.channel.send as jest.Mock;
+        expect(mockSend).toHaveBeenCalledTimes(1);
+
+        const resultEmbed = mockSend.mock.calls[0][0]["embeds"][0];
         expect(resultEmbed).toBeInstanceOf(InvalidPermissionsEmbed);
     });
 
-    it("Returns result of command when command matches name or aliases", async () => {
+    it("Runs command when command matches name or aliases", async () => {
         const cmdInfo = { name: "test", aliases: ["test1", "test2"] } as ICommandInfo;
         const command = new Command(cmdInfo);
         const commandHandler = new CommandHandler();
         commandHandler.addCommand(command);
 
-        const expectedEmbed = new EmbedBuilder().setTitle("Test Embed");
-        jest.spyOn(command, "run").mockResolvedValue(expectedEmbed);
-
+        const mockCmdRun = jest.spyOn(command, "run").mockImplementation();
         const commandNames = ["test", "test1", "test2"];
         for (const commandName of commandNames) {
-            const resultEmbed = await commandHandler.runCommand(commandName, [], member);
-            expect(resultEmbed).toEqual(expectedEmbed);
+            cmdContext.cmdName = commandName;
+            await commandHandler.handleCommand(cmdContext);
         }
+
+        expect(mockCmdRun).toHaveBeenCalledTimes(commandNames.length);
+    });
+
+    it("Sends error embed when a command has an unexpected error while running", async () => {
+        const cmdInfo = { name: "test", aliases: ["test1", "test2"] } as ICommandInfo;
+        const command = new Command(cmdInfo);
+        const commandHandler = new CommandHandler();
+        commandHandler.addCommand(command);
+
+        jest.spyOn(command, "run").mockImplementation(() => {
+            throw Error("Unexpected error");
+        });
+        await commandHandler.handleCommand(cmdContext);
+
+        const mockSend = cmdContext.channel.send as jest.Mock;
+        expect(mockSend).toHaveBeenCalledTimes(1);
+
+        const resultEmbed = mockSend.mock.calls[0][0]["embeds"][0];
+        expect(resultEmbed).toBeInstanceOf(ErrorEmbed);
+        expect(resultEmbed.data.description.includes("Unexpected error")).toBeTruthy();
     });
 });
 
